@@ -1,12 +1,13 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import EditForm from '@/app/ui/invoices/edit-form';
 
-export default function EditPage({ params }: { params: { id: string } }) {
+export default function EditPage() {
   const router = useRouter();
-  const { id } = params;
+  const params = useParams();
+  const id = Array.isArray(params?.id) ? params.id[0] : params?.id || '';
   const [customers, setCustomers] = useState([]);
 
   useEffect(() => {

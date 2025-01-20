@@ -69,7 +69,11 @@ export default function EditForm({ customers, appointmentId }: EditFormProps) {
 
       router.push('/dashboard/invoices');
     } catch (error) {
-      console.error('Error:', error.message);
+      if (error instanceof Error) {
+        console.error('Error:', error.message);
+      } else {
+        console.error('Error:', error);
+      }
     }
   };
 
