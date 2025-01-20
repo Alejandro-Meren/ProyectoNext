@@ -17,8 +17,6 @@ const links = [
   { name: 'Inicio', href: '/dashboard', icon: HomeIcon },
   { name: 'Facturas', href: '/dashboard/invoices', icon: DocumentDuplicateIcon },
   { name: 'Clientes', href: '/dashboard/customers', icon: UserGroupIcon },
-  { name: 'Reportes', href: '/dashboard/reports', icon: ChartBarIcon },
-  { name: 'Configuración', href: '/dashboard/settings', icon: CogIcon },
 ];
 
 export default function NavLinks() {

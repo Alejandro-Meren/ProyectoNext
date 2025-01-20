@@ -1,45 +1,44 @@
-import Pagination from '@/app/ui/invoices/pagination';
-import Search from '@/app/ui/search';
-import Table from '@/app/ui/invoices/table';
-import { CreateInvoice } from '@/app/ui/invoices/buttons';
-import { lusitana } from '@/app/ui/fonts';
-import { Suspense } from 'react';
-import { InvoicesTableSkeleton } from '@/app/ui/skeletons';
-import { fetchInvoicesPages } from '@/app/lib/data';
-import { Metadata } from 'next';
- 
-export const metadata: Metadata = {
-  title: 'Invoices',
-};
+'use client';
 
- 
-export default async function Page(props: {
-  searchParams?: Promise<{
-    query?: string;
-    page?: string;
-  }>;
-}) {
-  const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
-  const totalPages = await fetchInvoicesPages(query);
+import { useRouter } from 'next/navigation';
+import InvoicesTable from '@/app/ui/invoices/table';
+import Link from 'next/link';
 
- 
+export default function InvoicesPage() {
+  const router = useRouter();
+
+  const handleEdit = (id: string) => {
+    router.push(`/dashboard/invoices/${id}/edit`);
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const response = await fetch(`/api/appointments/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete appointment');
+      }
+
+      // Actualizar la página después de eliminar
+      router.refresh();
+    } catch (error) {
+      console.error('Error deleting appointment:', error);
+    }
+  };
+
   return (
-    <div className="w-full">
-      <div className="flex w-full items-center justify-between">
-        <h1 className={`${lusitana.className} text-2xl`}>Invoices</h1>
+    <div>
+      <div className="flex justify-end mb-4">
+        <Link
+          href="/dashboard/invoices/create"
+          className="bg-pink-500 text-white hover:bg-pink-600 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
+        >
+          Crear Cita
+        </Link>
       </div>
-      <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <Search placeholder="Search invoices..." />
-        <CreateInvoice />
-      </div>
-      <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
-        <Table query={query} currentPage={currentPage} />
-      </Suspense>
-      <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={totalPages} />
-      </div>
+      <InvoicesTable onEdit={handleEdit} onDelete={handleDelete} />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import type { NextAuthConfig } from 'next-auth';
- 
+
 export const authConfig = {
   pages: {
     signIn: '/login',
@@ -18,4 +18,9 @@ export const authConfig = {
     },
   },
   providers: [], // Add providers with an empty array for now
+  events: {
+    signOut: async () => {
+      window.location.href = '/'; // Redirect to home page after sign out
+    },
+  },
 } satisfies NextAuthConfig;

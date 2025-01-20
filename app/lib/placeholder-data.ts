@@ -129,6 +129,45 @@ const invoices = [
   },
 ];
 
+const services = [
+  {
+    customer_id: customers[0].id,
+    date: '2022-12-06',
+    time: '10:00',
+    service: 'Haircut',
+  },
+  {
+    customer_id: customers[1].id,
+    date: '2022-11-14',
+    time: '11:00',
+    service: 'Hair Coloring',
+  },
+  {
+    customer_id: customers[4].id,
+    date: '2022-10-29',
+    time: '12:00',
+    service: 'Shampoo and Style',
+  },
+  {
+    customer_id: customers[3].id,
+    date: '2023-09-10',
+    time: '13:00',
+    service: 'Haircut',
+  },
+  {
+    customer_id: customers[5].id,
+    date: '2023-08-05',
+    time: '14:00',
+    service: 'Haircut',
+  },
+  {
+    customer_id: customers[2].id,
+    date: '2023-07-16',
+    time: '15:00',
+    service: 'Haircut',
+  },
+];
+
 const revenue = [
   { month: 'Jan', revenue: 2000 },
   { month: 'Feb', revenue: 1800 },
@@ -144,4 +183,4 @@ const revenue = [
   { month: 'Dec', revenue: 4800 },
 ];
 
-export { users, customers, invoices, revenue };
+export { users, customers, invoices, services };

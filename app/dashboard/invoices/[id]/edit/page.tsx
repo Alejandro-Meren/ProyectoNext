@@ -1,34 +1,30 @@
-import Form from '@/app/ui/invoices/edit-form';
-import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
-import { fetchInvoiceById, fetchCustomers } from '@/app/lib/data';
-import { notFound } from 'next/navigation';
+'use client';
 
- 
-export default async function Page(props: { params: Promise<{ id: string }> }) {
-    const params = await props.params;
-    const id = params.id;
-    const [invoice, customers] = await Promise.all([
-      fetchInvoiceById(id),
-      fetchCustomers(),
-    ]);
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import EditForm from '@/app/ui/invoices/edit-form';
 
-    if (!invoice) {
-        notFound();
+export default function EditPage({ params }: { params: { id: string } }) {
+  const router = useRouter();
+  const { id } = params;
+  const [customers, setCustomers] = useState([]);
+
+  useEffect(() => {
+    async function fetchCustomers() {
+      try {
+        const response = await fetch('/api/customers');
+        if (!response.ok) {
+          throw new Error('Failed to fetch customers');
+        }
+        const data = await response.json();
+        setCustomers(data);
+      } catch (error) {
+        console.error('Error fetching customers:', error);
       }
+    }
 
-  return (
-    <main>
-      <Breadcrumbs
-        breadcrumbs={[
-          { label: 'Invoices', href: '/dashboard/invoices' },
-          {
-            label: 'Edit Invoice',
-            href: `/dashboard/invoices/${id}/edit`,
-            active: true,
-          },
-        ]}
-      />
-      <Form invoice={invoice} customers={customers} />
-    </main>
-  );
+    fetchCustomers();
+  }, []);
+
+  return <EditForm customers={customers} appointmentId={id} />;
 }
