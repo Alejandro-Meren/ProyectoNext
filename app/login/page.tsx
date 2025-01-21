@@ -11,11 +11,11 @@ export default function LoginPage() {
             <AcmeLogo />
           </div>
         </div>
-        <h2 className="text-center text-3xl font-bold text-pink-600 animate-bounce">Welcome Back!</h2>
-        <p className="text-center text-gray-700 mb-4">Please login to your account</p>
+        <h2 className="text-center text-3xl font-bold text-pink-600 animate-bounce">Bienvenid@!</h2>
+        <p className="text-center text-gray-700 mb-4">Porfavor inicie sesion con tu cuenta</p>
         <LoginForm />
         <div className="flex justify-center mt-6">
-          <a href="/" className="text-pink-500 hover:underline">Back to Home</a>
+          <a href="/" className="text-pink-500 hover:underline">Vuelve al Home</a>
         </div>
       </div>
     </main>
