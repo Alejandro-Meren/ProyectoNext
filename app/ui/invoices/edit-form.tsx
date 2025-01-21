@@ -40,7 +40,11 @@ export default function EditForm({ customers, appointmentId }: EditFormProps) {
           service: data.service,
         });
       } catch (error) {
-        console.error('Error fetching appointment:', error);
+        if (error instanceof Error) {
+          console.error('Error fetching appointment:', error.message);
+        } else {
+          console.error('Unexpected error:', error);
+        }
       }
     }
 
@@ -72,7 +76,7 @@ export default function EditForm({ customers, appointmentId }: EditFormProps) {
       if (error instanceof Error) {
         console.error('Error:', error.message);
       } else {
-        console.error('Error:', error);
+        console.error('Unexpected error:', error);
       }
     }
   };

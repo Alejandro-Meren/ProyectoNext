@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 interface Appointment {
   id: string;
@@ -14,10 +14,9 @@ interface Appointment {
 
 interface InvoicesTableProps {
   onEdit: (id: string) => void;
-  onDelete: (id: string) => void;
 }
 
-export default function InvoicesTable({ onEdit, onDelete }: InvoicesTableProps) {
+export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
 
   useEffect(() => {
@@ -37,6 +36,23 @@ export default function InvoicesTable({ onEdit, onDelete }: InvoicesTableProps) 
     fetchAppointments();
   }, []);
 
+  const handleDelete = async (id: string) => {
+    try {
+      const response = await fetch(`/api/appointments/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete appointment');
+      }
+
+      // Actualizar el estado local después de eliminar
+      setAppointments((prevAppointments) => prevAppointments.filter((appointment) => appointment.id !== id));
+    } catch (error) {
+      console.error('Error deleting appointment:', error);
+    }
+  };
+
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
@@ -48,9 +64,7 @@ export default function InvoicesTable({ onEdit, onDelete }: InvoicesTableProps) 
   };
 
   return (
-    
     <div className="mt-6 flow-root">
-      
       <div className="inline-block min-w-full align-middle">
         <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
           <table className="min-w-full divide-y divide-gray-300">
@@ -70,11 +84,6 @@ export default function InvoicesTable({ onEdit, onDelete }: InvoicesTableProps) 
                 </th>
                 <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
-                </th>
-              </tr>
-              <tr>
-                <th colSpan={5} className="px-6 py-3 text-right">
-                  
                 </th>
               </tr>
             </thead>
@@ -101,18 +110,20 @@ export default function InvoicesTable({ onEdit, onDelete }: InvoicesTableProps) 
                     <div className="text-sm text-gray-900">{appointment.service}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button
-                      onClick={() => onEdit(appointment.id)}
-                      className="text-indigo-600 hover:text-indigo-900 mr-4"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => onDelete(appointment.id)}
-                      className="text-red-600 hover:text-red-900"
-                    >
-                      Delete
-                    </button>
+                  <div className="flex justify-end space-x-5">
+  <button
+    onClick={() => onEdit(appointment.id)}
+    className="text-white bg-indigo-600 hover:bg-indigo-700 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center"
+  >
+    <PencilIcon className="h-5 w-5 mr-1" />
+  </button>
+  <button
+    onClick={() => handleDelete(appointment.id)}
+    className="text-white bg-red-600 hover:bg-red-700 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center justify-center"
+  >
+    <TrashIcon className="h-5 w-5" />
+  </button>
+</div>
                   </td>
                 </tr>
               ))}

@@ -11,23 +11,6 @@ export default function InvoicesPage() {
     router.push(`/dashboard/invoices/${id}/edit`);
   };
 
-  const handleDelete = async (id: string) => {
-    try {
-      const response = await fetch(`/api/appointments/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete appointment');
-      }
-
-      // Actualizar la página después de eliminar
-      router.refresh();
-    } catch (error) {
-      console.error('Error deleting appointment:', error);
-    }
-  };
-
   return (
     <div>
       <div className="flex justify-end mb-4">
@@ -38,7 +21,7 @@ export default function InvoicesPage() {
           Crear Cita
         </Link>
       </div>
-      <InvoicesTable onEdit={handleEdit} onDelete={handleDelete} />
+      <InvoicesTable onEdit={handleEdit} />
     </div>
   );
 }

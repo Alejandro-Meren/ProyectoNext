@@ -5,6 +5,7 @@ import { lusitana } from '@/app/ui/fonts';
 import Image from 'next/image';
 
 export default function Page() {
+  
   return (
     <main className="flex min-h-screen flex-col p-6 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200">
       {/* Header */}
@@ -19,18 +20,6 @@ export default function Page() {
     </Link>
   </div>
   <div className="mt-6 flex justify-center gap-4">
-    <Link
-      href="/dashboard/customers"
-      className="bg-pink-500 text-white px-6 py-3 rounded-lg font-medium shadow-lg hover:bg-pink-400">
-      Productos
-    </Link>
-  </div>
-  <div className="mt-6 flex justify-center gap-4">
-    <Link
-      href="/login"
-      className="bg-pink-500 text-white px-6 py-3 rounded-lg font-medium shadow-lg hover:bg-pink-400">
-      Login
-    </Link>
   </div>
         </nav>
       </header>
