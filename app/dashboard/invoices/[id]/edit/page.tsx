@@ -18,7 +18,7 @@ interface Appointment {
   service: string;
 }
 
-export default function EditAppointmentPage({ params }: { params: { id: string } }) {
+export default function EditAppointmentPage({ params }: { params: Promise<{ id: string }> }) {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [appointment, setAppointment] = useState<Appointment | null>(null);
   const [appointmentId, setAppointmentId] = useState<string | null>(null);
