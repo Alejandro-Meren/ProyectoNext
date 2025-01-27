@@ -16,6 +16,8 @@ export type Customer = {
   image_url: string;
 };
 
+
+
 export type Invoice = {
   id: string;
   customer_id: string;
@@ -65,16 +67,17 @@ export type CustomersTableType = {
   total_paid: number;
 };
 
-export type FormattedCustomersTable = {
+export interface FormattedCustomersTable {
   id: string;
   name: string;
   email: string;
   image_url: string;
+  total_appointments: number;
+  services: string;
   total_invoices: number;
-  total_pending: string;
-  total_paid: string;
-};
-
+  total_pending: number;
+  total_paid: number;
+}
 export type CustomerField = {
   id: string;
   name: string;

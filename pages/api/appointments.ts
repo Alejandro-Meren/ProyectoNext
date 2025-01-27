@@ -6,8 +6,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const client = await db.connect();
       const result = await client.sql`
-        SELECT * FROM services
+        SELECT 
+          services.id,
+          services.date,
+          services.time,
+          services.service,
+          customers.name AS customer_name,
+          customers.image_url AS customer_image
+        FROM services
+        JOIN customers ON services.customer_id = customers.id
       `;
+      console.log('Fetched appointments:', result.rows); // Log the fetched data
       return res.status(200).json(result.rows);
     } catch (error) {
       console.error('Database error:', error);

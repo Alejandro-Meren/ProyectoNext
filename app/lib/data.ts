@@ -5,7 +5,7 @@ import {
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
-  Revenue,
+  Revenue, FormattedCustomersTable,
 } from './definitions';
 import { formatCurrency } from './utils';
 
@@ -65,17 +65,16 @@ export async function fetchCardData() {
           customerCountPromise,
           invoiceStatusPromise,
         ]);
-
-    const numberOfInvoices = Number(data[0].rows[0].count ?? '0');
-    const numberOfCustomers = Number(data[1].rows[0].count ?? '0');
-    const totalPaidInvoices = formatCurrency(data[2].rows[0].paid ?? '0');
-    const totalPendingInvoices = formatCurrency(data[2].rows[0].pending ?? '0');
+        const numberOfAppointments = Number(data[0].rows[0].count ?? '0');
+        const numberOfClients = Number(data[1].rows[0].count ?? '0');
+        const totalRevenue = formatCurrency(data[2].rows[0].paid ?? '0');
+        const totalPendingPayments = formatCurrency(data[2].rows[0].pending ?? '0');
 
     return {
-      numberOfCustomers,
-      numberOfInvoices,
-      totalPaidInvoices,
-      totalPendingInvoices,
+      numberOfAppointments,
+      numberOfClients,
+      totalRevenue,
+      totalPendingPayments,
     };
   } catch (error) {
     console.error('Database Error:', error);
@@ -165,7 +164,8 @@ export async function fetchInvoiceById(id: string) {
   }
 }
 
-export async function fetchCustomers() {
+export async function 
+fetchCustomers() {
   try {
     const data = await sql<CustomerField>`
       SELECT
@@ -182,36 +182,56 @@ export async function fetchCustomers() {
     throw new Error('Failed to fetch all customers.');
   }
 }
-
-export async function fetchFilteredCustomers(query: string) {
+export async function fetchCustomersForEdit() {
   try {
-    const data = await sql<CustomersTableType>`
-		SELECT
-		  customers.id,
-		  customers.name,
-		  customers.email,
-		  customers.image_url,
-		  COUNT(invoices.id) AS total_invoices,
-		  SUM(CASE WHEN invoices.status = 'pending' THEN invoices.amount ELSE 0 END) AS total_pending,
-		  SUM(CASE WHEN invoices.status = 'paid' THEN invoices.amount ELSE 0 END) AS total_paid
-		FROM customers
-		LEFT JOIN invoices ON customers.id = invoices.customer_id
-		WHERE
-		  customers.name ILIKE ${`%${query}%`} OR
-        customers.email ILIKE ${`%${query}%`}
-		GROUP BY customers.id, customers.name, customers.email, customers.image_url
-		ORDER BY customers.name ASC
-	  `;
+    const data = await sql`
+      SELECT id, name, image_url
+      FROM customers
+      ORDER BY name ASC
+    `;
 
-    const customers = data.rows.map((customer) => ({
-      ...customer,
-      total_pending: formatCurrency(customer.total_pending),
-      total_paid: formatCurrency(customer.total_paid),
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch customers for edit.');
+  }
+}
+
+
+
+export async function fetchFilteredCustomers(query: string): Promise<FormattedCustomersTable[]> {
+  try {
+    const result = await sql`
+      SELECT 
+        c.id, 
+        c.name, 
+        c.email, 
+        c.image_url, 
+        COUNT(s.id) AS total_appointments, 
+        STRING_AGG(s.service, ', ') AS services
+      FROM customers c
+      LEFT JOIN services s ON c.id = s.customer_id
+      WHERE c.name ILIKE ${'%' + query + '%'}
+      GROUP BY c.id
+      ORDER BY c.name ASC
+    `;
+    
+    // Map the result to the FormattedCustomersTable interface
+    const formattedCustomers: FormattedCustomersTable[] = result.rows.map(row => ({
+      id: row.id,
+      name: row.name,
+      email: row.email,
+      image_url: row.image_url,
+      total_appointments: parseInt(row.total_appointments, 10),
+      services: row.services,
+      total_invoices: 0, // Placeholder value, replace with actual data if available
+      total_pending: 0, // Placeholder value, replace with actual data if available
+      total_paid: 0, // Placeholder value, replace with actual data if available
     }));
 
-    return customers;
-  } catch (err) {
-    console.error('Database Error:', err);
-    throw new Error('Failed to fetch customer table.');
+    return formattedCustomers;
+  } catch (error) {
+    console.error('Database error:', error);
+    return [];
   }
 }

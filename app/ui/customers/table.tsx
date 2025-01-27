@@ -1,114 +1,110 @@
 import Image from 'next/image';
 import { lusitana } from '@/app/ui/fonts';
 import Search from '@/app/ui/search';
-import {
-  CustomersTableType,
-  FormattedCustomersTable,
-} from '@/app/lib/definitions';
+import { FormattedCustomersTable } from '@/app/lib/definitions';
 
-export default async function CustomersTable({
+export default function CustomersTable({
   customers,
 }: {
   customers: FormattedCustomersTable[];
 }) {
   return (
     <div className="w-full">
-      <h1 className={`${lusitana.className} mb-8 text-xl md:text-2xl`}>
-        Customers
+      <h1 className={`${lusitana.className} mb-8 text-2xl md:text-3xl text-center text-pink-800`}>
+        Clientes
       </h1>
-      <Search placeholder="Search customers..." />
+      <Search placeholder="Buscar Clientes..." />
       <div className="mt-6 flow-root">
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">
-            <div className="overflow-hidden rounded-md bg-gray-50 p-2 md:pt-0">
+            <div className="overflow-hidden rounded-lg bg-white shadow-lg p-4 md:p-6">
               <div className="md:hidden">
                 {customers?.map((customer) => (
                   <div
                     key={customer.id}
-                    className="mb-2 w-full rounded-md bg-white p-4"
+                    className="mb-4 w-full rounded-lg bg-pink-50 p-4 shadow-md hover:shadow-lg transition-shadow duration-300"
                   >
-                    <div className="flex items-center justify-between border-b pb-4">
-                      <div>
-                        <div className="mb-2 flex items-center">
-                          <div className="flex items-center gap-3">
-                            <Image
-                              src={customer.image_url}
-                              className="rounded-full"
-                              alt={`${customer.name}'s profile picture`}
-                              width={28}
-                              height={28}
-                            />
-                            <p>{customer.name}</p>
-                          </div>
+                    <div className="flex items-center justify-between border-b border-pink-200 pb-4">
+                      <div className="flex items-center">
+                        {customer.image_url ? (
+                          <Image
+                            src={customer.image_url}
+                            alt={customer.name}
+                            width={40}
+                            height={40}
+                            className="rounded-full"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-gray-200" />
+                        )}
+                        <div className="ml-4">
+                          <p className="text-sm font-medium text-pink-700">{customer.name}</p>
+                          <p className="text-sm text-pink-500">{customer.email}</p>
                         </div>
-                        <p className="text-sm text-gray-500">
-                          {customer.email}
-                        </p>
                       </div>
                     </div>
-                    <div className="flex w-full items-center justify-between border-b py-5">
+                    <div className="flex w-full items-center justify-between border-b border-pink-200 py-5">
                       <div className="flex w-1/2 flex-col">
-                        <p className="text-xs">Pending</p>
-                        <p className="font-medium">{customer.total_pending}</p>
+                        <p className="text-xs text-pink-500">Citas Totales</p>
+                        <p className="font-medium text-pink-700">{customer.total_appointments}</p>
                       </div>
                       <div className="flex w-1/2 flex-col">
-                        <p className="text-xs">Paid</p>
-                        <p className="font-medium">{customer.total_paid}</p>
+                        <p className="text-xs text-pink-500">Servicios</p>
+                        <p className="font-medium text-pink-700">{customer.services}</p>
                       </div>
                     </div>
-                    <div className="pt-4 text-sm">
-                      <p>{customer.total_invoices} invoices</p>
+                    <div className="pt-4 text-sm text-pink-500">
+                      <p>{customer.total_invoices} facturas</p>
                     </div>
                   </div>
                 ))}
               </div>
-              <table className="hidden min-w-full rounded-md text-gray-900 md:table">
-                <thead className="rounded-md bg-gray-50 text-left text-sm font-normal">
+              <table className="hidden min-w-full rounded-lg text-gray-900 md:table">
+                <thead className="bg-pink-100">
                   <tr>
-                    <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-                      Name
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">
+                      Customer
                     </th>
-                    <th scope="col" className="px-3 py-5 font-medium">
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">
                       Email
                     </th>
-                    <th scope="col" className="px-3 py-5 font-medium">
-                      Total Invoices
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">
+                      Citas Totales
                     </th>
-                    <th scope="col" className="px-3 py-5 font-medium">
-                      Total Pending
-                    </th>
-                    <th scope="col" className="px-4 py-5 font-medium">
-                      Total Paid
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">
+                      Servicios
                     </th>
                   </tr>
                 </thead>
-
-                <tbody className="divide-y divide-gray-200 text-gray-900">
+                <tbody className="divide-y divide-pink-200 text-gray-900">
                   {customers.map((customer) => (
-                    <tr key={customer.id} className="group">
-                      <td className="whitespace-nowrap bg-white py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
-                        <div className="flex items-center gap-3">
-                          <Image
-                            src={customer.image_url}
-                            className="rounded-full"
-                            alt={`${customer.name}'s profile picture`}
-                            width={28}
-                            height={28}
-                          />
-                          <p>{customer.name}</p>
+                    <tr key={customer.id} className="group hover:bg-pink-50 transition-colors duration-200">
+                      <td className="whitespace-nowrap bg-white py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-lg group-last-of-type:rounded-lg sm:pl-6">
+                        <div className="flex items-center">
+                          {customer.image_url ? (
+                            <Image
+                              src={customer.image_url}
+                              alt={customer.name}
+                              width={40}
+                              height={40}
+                              className="rounded-full"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 rounded-full bg-gray-200" />
+                          )}
+                          <div className="ml-4">
+                            <p className="text-sm font-medium text-pink-700">{customer.name}</p>
+                          </div>
                         </div>
                       </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm text-pink-500">
                         {customer.email}
                       </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {customer.total_invoices}
+                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm text-pink-700">
+                        {customer.total_appointments}
                       </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                        {customer.total_pending}
-                      </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
-                        {customer.total_paid}
+                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm text-pink-700">
+                        {customer.services}
                       </td>
                     </tr>
                   ))}

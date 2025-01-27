@@ -8,7 +8,7 @@ export default function SideNav() {
   return (
     <div className="flex h-full flex-col bg-gradient-to-b from-pink-100 to-pink-200 text-gray-900 px-4 py-6 md:px-3 shadow-lg">
       <Link
-        className="mb-6 flex h-20 items-end justify-start rounded-md bg-gradient-to-r from-pink-600 to-pink-500 p-4 md:h-40 shadow-md"
+        className="mb-6 flex h-20 items-end justify-start rounded-md bg-gradient-to-r from-pink-600 to-pink-500 p-4 md:h-40 shadow-md transition-transform transform hover:scale-105 duration-300"
         href="/"
       >
         <div className="w-32 text-white md:w-40">

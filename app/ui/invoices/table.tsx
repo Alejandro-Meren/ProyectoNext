@@ -22,11 +22,16 @@ export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
   useEffect(() => {
     async function fetchAppointments() {
       try {
-        const response = await fetch('/api/appointments');
+        const response = await fetch('/api/appointments', {
+          headers: {
+            'Cache-Control': 'no-cache',
+          },
+        });
         if (!response.ok) {
           throw new Error('Failed to fetch appointments');
         }
         const data = await response.json();
+        console.log('Fetched appointments:', data); // Log the fetched data
         setAppointments(data);
       } catch (error) {
         console.error('Error fetching appointments:', error);
@@ -92,9 +97,11 @@ export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
                 <tr key={appointment.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10">
-                        <img className="h-10 w-10 rounded-full" src={appointment.customer_image} alt={appointment.customer_name} />
-                      </div>
+                      {appointment.customer_image ? (
+                        <img src={appointment.customer_image} alt={appointment.customer_name} className="w-10 h-10 rounded-full" />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-gray-200" />
+                      )}
                       <div className="ml-4">
                         <div className="text-sm font-medium text-gray-900">{appointment.customer_name}</div>
                       </div>
@@ -110,20 +117,20 @@ export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
                     <div className="text-sm text-gray-900">{appointment.service}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <div className="flex justify-end space-x-5">
-  <button
-    onClick={() => onEdit(appointment.id)}
-    className="text-white bg-indigo-600 hover:bg-indigo-700 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center"
-  >
-    <PencilIcon className="h-5 w-5 mr-1" />
-  </button>
-  <button
-    onClick={() => handleDelete(appointment.id)}
-    className="text-white bg-red-600 hover:bg-red-700 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center justify-center"
-  >
-    <TrashIcon className="h-5 w-5" />
-  </button>
-</div>
+                    <div className="flex justify-end space-x-5">
+                      <button
+                        onClick={() => onEdit(appointment.id)}
+                        className="text-white bg-indigo-600 hover:bg-indigo-700 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center"
+                      >
+                        <PencilIcon className="h-5 w-5 mr-1" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(appointment.id)}
+                        className="text-white bg-red-600 hover:bg-red-700 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center justify-center"
+                      >
+                        <TrashIcon className="h-5 w-5" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

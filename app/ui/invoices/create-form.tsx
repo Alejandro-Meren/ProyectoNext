@@ -128,12 +128,6 @@ export default function CreateForm({ customers }: CreateFormProps) {
         >
           Cancelar
         </Link>
-        <Link
-          href="/ui/invoices/edit-form"
-          className="flex h-10 items-center rounded-lg bg-blue-500 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-600 transform hover:scale-105 duration-300"
-        >
-          Editar Cita
-        </Link>
       </div>
     </form>
   );
