@@ -18,6 +18,8 @@ const links = [
   { name: 'Inicio', href: '/dashboard', icon: HomeIcon },
   { name: 'Citas', href: '/dashboard/invoices', icon: DocumentDuplicateIcon },
   { name: 'Clientes', href: '/dashboard/customers', icon: UserGroupIcon },
+  { name: 'Productos', href: '/dashboard/productos', icon: UserGroupIcon },
+
 ];
 
 export default function NavLinks() {

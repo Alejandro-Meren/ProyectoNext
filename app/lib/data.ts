@@ -8,6 +8,8 @@ import {
   Revenue, FormattedCustomersTable,
 } from './definitions';
 import { formatCurrency } from './utils';
+import db from './db';
+
 
 export async function fetchRevenue() {
   try {
@@ -230,6 +232,21 @@ export async function fetchFilteredCustomers(query: string): Promise<FormattedCu
     }));
 
     return formattedCustomers;
+  } catch (error) {
+    console.error('Database error:', error);
+    return [];
+  }
+
+  
+}
+
+export async function fetchProducts() {
+  try {
+    const result = await db.query(`
+      SELECT id, name, description, price, image_url AS "imageUrl"
+      FROM products
+    `);
+    return result.rows;
   } catch (error) {
     console.error('Database error:', error);
     return [];

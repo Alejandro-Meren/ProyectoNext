@@ -78,6 +78,7 @@ export interface FormattedCustomersTable {
   total_pending: number;
   total_paid: number;
 }
+
 export type CustomerField = {
   id: string;
   name: string;
@@ -89,3 +90,11 @@ export type InvoiceForm = {
   amount: number;
   status: 'pending' | 'paid';
 };
+
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  imageUrl: string;
+}

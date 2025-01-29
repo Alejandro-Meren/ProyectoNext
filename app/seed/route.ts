@@ -38,15 +38,17 @@ async function seedServices() {
       customer_id UUID NOT NULL,
       date DATE NOT NULL,
       time TIME NOT NULL,
-      service VARCHAR(255) NOT NULL
+      service VARCHAR(255) NOT NULL,
+      description TEXT,
+      price DECIMAL(10, 2) NOT NULL
     );
   `;
 
   const insertedServices = await Promise.all(
     services.map(
       (service) => client.sql`
-        INSERT INTO services (customer_id, date, time, service)
-        VALUES (${service.customer_id}, ${service.date}, ${service.time}, ${service.service})
+        INSERT INTO services (customer_id, date, time, service, description, price)
+        VALUES (${service.customer_id}, ${service.date}, ${service.time}, ${service.service}, ${service.description}, ${service.price})
         ON CONFLICT (id) DO NOTHING;
       `,
     ),
@@ -81,7 +83,6 @@ async function seedCustomers() {
 }
 
 export async function GET() {
-  
   try {
     await client.sql`BEGIN`;
     await seedUsers();
