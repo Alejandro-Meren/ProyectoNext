@@ -3,7 +3,7 @@ import ProductsTable from '@/app/ui/products/table';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Products',
+  title: 'Productos',
 };
 
 export default async function Page() {

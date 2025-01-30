@@ -91,7 +91,7 @@ export type InvoiceForm = {
   status: 'pending' | 'paid';
 };
 
-export interface Product {
+export type Product = {
   id: string;
   name: string;
   description: string;

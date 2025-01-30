@@ -2,6 +2,7 @@ import { sql } from '@vercel/postgres';
 import {
   CustomerField,
   CustomersTableType,
+  Product,
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
@@ -242,13 +243,34 @@ export async function fetchFilteredCustomers(query: string): Promise<FormattedCu
 
 export async function fetchProducts() {
   try {
-    const result = await db.query(`
-      SELECT id, name, description, price, image_url AS "imageUrl"
+    const data = await sql<Product>`
+       SELECT id, name, description, price, image_url AS "imageUrl"
       FROM products
-    `);
-    return result.rows;
+        `;
+    console.log('Fetched products:', data.rows);
+    return data.rows;
   } catch (error) {
     console.error('Database error:', error);
     return [];
   }
 }
+
+
+
+// fetchCustomers() {
+//   try {
+//     const data = await sql<CustomerField>`
+//       SELECT
+//         id,
+//         name
+//       FROM customers
+//       ORDER BY name ASC
+//     `;
+
+//     const customers = data.rows;
+//     return customers;
+//   } catch (err) {
+//     console.error('Database Error:', err);
+//     throw new Error('Failed to fetch all customers.');
+//   }
+// }
