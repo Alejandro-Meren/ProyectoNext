@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 interface Product {
   id: string;
@@ -14,15 +14,8 @@ interface ProductsTableProps {
 }
 
 const ProductsTable: React.FC<ProductsTableProps> = ({ products }) => {
-  const [currentPage, setCurrentPage] = useState<number>(() => {
-    const savedPage = localStorage.getItem('currentPage');
-    return savedPage ? parseInt(savedPage, 10) : 1;
-  });
+  const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 9;
-
-  useEffect(() => {
-    localStorage.setItem('currentPage', currentPage.toString());
-  }, [currentPage]);
 
   const sortedProducts = [...products].sort((a, b) => a.name.localeCompare(b.name));
 
@@ -51,15 +44,15 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products }) => {
         {currentProducts.map((product) => (
           <div key={product.id} className="relative bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105">
             <div className="w-full h-56 flex justify-center items-center bg-gradient-to-r from-pink-100 to-yellow-100">
-              <div className="w-40 h-40 bg-white flex justify-center items-center rounded-full border-4 border-pink-300 shadow-md">
-                <img src={product.imageUrl} alt={product.name} className="w-36 h-36 object-cover rounded-full" />
-              </div>
-            </div>
-            <div className="p-6 text-center">
-              <h3 className="text-xl font-bold text-gray-900 capitalize">{product.name}</h3>
-              <p className="mt-2 text-sm text-gray-600 capitalize">{product.description}</p>
-              <p className="mt-4 text-xl font-semibold text-gray-900">${product.price}</p>
-            </div>
+  <div className="w-40 h-40 bg-white flex justify-center items-center rounded-full border-4 border-pink-300 shadow-md">
+    <img src={product.imageUrl} alt={product.name} className="w-36 h-36 object-cover rounded-full" />
+  </div>
+</div>
+<div className="p-6 text-center">
+  <h3 className="text-xl font-bold text-gray-900 capitalize">{product.name}</h3>
+  <p className="mt-2 text-sm text-gray-600 capitalize">{product.description}</p>
+  <p className="mt-4 text-xl font-semibold text-gray-900">${product.price}</p>
+</div>
           </div>
         ))}
       </div>
