@@ -13,7 +13,8 @@ interface ProductsTableProps {
   products: Product[];
 }
 
-const ProductsTable: React.FC<ProductsTableProps> = ({ products }) => {
+const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts }) => {
+  const [products, setProducts] = useState(initialProducts);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 9;
 
@@ -36,6 +37,21 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products }) => {
       setCurrentPage(currentPage + 1);
     }
   };
+  
+  const handleDelete = async (productId: string) => {
+    try {
+      const response = await fetch(`/api/products/${productId}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        setProducts(products.filter(product => product.id !== productId));
+      } else {
+        console.error('Failed to delete product:', await response.json());
+      }
+    } catch (error) {
+      console.error('Failed to delete product:', error);
+    }
+  };
 
   return (
     <div className="flex flex-col h-full p-6 md:p-12 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 rounded-lg shadow-lg overflow-hidden">
@@ -54,6 +70,12 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products }) => {
               <h3 className="text-xl font-bold text-gray-900 capitalize">{product.name}</h3>
               <p className="mt-2 text-sm text-gray-600 capitalize">{product.description}</p>
               <p className="mt-4 text-xl font-semibold text-gray-900">${product.price}</p>
+              <button
+            onClick={() => handleDelete(product.id)}
+            className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition-colors duration-300"
+          >
+            Delete
+          </button>
             </div>
           </div>
         ))}

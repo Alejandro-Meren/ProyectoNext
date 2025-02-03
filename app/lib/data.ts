@@ -254,7 +254,14 @@ export async function fetchProducts() {
     return [];
   }
 }
-
+export async function deleteProduct(productId: string): Promise<void> {
+  try {
+    await sql`DELETE FROM products WHERE id = ${productId}`;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to delete product.');
+  }
+}
 
 
 // fetchCustomers() {
