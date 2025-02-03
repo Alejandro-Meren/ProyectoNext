@@ -263,6 +263,20 @@ export async function deleteProduct(productId: string): Promise<void> {
   }
 }
 
+export async function updateProduct(productId: string, product: { name: string; description: string; price: number; imageUrl: string }): Promise<void> {
+  try {
+    await sql`
+      UPDATE products
+      SET name = ${product.name}, description = ${product.description}, price = ${product.price}, image_url = ${product.imageUrl}
+      WHERE id = ${productId}
+    `;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to update product.');
+  }
+}
+
+
 
 // fetchCustomers() {
 //   try {
