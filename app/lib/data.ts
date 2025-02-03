@@ -276,6 +276,19 @@ export async function updateProduct(productId: string, product: { name: string; 
   }
 }
 
+export async function addProduct(product: { name: string; description: string; price: number; imageUrl: string }): Promise<{ id: string }> {
+  try {
+    const result = await sql`
+      INSERT INTO products (name, description, price, image_url)
+      VALUES (${product.name}, ${product.description}, ${product.price}, ${product.imageUrl})
+      RETURNING id
+    `;
+    return { id: result.rows[0].id };
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to add product.');
+  }
+}
 
 
 // fetchCustomers() {

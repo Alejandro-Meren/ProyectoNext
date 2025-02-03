@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
-import EditForm from './edit-forms';
+import EditForm from './/edit-forms';
+import CreateForm from './create-form';
 
 interface Product {
   id: string;
@@ -17,11 +18,13 @@ interface ProductsTableProps {
 const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts }) => {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [creatingProduct, setCreatingProduct] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 9;
 
-  const sortedProducts = Array.isArray(products) ? [...products].sort((a, b) => a.name.localeCompare(b.name)) : [];
-
+  const sortedProducts = Array.isArray(products) 
+  ? products.filter(product => product && product.name).sort((a, b) => a.name.localeCompare(b.name)) 
+  : [];
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct);
@@ -66,6 +69,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
 
   const handleCancel = () => {
     setEditingProduct(null);
+    setCreatingProduct(false);
   };
 
   const handleDelete = async (productId: string) => {
@@ -83,6 +87,31 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
     }
   };
 
+  const handleCreate = () => {
+    setCreatingProduct(true);
+  };
+
+  const handleSaveNew = async (newProduct: { name: string; description: string; price: number; imageUrl: string }) => {
+    try {
+      const response = await fetch('/api/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newProduct),
+      });
+      if (response.ok) {
+        const addedProduct = await response.json();
+        setProducts([...products, addedProduct]);
+        setCreatingProduct(false);
+      } else {
+        console.error('Failed to add product:', await response.json());
+      }
+    } catch (error) {
+      console.error('Failed to add product:', error);
+    }
+  };
+
   return (
     <div className="flex flex-col h-full p-6 md:p-12 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 rounded-lg shadow-lg overflow-hidden">
       <h1 className="mb-4 text-2xl md:text-3xl text-pink-600" style={{ fontFamily: 'Times New Roman, serif' }}>
@@ -90,8 +119,16 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
       </h1>
       {editingProduct ? (
         <EditForm product={editingProduct} onSave={handleSave} onCancel={handleCancel} />
+      ) : creatingProduct ? (
+        <CreateForm onSave={handleSaveNew} onCancel={handleCancel} />
       ) : (
         <>
+          <button
+            onClick={handleCreate}
+            className="mb-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600 transition-colors duration-300"
+          >
+            Add New Product
+          </button>
           <div className="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
             {currentProducts.map((product) => (
               <div key={product.id} className="relative bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-transform duration-500 transform hover:scale-105">
