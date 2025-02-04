@@ -115,6 +115,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
   };
 
   return (
+    
     <div className="flex flex-col h-full p-6 md:p-12 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 rounded-lg shadow-lg overflow-hidden">
       <h1 className="mb-4 text-2xl md:text-3xl text-pink-600" style={{ fontFamily: 'Times New Roman, serif' }}>
         Productos de Peluquería

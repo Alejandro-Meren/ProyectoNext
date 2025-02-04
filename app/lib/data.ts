@@ -53,38 +53,30 @@ export async function fetchLatestInvoices() {
 
 export async function fetchCardData() {
   try {
-    // You can probably combine these into a single SQL query
-    // However, we are intentionally splitting them to demonstrate
-    // how to initialize multiple queries in parallel with JS.
-    const invoiceCountPromise = sql`SELECT COUNT(*) FROM invoices`;
+    const appointmentCountPromise = sql`SELECT COUNT(*) FROM services`;
     const customerCountPromise = sql`SELECT COUNT(*) FROM customers`;
-    const invoiceStatusPromise = sql`SELECT
-         SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END) AS "paid",
-         SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) AS "pending"
-         FROM invoices`;
+    const serviceCountPromise = sql`SELECT COUNT(*) FROM services`;
 
-         const data = await Promise.all([
-          invoiceCountPromise,
-          customerCountPromise,
-          invoiceStatusPromise,
-        ]);
-        const numberOfAppointments = Number(data[0].rows[0].count ?? '0');
-        const numberOfClients = Number(data[1].rows[0].count ?? '0');
-        const totalRevenue = formatCurrency(data[2].rows[0].paid ?? '0');
-        const totalPendingPayments = formatCurrency(data[2].rows[0].pending ?? '0');
+    const data = await Promise.all([
+      appointmentCountPromise,
+      customerCountPromise,
+      serviceCountPromise,
+    ]);
+
+    const numberOfAppointments = Number(data[0].rows[0].count ?? '0');
+    const numberOfClients = Number(data[1].rows[0].count ?? '0');
+    const totalServices = Number(data[2].rows[0].count ?? '0');
 
     return {
       numberOfAppointments,
       numberOfClients,
-      totalRevenue,
-      totalPendingPayments,
+      totalServices,
     };
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch card data.');
   }
 }
-
 const ITEMS_PER_PAGE = 6;
 export async function fetchFilteredInvoices(
   query: string,

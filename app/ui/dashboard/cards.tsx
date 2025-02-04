@@ -8,29 +8,27 @@ import { lusitana } from '@/app/ui/fonts';
 import { fetchCardData } from '@/app/lib/data';
 
 const iconMap = {
-  collected: BanknotesIcon,
-  customers: UserGroupIcon,
-  pending: ClockIcon,
-  invoices: InboxIcon,
+  revenue: BanknotesIcon,
+  clients: UserGroupIcon,
+  appointments: ClockIcon,
+  services: InboxIcon,
 };
 
 export default async function CardWrapper() {
   const {
     numberOfAppointments,
     numberOfClients,
-    totalRevenue,
-    totalPendingPayments,
+    totalServices,
   } = await fetchCardData();
 
   return (
     <>
-      <Card title="Collected" value={totalRevenue} type="collected" />
-      <Card title="Pending" value={totalPendingPayments} type="pending" />
-      <Card title="Total Invoices" value={numberOfAppointments} type="invoices" />
+      <Card title="Total De Servicios" value={totalServices} type="services" />
+      <Card title="Total De Citas" value={numberOfAppointments} type="appointments" />
       <Card
-        title="Total Customers"
+        title="Total De Clientes"
         value={numberOfClients}
-        type="customers"
+        type="clients"
       />
     </>
   );
@@ -43,21 +41,21 @@ export function Card({
 }: {
   title: string;
   value: number | string;
-  type: 'invoices' | 'customers' | 'pending' | 'collected';
+  type: 'appointments' | 'clients' | 'services' | 'revenue';
 }) {
   const Icon = iconMap[type];
 
   return (
-    <div className="rounded-xl bg-white p-4 shadow-lg">
-      <div className="flex items-center p-4 bg-gray-50 rounded-lg">
-        {Icon ? <Icon className="h-6 w-6 text-pink-600" /> : null}
-        <h3 className="ml-2 text-sm font-medium text-gray-700">{title}</h3>
+    <div className="flex flex-col items-center justify-center rounded-lg bg-gradient-to-r from-pink-100 to-pink-200 p-3 shadow-md mb-4 transform transition-transform hover:scale-105 hover:shadow-lg">
+      <div className="flex items-center justify-center p-2 bg-pink-600 rounded-full mb-2 shadow-sm">
+        {Icon ? <Icon className="h-5 w-5 text-white" /> : null}
       </div>
+      <h3 className="text-center text-sm font-semibold text-gray-800 mb-1">{title}</h3>
       <p
-        className={`${lusitana.className} truncate rounded-xl bg-white px-4 py-8 text-center text-2xl text-pink-600`}
-      >
-        {value}
-      </p>
+  className={`${lusitana.className} truncate rounded-lg bg-white px-6 py-8 text-center text-2xl text-pink-600 shadow-inner`}
+>
+  {value}
+</p>
     </div>
   );
 }

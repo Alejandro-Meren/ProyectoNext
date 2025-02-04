@@ -11,8 +11,7 @@ import {
 
 export default async function Page() {
   return (
-    <main className="flex flex-col h-full p-6 md:p-12 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 rounded-lg shadow-lg overflow-hidden">
-      <h1 className={`${lusitana.className} mb-4 text-2xl md:text-3xl text-pink-600`}>
+<main className="flex flex-col h-full p-8 md:p-16 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 rounded-lg shadow-2xl overflow-hidden">      <h1 className={`${lusitana.className} mb-4 text-2xl md:text-3xl text-pink-600`}>
         Hair Salon Dashboard
       </h1>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 flex-grow overflow-auto">
