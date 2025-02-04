@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
-import EditForm from './/edit-forms';
+import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
+import EditForm from './edit-forms';
 import CreateForm from './create-form';
 
 interface Product {
@@ -23,8 +24,9 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
   const productsPerPage = 9;
 
   const sortedProducts = Array.isArray(products) 
-  ? products.filter(product => product && product.name).sort((a, b) => a.name.localeCompare(b.name)) 
-  : [];
+    ? products.filter(product => product && product.name).sort((a, b) => a.name.localeCompare(b.name)) 
+    : [];
+
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct);
@@ -125,9 +127,10 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
         <>
           <button
             onClick={handleCreate}
-            className="mb-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600 transition-colors duration-300"
+            className="self-end mb-4 bg-pink-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-pink-600 transition-transform duration-300 transform hover:scale-105 flex items-center"
           >
-            Add New Product
+            <PlusIcon className="h-5 w-5 mr-2" />
+            Añadir Producto
           </button>
           <div className="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
             {currentProducts.map((product) => (
@@ -144,15 +147,17 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
                   <div className="flex justify-center space-x-4 mt-4">
                     <button
                       onClick={() => handleEdit(product)}
-                      className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300"
+                      className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300 flex items-center"
                     >
-                      Edit
+                      <PencilIcon className="h-5 w-5 mr-2" />
+                      Editar
                     </button>
                     <button
                       onClick={() => handleDelete(product.id)}
-                      className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition-colors duration-300"
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition-colors duration-300 flex items-center"
                     >
-                      Delete
+                      <TrashIcon className="h-5 w-5 mr-2" />
+                      Eliminar
                     </button>
                   </div>
                 </div>
