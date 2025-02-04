@@ -98,3 +98,11 @@ export type Product = {
   price: number;
   imageUrl: string;
 }
+
+export type Service = {
+  id: string;
+  customer_id: string;
+  date: string;
+  time: string;
+  service: string;
+};

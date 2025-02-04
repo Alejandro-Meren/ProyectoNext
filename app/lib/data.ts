@@ -10,6 +10,8 @@ import {
 } from './definitions';
 import { formatCurrency } from './utils';
 import db from './db';
+import { Service } from './definitions';
+
 
 
 export async function fetchRevenue() {
@@ -281,6 +283,18 @@ export async function addProduct(product: { name: string; description: string; p
     throw new Error('Failed to add product.');
   }
 }
+
+
+export async function fetchServices() {
+  try {
+    const data = await sql<Service>`SELECT * FROM services ORDER BY date DESC, time DESC`;
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch services.');
+  }
+}
+
 
 
 // fetchCustomers() {

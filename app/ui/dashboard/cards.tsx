@@ -46,16 +46,16 @@ export function Card({
   const Icon = iconMap[type];
 
   return (
-    <div className="flex flex-col items-center justify-center rounded-lg bg-gradient-to-r from-pink-100 to-pink-200 p-3 shadow-md mb-4 transform transition-transform hover:scale-105 hover:shadow-lg">
-      <div className="flex items-center justify-center p-2 bg-pink-600 rounded-full mb-2 shadow-sm">
-        {Icon ? <Icon className="h-5 w-5 text-white" /> : null}
+    <div className="flex flex-col items-center justify-center rounded-lg bg-gradient-to-r from-pink-100 to-pink-200 p-2 shadow-md mb-4 transform transition-transform hover:scale-105 hover:shadow-lg">
+      <div className="flex items-center justify-center p-1 bg-pink-600 rounded-full mb-2 shadow-sm">
+        {Icon ? <Icon className="h-4 w-4 text-white" /> : null}
       </div>
-      <h3 className="text-center text-sm font-semibold text-gray-800 mb-1">{title}</h3>
+      <h3 className="text-center text-xs font-semibold text-gray-800 mb-1">{title}</h3>
       <p
-  className={`${lusitana.className} truncate rounded-lg bg-white px-6 py-8 text-center text-2xl text-pink-600 shadow-inner`}
->
-  {value}
-</p>
+        className={`${lusitana.className} truncate rounded-lg bg-white px-3 py-4 text-center text-lg text-pink-600 shadow-inner`}
+      >
+        {value}
+      </p>
     </div>
   );
 }
