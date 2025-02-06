@@ -1,8 +1,10 @@
 'use client';
+
 import React, { useState } from 'react';
-import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { createProduct, updateProduct, deleteProduct } from '@/app/lib/actions';
 import EditForm from './edit-forms';
 import CreateForm from './create-form';
+import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 interface Product {
   id: string;
@@ -45,83 +47,53 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
     }
   };
 
-  const handleEdit = (product: Product) => {
-    setEditingProduct(product);
-  };
-
-  const handleSave = async (updatedProduct: Product) => {
-    try {
-      const response = await fetch(`/api/products/${updatedProduct.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedProduct),
-      });
-      if (response.ok) {
-        setProducts(products.map(product => (product.id === updatedProduct.id ? updatedProduct : product)));
-        setEditingProduct(null);
-      } else {
-        console.error('Failed to update product:', await response.json());
-      }
-    } catch (error) {
-      console.error('Failed to update product:', error);
-    }
-  };
-
-  const handleCancel = () => {
-    setEditingProduct(null);
-    setCreatingProduct(false);
-  };
-
-  const handleDelete = async (productId: string) => {
-    try {
-      const response = await fetch(`/api/products/${productId}`, {
-        method: 'DELETE',
-      });
-      if (response.ok) {
-        setProducts(products.filter(product => product.id !== productId));
-      } else {
-        console.error('Failed to delete product:', await response.json());
-      }
-    } catch (error) {
-      console.error('Failed to delete product:', error);
-    }
-  };
-
   const handleCreate = () => {
     setCreatingProduct(true);
   };
 
+  const handleEdit = (product: Product) => {
+    setEditingProduct(product);
+  };
+
+  const handleDelete = async (id: string) => {
+    await deleteProduct(id);
+    setProducts(products.filter(product => product.id !== id));
+  };
+
   const handleSaveNew = async (newProduct: { name: string; description: string; price: number; imageUrl: string }) => {
-    try {
-      const response = await fetch('/api/products', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newProduct),
-      });
-      if (response.ok) {
-        const addedProduct = await response.json();
-        setProducts([...products, addedProduct]);
-        setCreatingProduct(false);
-      } else {
-        console.error('Failed to add product:', await response.json());
-      }
-    } catch (error) {
-      console.error('Failed to add product:', error);
-    }
+    const form = new FormData();
+    form.append('name', newProduct.name);
+    form.append('description', newProduct.description);
+    form.append('price', newProduct.price.toString());
+    form.append('imageUrl', newProduct.imageUrl);
+
+    await createProduct(form);
+    setCreatingProduct(false);
+  };
+
+  const handleSaveEdit = async (updatedProduct: { id: string; name: string; description: string; price: number; imageUrl: string }) => {
+    const form = new FormData();
+    form.append('name', updatedProduct.name);
+    form.append('description', updatedProduct.description);
+    form.append('price', updatedProduct.price.toString());
+    form.append('imageUrl', updatedProduct.imageUrl);
+
+    await updateProduct(updatedProduct.id, form);
+    setEditingProduct(null);
+  };
+
+  const handleCancel = () => {
+    setCreatingProduct(false);
+    setEditingProduct(null);
   };
 
   return (
-    
     <div className="flex flex-col h-full p-6 md:p-12 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 rounded-lg shadow-lg overflow-hidden">
       <h1 className="mb-4 text-2xl md:text-3xl text-pink-600" style={{ fontFamily: 'Times New Roman, serif' }}>
         Productos de Peluquería
       </h1>
       {editingProduct ? (
-        <EditForm product={editingProduct} onSave={handleSave} onCancel={handleCancel} />
+        <EditForm product={editingProduct} onSave={handleSaveEdit} onCancel={handleCancel} />
       ) : creatingProduct ? (
         <CreateForm onSave={handleSaveNew} onCancel={handleCancel} />
       ) : (
@@ -138,7 +110,11 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
               <div key={product.id} className="relative bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-transform duration-500 transform hover:scale-105">
                 <div className="w-full h-56 flex justify-center items-center bg-gradient-to-r from-pink-100 to-yellow-100">
                   <div className="w-40 h-40 bg-white flex justify-center items-center rounded-full border-4 border-pink-300 shadow-md">
-                    <img src={product.imageUrl} alt={product.name} className="w-36 h-36 object-cover rounded-full" />
+                    {product.imageUrl ? (
+                      <img src={product.imageUrl} alt={product.name} className="w-36 h-36 object-cover rounded-full" />
+                    ) : (
+                      <div className="w-36 h-36 bg-gray-200 rounded-full" />
+                    )}
                   </div>
                 </div>
                 <div className="p-6 text-center">
@@ -165,25 +141,22 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
               </div>
             ))}
           </div>
-          {totalPages > 1 && (
-            <div className="mt-8 flex justify-center items-center space-x-4">
-              <button
-                onClick={handlePreviousPage}
-                className="px-4 py-2 border-2 border-pink-500 rounded-full bg-pink-500 text-white hover:bg-pink-600 hover:border-pink-600 transition-colors duration-500 shadow-lg transform hover:scale-110"
-                disabled={currentPage === 1}
-              >
-                Previous
-              </button>
-              <span className="text-lg font-semibold">{currentPage} / {totalPages}</span>
-              <button
-                onClick={handleNextPage}
-                className="px-4 py-2 border-2 border-pink-500 rounded-full bg-pink-500 text-white hover:bg-pink-600 hover:border-pink-600 transition-colors duration-500 shadow-lg transform hover:scale-110"
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </button>
-            </div>
-          )}
+          <div className="flex justify-between mt-8">
+            <button
+              onClick={handlePreviousPage}
+              className="bg-pink-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-pink-600 transition-transform duration-300 transform hover:scale-105"
+              disabled={currentPage === 1}
+            >
+              Anterior
+            </button>
+            <button
+              onClick={handleNextPage}
+              className="bg-pink-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-pink-600 transition-transform duration-300 transform hover:scale-105"
+              disabled={currentPage === totalPages}
+            >
+              Siguiente
+            </button>
+          </div>
         </>
       )}
     </div>
