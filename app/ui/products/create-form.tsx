@@ -1,8 +1,9 @@
 'use client';
 import React, { useState } from 'react';
+import { createProduct } from '@/app/lib/actions';
 
 interface CreateFormProps {
-  onSave: (product: { name: string; description: string; price: number; imageUrl: string }) => void;
+  onSave: (newProduct: { name: string; description: string; price: number; imageUrl: string }) => Promise<void>;
   onCancel: () => void;
 }
 
@@ -14,9 +15,16 @@ const CreateForm: React.FC<CreateFormProps> = ({ onSave, onCancel }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(formData);
+    const form = new FormData();
+    form.append('name', formData.name);
+    form.append('description', formData.description);
+    form.append('price', formData.price.toString());
+    form.append('imageUrl', formData.imageUrl);
+
+    await createProduct(form);
+    await onSave(formData);
   };
 
   return (

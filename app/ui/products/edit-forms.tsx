@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import { updateProduct } from '@/app/lib/actions';
 
 interface EditFormProps {
   product: {
@@ -21,9 +22,16 @@ const EditForm: React.FC<EditFormProps> = ({ product, onSave, onCancel }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(formData);
+    const form = new FormData();
+    form.append('name', formData.name);
+    form.append('description', formData.description);
+    form.append('price', formData.price.toString());
+    form.append('imageUrl', formData.imageUrl);
+
+    await updateProduct(formData.id, form);
+    await onSave(formData);
   };
 
   return (

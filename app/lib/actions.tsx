@@ -112,6 +112,86 @@ export async function deleteInvoice(id: string) {
   revalidatePath('/dashboard/invoices');
 }
 
+const ProductSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(1, { message: 'Please enter a product name.' }),
+  description: z.string().min(1, { message: 'Please enter a product description.' }),
+  price: z.coerce.number().gt(0, { message: 'Please enter a price greater than $0.' }),
+  imageUrl: z.string().url({ message: 'Please enter a valid URL.' }),
+});
+
+export async function createProduct(formData: FormData) {
+  const validatedFields = ProductSchema.omit({ id: true }).safeParse({
+    name: formData.get('name'),
+    description: formData.get('description'),
+    price: formData.get('price'),
+    imageUrl: formData.get('imageUrl'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Create Product.',
+    };
+  }
+
+  const { name, description, price, imageUrl } = validatedFields.data;
+
+  try {
+    await sql`
+      INSERT INTO products (name, description, price, image_url)
+      VALUES (${name}, ${description}, ${price}, ${imageUrl})
+    `;
+  } catch (error) {
+    return {
+      message: 'Database Error: Failed to Create Product.',
+    };
+  }
+
+  revalidatePath('/dashboard/products');
+  redirect('/dashboard/products');
+}
+
+export async function updateProduct(id: string, formData: FormData) {
+  const validatedFields = ProductSchema.omit({ id: true }).safeParse({
+    name: formData.get('name'),
+    description: formData.get('description'),
+    price: formData.get('price'),
+    imageUrl: formData.get('imageUrl'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing Fields. Failed to Update Product.',
+    };
+  }
+
+  const { name, description, price, imageUrl } = validatedFields.data;
+
+  try {
+    await sql`
+      UPDATE products
+      SET name = ${name}, description = ${description}, price = ${price}, image_url = ${imageUrl}
+      WHERE id = ${id}
+    `;
+  } catch (error) {
+    return { message: 'Database Error: Failed to Update Product.' };
+  }
+
+  revalidatePath('/dashboard/products');
+  redirect('/dashboard/products');
+}
+
+export async function deleteProduct(id: string) {
+  await sql`DELETE FROM products WHERE id = ${id}`;
+  revalidatePath('/dashboard/products');
+}
+
+
+
+
+
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData,
