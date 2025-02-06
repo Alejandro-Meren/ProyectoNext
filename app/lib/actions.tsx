@@ -148,8 +148,8 @@ export async function createProduct(formData: FormData) {
     };
   }
 
-  revalidatePath('/dashboard/products');
-  redirect('/dashboard/products');
+  revalidatePath('/dashboard/productos');
+  redirect('/dashboard/productos');
 }
 
 export async function updateProduct(id: string, formData: FormData) {
@@ -179,13 +179,13 @@ export async function updateProduct(id: string, formData: FormData) {
     return { message: 'Database Error: Failed to Update Product.' };
   }
 
-  revalidatePath('/dashboard/products');
-  redirect('/dashboard/products');
+  revalidatePath('/dashboard/productos');
+  redirect('/dashboard/productos');
 }
 
 export async function deleteProduct(id: string) {
   await sql`DELETE FROM products WHERE id = ${id}`;
-  revalidatePath('/dashboard/products');
+  revalidatePath('/dashboard/productos');
 }
 
 
