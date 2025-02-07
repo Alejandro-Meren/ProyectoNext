@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { updateProduct } from '@/app/lib/actions';
+import Link from 'next/link';
 
 interface EditFormProps {
   product: {
@@ -80,13 +81,12 @@ const EditForm: React.FC<EditFormProps> = ({ product }) => {
         />
       </div>
       <div className="flex justify-end space-x-4">
-        <button
-          type="button"
-          // onClick={onCancel}
-          className="bg-gray-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-600 transition-colors duration-300"
+      <Link
+          href="/dashboard/productos"
+          className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-red-500 hover:text-white transform hover:scale-105 duration-300"
         >
-          Cancel
-        </button>
+          Cancelar
+        </Link>
         <button
           type="submit"
           className="bg-pink-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-pink-600 transition-colors duration-300"
