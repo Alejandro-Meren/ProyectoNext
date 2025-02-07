@@ -10,11 +10,11 @@ interface EditFormProps {
     price: number;
     imageUrl: string;
   };
-  onSave: (product: { id: string; name: string; description: string; price: number; imageUrl: string }) => void;
-  onCancel: () => void;
+  // onSave: (product: { id: string; name: string; description: string; price: number; imageUrl: string }) => void;
+  // onCancel: () => void;
 }
 
-const EditForm: React.FC<EditFormProps> = ({ product, onSave, onCancel }) => {
+const EditForm: React.FC<EditFormProps> = ({ product }) => {
   const [formData, setFormData] = useState(product);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -23,15 +23,19 @@ const EditForm: React.FC<EditFormProps> = ({ product, onSave, onCancel }) => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const form = new FormData();
-    form.append('name', formData.name);
-    form.append('description', formData.description);
-    form.append('price', formData.price.toString());
-    form.append('imageUrl', formData.imageUrl);
+      e.preventDefault();
+      const form = new FormData();
+      form.append('name', formData.name);
+      form.append('description', formData.description);
+      form.append('price', formData.price.toString());
+      form.append('imageUrl', formData.imageUrl);
+  
+      
+      //await createProduct(form);
 
-    await updateProduct(formData.id, form);
-    await onSave(formData);
+    await updateProduct(product.id as string, form);
+    //await onSave(formData);
+    //onCancel(); // Cerrar el formulario después de guardar
   };
 
   return (
@@ -78,7 +82,7 @@ const EditForm: React.FC<EditFormProps> = ({ product, onSave, onCancel }) => {
       <div className="flex justify-end space-x-4">
         <button
           type="button"
-          onClick={onCancel}
+          // onClick={onCancel}
           className="bg-gray-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-600 transition-colors duration-300"
         >
           Cancel

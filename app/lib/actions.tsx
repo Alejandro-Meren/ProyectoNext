@@ -112,6 +112,7 @@ export async function deleteInvoice(id: string) {
   revalidatePath('/dashboard/invoices');
 }
 
+
 const ProductSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, { message: 'Please enter a product name.' }),
@@ -147,7 +148,7 @@ export async function createProduct(formData: FormData) {
       message: 'Database Error: Failed to Create Product.',
     };
   }
-
+  console.log('revalidatePath'+ name);
   revalidatePath('/dashboard/productos');
   redirect('/dashboard/productos');
 }

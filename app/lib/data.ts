@@ -235,12 +235,19 @@ export async function fetchFilteredCustomers(query: string): Promise<FormattedCu
   
 }
 
-export async function fetchProducts() {
+export async function fetchProductById(id: string): Promise<Product | null> {
   try {
-    const data = await sql<Product>`
-       SELECT id, name, description, price, image_url AS "imageUrl"
-      FROM products
-        `;
+    const data = await sql<Product>`SELECT id, name, description, price, image_url AS "imageUrl" FROM products WHERE id = ${id}`;
+    return data.rows[0] || null;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch product.');
+  }
+}
+
+export async function fetchProducts(): Promise<Product[]> {
+  try {
+    const data = await sql<Product>`SELECT id, name, description, price, image_url AS "imageUrl" FROM products`;
     console.log('Fetched products:', data.rows);
     return data.rows;
   } catch (error) {
@@ -248,6 +255,7 @@ export async function fetchProducts() {
     return [];
   }
 }
+
 export async function deleteProduct(productId: string): Promise<void> {
   try {
     await sql`DELETE FROM products WHERE id = ${productId}`;
@@ -294,7 +302,6 @@ export async function fetchServices() {
     throw new Error('Failed to fetch services.');
   }
 }
-
 
 
 // fetchCustomers() {

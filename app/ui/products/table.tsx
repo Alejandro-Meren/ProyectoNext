@@ -5,6 +5,8 @@ import { createProduct, updateProduct, deleteProduct } from '@/app/lib/actions';
 import EditForm from './edit-forms';
 import CreateForm from './create-form';
 import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface Product {
   id: string;
@@ -24,9 +26,10 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
   const [creatingProduct, setCreatingProduct] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 9;
+  const router = useRouter();
 
-  const sortedProducts = Array.isArray(products) 
-    ? products.filter(product => product && product.name).sort((a, b) => a.name.localeCompare(b.name)) 
+  const sortedProducts = Array.isArray(products)
+    ? products.filter(product => product && product.name).sort((a, b) => a.name.localeCompare(b.name))
     : [];
 
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -52,34 +55,33 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
   };
 
   const handleEdit = (product: Product) => {
-    setEditingProduct(product);
+    router.push(`/dashboard/productos/${product.id}/edit`);
+  };
+
+  const handleSaveNew = async (newProduct: { name: string; description: string; price: number; imageUrl: string }) => {
+    const formData = new FormData();
+    formData.append('name', newProduct.name);
+    formData.append('description', newProduct.description);
+    formData.append('price', newProduct.price.toString());
+    formData.append('imageUrl', newProduct.imageUrl);
+    await createProduct(formData);
+    router.refresh();
+  };
+
+  const handleSaveEdit = async (updatedProduct: Product) => {
+    const formData = new FormData();
+    formData.append('name', updatedProduct.name);
+    formData.append('description', updatedProduct.description);
+    formData.append('price', updatedProduct.price.toString());
+    formData.append('imageUrl', updatedProduct.imageUrl);
+    await updateProduct(updatedProduct.id!, formData);
+    router.refresh();
   };
 
   const handleDelete = async (id: string) => {
     await deleteProduct(id);
     setProducts(products.filter(product => product.id !== id));
-  };
-
-  const handleSaveNew = async (newProduct: { name: string; description: string; price: number; imageUrl: string }) => {
-    const form = new FormData();
-    form.append('name', newProduct.name);
-    form.append('description', newProduct.description);
-    form.append('price', newProduct.price.toString());
-    form.append('imageUrl', newProduct.imageUrl);
-
-    await createProduct(form);
-    setCreatingProduct(false);
-  };
-
-  const handleSaveEdit = async (updatedProduct: { id: string; name: string; description: string; price: number; imageUrl: string }) => {
-    const form = new FormData();
-    form.append('name', updatedProduct.name);
-    form.append('description', updatedProduct.description);
-    form.append('price', updatedProduct.price.toString());
-    form.append('imageUrl', updatedProduct.imageUrl);
-
-    await updateProduct(updatedProduct.id, form);
-    setEditingProduct(null);
+    router.refresh();
   };
 
   const handleCancel = () => {
@@ -93,18 +95,17 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
         Productos de Peluquería
       </h1>
       {editingProduct ? (
-        <EditForm product={editingProduct} onSave={handleSaveEdit} onCancel={handleCancel} />
+        <EditForm product={editingProduct}  />
       ) : creatingProduct ? (
         <CreateForm onSave={handleSaveNew} onCancel={handleCancel} />
       ) : (
         <>
-          <button
-            onClick={handleCreate}
-            className="self-end mb-4 bg-pink-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-pink-600 transition-transform duration-300 transform hover:scale-105 flex items-center"
-          >
-            <PlusIcon className="h-5 w-5 mr-2" />
-            Añadir Producto
-          </button>
+          <Link href="/dashboard/productos/create">
+            <p className="self-end mb-4 bg-pink-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-pink-600 transition-transform duration-300 transform hover:scale-105 flex items-center">
+              <PlusIcon className="h-5 w-5 mr-2" />
+              Añadir Producto
+            </p>
+          </Link>
           <div className="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
             {currentProducts.map((product) => (
               <div key={product.id} className="relative bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-transform duration-500 transform hover:scale-105">
@@ -113,27 +114,29 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
                     {product.imageUrl ? (
                       <img src={product.imageUrl} alt={product.name} className="w-36 h-36 object-cover rounded-full" />
                     ) : (
-                      <div className="w-36 h-36 bg-gray-200 rounded-full" />
+                      <div className="w-36 h-36 bg-gray-200 rounded-full flex items-center justify-center">
+                        <span className="text-gray-500">No Image</span>
+                      </div>
                     )}
                   </div>
                 </div>
-                <div className="p-6 text-center">
-                  <h3 className="text-xl font-bold text-gray-900 capitalize">{product.name}</h3>
-                  <p className="mt-2 text-sm text-gray-600 capitalize">{product.description}</p>
-                  <p className="mt-4 text-xl font-semibold text-gray-900">${product.price}</p>
-                  <div className="flex justify-center space-x-4 mt-4">
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
+                  <p className="text-gray-600">{product.description}</p>
+                  <p className="text-gray-800 font-semibold">${product.price}</p>
+                  <div className="mt-4 flex justify-end space-x-2">
                     <button
                       onClick={() => handleEdit(product)}
-                      className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300 flex items-center"
+                      className="text-white bg-indigo-600 hover:bg-indigo-700 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center"
                     >
-                      <PencilIcon className="h-5 w-5 mr-2" />
+                      <PencilIcon className="h-5 w-5 mr-1" />
                       Editar
                     </button>
                     <button
-                      onClick={() => handleDelete(product.id)}
-                      className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition-colors duration-300 flex items-center"
+                      onClick={() => handleDelete(product.id!)}
+                      className="text-white bg-red-600 hover:bg-red-700 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center justify-center"
                     >
-                      <TrashIcon className="h-5 w-5 mr-2" />
+                      <TrashIcon className="h-5 w-5" />
                       Eliminar
                     </button>
                   </div>
@@ -141,18 +144,18 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
               </div>
             ))}
           </div>
-          <div className="flex justify-between mt-8">
+          <div className="mt-8 flex justify-between">
             <button
               onClick={handlePreviousPage}
-              className="bg-pink-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-pink-600 transition-transform duration-300 transform hover:scale-105"
               disabled={currentPage === 1}
+              className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow-md hover:bg-gray-400 transition-transform duration-300 transform hover:scale-105"
             >
               Anterior
             </button>
             <button
               onClick={handleNextPage}
-              className="bg-pink-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-pink-600 transition-transform duration-300 transform hover:scale-105"
               disabled={currentPage === totalPages}
+              className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow-md hover:bg-gray-400 transition-transform duration-300 transform hover:scale-105"
             >
               Siguiente
             </button>

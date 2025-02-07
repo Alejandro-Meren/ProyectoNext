@@ -23,7 +23,8 @@ const CreateForm: React.FC<CreateFormProps> = ({ onSave, onCancel }) => {
     form.append('price', formData.price.toString());
     form.append('imageUrl', formData.imageUrl);
 
-    await createProduct(form);
+    
+    //await createProduct(form);
     await onSave(formData);
   };
 
