@@ -9,18 +9,18 @@ export default function Page() {
   return (
     <main className="flex min-h-screen flex-col p-6 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200">
       {/* Header */}
-      <header className="flex h-20 items-center justify-between bg-pink-500 p-4 md:h-24 rounded-lg shadow-xl">
-        <AcmeLogo />
-        <nav className="flex gap-6 text-white">
-          <div className="mt-6 flex justify-center gap-4">
-            <Link
-              href="/dashboard/invoices"
-              className="bg-pink-500 text-white px-6 py-3 rounded-lg font-medium shadow-lg hover:bg-pink-400 transition duration-300 ease-in-out transform hover:scale-105">
-              Reservar Cita
-            </Link>
-          </div>
-        </nav>
-      </header>
+      <header className="flex flex-col sm:flex-row h-auto sm:h-20 items-center justify-between bg-pink-500 p-4 md:h-24 rounded-lg shadow-xl">
+  <AcmeLogo />
+  <nav className="flex flex-col sm:flex-row gap-4 sm:gap-6 text-white mt-4 sm:mt-0">
+    <div className="flex justify-center">
+      <Link
+        href="/dashboard/invoices"
+        className="bg-pink-500 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg font-medium shadow-lg hover:bg-pink-400 transition duration-300 ease-in-out transform hover:scale-105 text-sm sm:text-base">
+        Reservar Cita
+      </Link>
+    </div>
+  </nav>
+</header>
 
       {/* Sección Hero */}
       <section className="mt-16">
