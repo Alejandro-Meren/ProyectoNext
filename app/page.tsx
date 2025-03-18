@@ -23,100 +23,86 @@ export default function Page() {
       </header>
 
       {/* Sección Hero */}
-      <section className="mt-8 text-center">
-        <h1 className={`${lusitana.className} text-4xl md:text-5xl text-pink-600 font-bold`}>
-          Bienvenido a Acme Hair Salon
-        </h1>
-        <p className="mt-4 text-gray-700 md:text-xl text-center">
-          Transformamos tu estilo con cortes modernos y personalizados. Déjate
-          mimar por nuestros expertos estilistas.
-        </p>
-        <p className="mt-4 text-gray-700 md:text-xl text-center">
-          Para acceder a nuestros servicios inicie sesión en nuestra web
-        </p>
-      </section>
-
-      {/* Sección de Servicios Destacados */}
       <section className="mt-16">
   <h2 className="text-center text-3xl font-bold text-pink-600">
     Algunos de nuestros servicios
   </h2>
-  <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-    <div className="bg-pink-50 p-6 rounded-xl shadow-lg transform transition duration-500 hover:scale-105">
+  <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+    <div className="bg-pink-50 p-4 sm:p-6 rounded-xl shadow-lg transform transition duration-500 hover:scale-105">
       <Image
         src="/cortes-de-cabello-sin-sacrificar-tu-larga-melena.jpg"
         alt="Corte de cabello"
         width={300}
         height={300}
-        className="rounded-lg mb-4 object-contain w-full h-48"
+        className="rounded-lg mb-4 object-contain w-full h-40 sm:h-48"
       />
-      <h3 className="text-lg font-semibold text-pink-600">Corte de Cabello</h3>
-      <p className="text-gray-600 mt-2">
+      <h3 className="text-base sm:text-lg font-semibold text-pink-600">Corte de Cabello</h3>
+      <p className="text-sm sm:text-gray-600 mt-2">
         Estilos modernos y personalizados adaptados a ti.
       </p>
     </div>
-    <div className="bg-pink-50 p-6 rounded-xl shadow-lg transform transition duration-500 hover:scale-105">
+    <div className="bg-pink-50 p-4 sm:p-6 rounded-xl shadow-lg transform transition duration-500 hover:scale-105">
       <Image
         src="/images.jpg"
         alt="Tinte de cabello"
         width={300}
         height={300}
-        className="rounded-lg mb-4 object-contain w-full h-48"
+        className="rounded-lg mb-4 object-contain w-full h-40 sm:h-48"
       />
-      <h3 className="text-lg font-semibold text-pink-600">Tinte de Cabello</h3>
-      <p className="text-gray-600 mt-2">
+      <h3 className="text-base sm:text-lg font-semibold text-pink-600">Tinte de Cabello</h3>
+      <p className="text-sm sm:text-gray-600 mt-2">
         Los colores más vibrantes y técnicas de vanguardia.
       </p>
     </div>
-    <div className="bg-pink-50 p-6 rounded-xl shadow-lg transform transition duration-500 hover:scale-105">
+    <div className="bg-pink-50 p-4 sm:p-6 rounded-xl shadow-lg transform transition duration-500 hover:scale-105">
       <Image
         src="/hq720.jpg"
         alt="Peinados festivos"
         width={300}
         height={300}
-        className="rounded-lg mb-4 object-contain w-full h-48"
+        className="rounded-lg mb-4 object-contain w-full h-40 sm:h-48"
       />
-      <h3 className="text-lg font-semibold text-pink-600">Peinados Festivos</h3>
-      <p className="text-gray-600 mt-2">
+      <h3 className="text-base sm:text-lg font-semibold text-pink-600">Peinados Festivos</h3>
+      <p className="text-sm sm:text-gray-600 mt-2">
         Ideal para bodas, fiestas y eventos especiales.
       </p>
     </div>
   </div>
 </section>
-      {/* Sección de Equipo */}
-      <section className="mt-16 bg-gradient-to-r from-pink-200 via-white to-pink-100 p-8 rounded-lg shadow-lg">
-  <h2 className="text-center text-2xl font-bold text-pink-600">
+
+<section className="mt-16 bg-gradient-to-r from-pink-200 via-white to-pink-100 p-6 sm:p-8 rounded-lg shadow-lg">
+  <h2 className="text-center text-xl sm:text-2xl font-bold text-pink-600">
     Conoce a Nuestro Equipo
   </h2>
-  <p className="text-center text-gray-700 mt-4">
+  <p className="text-center text-sm sm:text-gray-700 mt-4">
     Profesionales dedicados a transformar tu estilo.
   </p>
-  <div className="mt-8 flex flex-col md:flex-row gap-6 justify-center">
+  <div className="mt-8 flex flex-col sm:flex-row gap-6 justify-center">
     <div className="flex flex-col items-center">
       <Image
         src="/Andrea-López-Septiembre-2022-13.jpg"
         alt="Estilista 1"
-        width={200}
-        height={200}
-        className="rounded-full shadow-lg object-cover w-48 h-48"
+        width={150}
+        height={150}
+        className="rounded-full shadow-lg object-cover w-36 h-36 sm:w-48 sm:h-48"
       />
-      <h3 className="mt-4 text-lg font-semibold text-pink-600">
+      <h3 className="mt-4 text-base sm:text-lg font-semibold text-pink-600">
         Andrea López
       </h3>
-      <p className="text-sm text-gray-700">Especialista en coloración</p>
+      <p className="text-xs sm:text-sm text-gray-700">Especialista en coloración</p>
     </div>
     <div className="flex flex-col items-center">
       <Image
         src="/image-20230313-14-bcsgqh.jpg"
         alt="Estilista 2"
-        width={200}
-        height={200}
-        className="rounded-full shadow-lg object-cover w-48 h-48"
+        width={150}
+        height={150}
+        className="rounded-full shadow-lg object-cover w-36 h-36 sm:w-48 sm:h-48"
       />
-      <h3 className="mt-4 text-lg font-semibold text-pink-600">
+      <h3 className="mt-4 text-base sm:text-lg font-semibold text-pink-600">
         Estilista 2
       </h3>
-      <p className="text-sm text-gray-700">Especialista en cortes</p>
+      <p className="text-xs sm:text-sm text-gray-700">Especialista en cortes</p>
     </div>
   </div>
 </section>
