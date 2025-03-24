@@ -14,6 +14,7 @@ interface Product {
   description: string;
   price: number;
   imageUrl: string;
+  stock: number;
 }
 
 interface ProductsTableProps {
@@ -21,6 +22,8 @@ interface ProductsTableProps {
 }
 
 const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts }) => {
+  console.log(initialProducts);
+  
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [creatingProduct, setCreatingProduct] = useState<boolean>(false);
@@ -58,12 +61,14 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
     router.push(`/dashboard/productos/${product.id}/edit`);
   };
 
-  const handleSaveNew = async (newProduct: { name: string; description: string; price: number; imageUrl: string }) => {
+  const handleSaveNew = async (newProduct: { name: string; description: string; price: number; imageUrl: string; stock: number }) => {
     const formData = new FormData();
     formData.append('name', newProduct.name);
     formData.append('description', newProduct.description);
     formData.append('price', newProduct.price.toString());
     formData.append('imageUrl', newProduct.imageUrl);
+    formData.append('stock', newProduct.stock.toString());
+
     await createProduct(formData);
     router.refresh();
   };
@@ -74,6 +79,8 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
     formData.append('description', updatedProduct.description);
     formData.append('price', updatedProduct.price.toString());
     formData.append('imageUrl', updatedProduct.imageUrl);
+    formData.append('stock', updatedProduct.stock.toString());
+
     await updateProduct(updatedProduct.id!, formData);
     router.refresh();
   };
@@ -88,6 +95,17 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
     setCreatingProduct(false);
     setEditingProduct(null);
   };
+
+  const handlePurchase = (productId: string) => {
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === productId && product.stock > 0
+          ? { ...product, stock: product.stock - 1 }
+          : product
+      )
+    );
+  };
+
 
   return (
     <div className="flex flex-col h-full p-6 md:p-12 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 rounded-lg shadow-lg overflow-hidden">
@@ -124,6 +142,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
                   <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
                   <p className="text-gray-600">{product.description}</p>
                   <p className="text-gray-800 font-semibold">${product.price}</p>
+                  <p className="text-gray-600">Stock: {product.stock > 0 ? product.stock : 'Sin stock'}</p> 
                   <div className="mt-4 flex justify-end space-x-2">
                     <button
                       onClick={() => handleEdit(product)}

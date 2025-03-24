@@ -9,12 +9,13 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   const product = await fetchProductById(id)
 
-  const handleSave = async (updatedProduct: { id: string; name: string; description: string; price: number; imageUrl: string }) => {
+  const handleSave = async (updatedProduct: { id: string; name: string; description: string; price: number; imageUrl: string; stock: number }) => {
     const productData = {
       name: updatedProduct.name,
       description: updatedProduct.description,
       price: updatedProduct.price,
       imageUrl: updatedProduct.imageUrl,
+      stock: updatedProduct.stock,
     };
 
     await updateProduct(id as string, productData);

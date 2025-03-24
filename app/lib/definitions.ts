@@ -97,7 +97,8 @@ export type Product = {
   description: string;
   price: number;
   imageUrl: string;
-}
+  stock: number; // Nuevo campo para el stock
+};
 
 export type Service = {
   id: string;
