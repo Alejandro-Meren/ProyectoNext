@@ -7,12 +7,14 @@ import { createProduct } from '@/app/lib/actions';
 const CreateProductPage: React.FC = () => {
   const router = useRouter();
 
-  const handleSave = async (newProduct: { name: string; description: string; price: number; imageUrl: string }) => {
+  const handleSave = async (newProduct: { name: string; description: string; price: number; imageUrl: string; stock: number; supplierName: string }) => {
     const form = new FormData();
     form.append('name', newProduct.name);
     form.append('description', newProduct.description);
     form.append('price', newProduct.price.toString());
     form.append('imageUrl', newProduct.imageUrl);
+    form.append('stock', newProduct.stock.toString());
+    form.append('supplierName', newProduct.supplierName);
 
     await createProduct(form);
     

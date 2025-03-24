@@ -6,10 +6,10 @@ import { updateProduct } from '@/app/lib/data';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'PUT') {
       const { id } = req.query;
-      const { name, description, price, imageUrl, stock } = req.body;
+      const { name, description, price, imageUrl, stock, supplierName } = req.body;
       try {
-        await updateProduct(id as string, { name, description, price, imageUrl, stock });        res.status(200).json({ message: 'Product updated successfully' });
-      } catch (error) {
+        
+        await updateProduct(id as string, { name, description, price, imageUrl, stock, supplierName });      } catch (error) {
         res.status(500).json({ error: 'Failed to update product' });
       }
     } else if (req.method === 'DELETE') {

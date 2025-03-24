@@ -238,7 +238,7 @@ export async function fetchFilteredCustomers(query: string): Promise<FormattedCu
 export async function fetchProductById(id: string): Promise<Product | null> {
   try {
     const data = await sql<Product>`
-      SELECT id, name, description, price, image_url AS "imageUrl", stock
+      SELECT id, name, description, price, image_url AS "imageUrl", stock, supplier_name AS "supplierName"
       FROM products
       WHERE id = ${id}
     `;
@@ -252,7 +252,7 @@ export async function fetchProductById(id: string): Promise<Product | null> {
 export async function fetchProducts(): Promise<Product[]> {
   try {
     const data = await sql<Product>`
-      SELECT id, name, description, price, image_url AS "imageUrl", stock
+      SELECT id, name, description, price, image_url AS "imageUrl", stock, supplier_name AS "supplierName"
       FROM products
     `;
     return data.rows;
@@ -271,11 +271,11 @@ export async function deleteProduct(productId: string): Promise<void> {
   }
 }
 
-export async function updateProduct(productId: string, product: { name: string; description: string; price: number; imageUrl: string; stock: number }): Promise<void> {
+export async function updateProduct(productId: string, product: { name: string; description: string; price: number; imageUrl: string; stock: number; supplierName: string }): Promise<void> {
   try {
     await sql`
       UPDATE products
-      SET name = ${product.name}, description = ${product.description}, price = ${product.price}, image_url = ${product.imageUrl}, stock = ${product.stock}
+      SET name = ${product.name}, description = ${product.description}, price = ${product.price}, image_url = ${product.imageUrl}, stock = ${product.stock}, supplier_name = ${product.supplierName}
       WHERE id = ${productId}
     `;
   } catch (error) {
@@ -284,11 +284,11 @@ export async function updateProduct(productId: string, product: { name: string; 
   }
 }
 
-export async function addProduct(product: { name: string; description: string; price: number; imageUrl: string; stock: number }): Promise<{ id: string }> {
+export async function addProduct(product: { name: string; description: string; price: number; imageUrl: string; stock: number; supplierName: string }): Promise<{ id: string }> {
   try {
     const result = await sql`
-      INSERT INTO products (name, description, price, image_url, stock)
-      VALUES (${product.name}, ${product.description}, ${product.price}, ${product.imageUrl}, ${product.stock})
+      INSERT INTO products (name, description, price, image_url, stock, supplier_name)
+      VALUES (${product.name}, ${product.description}, ${product.price}, ${product.imageUrl}, ${product.stock}, ${product.supplierName})
       RETURNING id
     `;
     return { id: result.rows[0].id };

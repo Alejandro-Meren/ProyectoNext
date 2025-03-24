@@ -32,7 +32,8 @@ const nextConfig: NextConfig = {
       'www.delauz.es',
       'encrypted-tbn0.gstatic.com',
       'encrypted-tbn1.gstatic.com',
-      'www.jata.es'
+      'www.jata.es',
+      'example.com' // Agregado el dominio example.com
     ],
   },
 };

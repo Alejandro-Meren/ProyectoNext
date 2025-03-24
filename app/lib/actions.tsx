@@ -119,6 +119,8 @@ const ProductSchema = z.object({
   description: z.string().min(1, { message: 'Please enter a product description.' }),
   price: z.coerce.number().gt(0, { message: 'Please enter a price greater than $0.' }),
   imageUrl: z.string().url({ message: 'Please enter a valid URL.' }),
+  stock: z.coerce.number().int().nonnegative({ message: 'Stock must be a non-negative integer.' }),
+  supplierName: z.string().min(1, { message: 'Please enter a supplier name.' }),
 });
 
 export async function createProduct(formData: FormData) {
@@ -127,6 +129,8 @@ export async function createProduct(formData: FormData) {
     description: formData.get('description'),
     price: formData.get('price'),
     imageUrl: formData.get('imageUrl'),
+    stock: formData.get('stock'), // Agregar stock
+    supplierName: formData.get('supplierName'), // Agregar supplierName
   });
 
   if (!validatedFields.success) {
@@ -136,19 +140,19 @@ export async function createProduct(formData: FormData) {
     };
   }
 
-  const { name, description, price, imageUrl } = validatedFields.data;
+  const { name, description, price, imageUrl, stock, supplierName } = validatedFields.data;
 
   try {
     await sql`
-      INSERT INTO products (name, description, price, image_url)
-      VALUES (${name}, ${description}, ${price}, ${imageUrl})
+      INSERT INTO products (name, description, price, image_url, stock, supplier_name)
+      VALUES (${name}, ${description}, ${price}, ${imageUrl}, ${stock}, ${supplierName})
     `;
   } catch (error) {
     return {
       message: 'Database Error: Failed to Create Product.',
     };
   }
-  console.log('revalidatePath'+ name);
+
   revalidatePath('/dashboard/productos');
   redirect('/dashboard/productos');
 }
@@ -159,6 +163,8 @@ export async function updateProduct(id: string, formData: FormData) {
     description: formData.get('description'),
     price: formData.get('price'),
     imageUrl: formData.get('imageUrl'),
+    stock: formData.get('stock'), // Agregar stock
+    supplierName: formData.get('supplierName'), // Agregar supplierName
   });
 
   if (!validatedFields.success) {
@@ -168,12 +174,12 @@ export async function updateProduct(id: string, formData: FormData) {
     };
   }
 
-  const { name, description, price, imageUrl } = validatedFields.data;
+  const { name, description, price, imageUrl, stock, supplierName } = validatedFields.data;
 
   try {
     await sql`
       UPDATE products
-      SET name = ${name}, description = ${description}, price = ${price}, image_url = ${imageUrl}
+      SET name = ${name}, description = ${description}, price = ${price}, image_url = ${imageUrl}, stock = ${stock}, supplier_name = ${supplierName}
       WHERE id = ${id}
     `;
   } catch (error) {

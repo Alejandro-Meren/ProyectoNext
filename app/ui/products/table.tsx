@@ -15,6 +15,7 @@ interface Product {
   price: number;
   imageUrl: string;
   stock: number;
+  supplierName: string; // Nuevo campo para el nombre del proveedor
 }
 
 interface ProductsTableProps {
@@ -23,7 +24,7 @@ interface ProductsTableProps {
 
 const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts }) => {
   console.log(initialProducts);
-  
+
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [creatingProduct, setCreatingProduct] = useState<boolean>(false);
@@ -61,13 +62,14 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
     router.push(`/dashboard/productos/${product.id}/edit`);
   };
 
-  const handleSaveNew = async (newProduct: { name: string; description: string; price: number; imageUrl: string; stock: number }) => {
+  const handleSaveNew = async (newProduct: { name: string; description: string; price: number; imageUrl: string; stock: number; supplierName: string }) => {
     const formData = new FormData();
     formData.append('name', newProduct.name);
     formData.append('description', newProduct.description);
     formData.append('price', newProduct.price.toString());
     formData.append('imageUrl', newProduct.imageUrl);
     formData.append('stock', newProduct.stock.toString());
+    formData.append('supplierName', newProduct.supplierName);
 
     await createProduct(formData);
     router.refresh();
@@ -80,6 +82,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
     formData.append('price', updatedProduct.price.toString());
     formData.append('imageUrl', updatedProduct.imageUrl);
     formData.append('stock', updatedProduct.stock.toString());
+    formData.append('supplierName', updatedProduct.supplierName);
 
     await updateProduct(updatedProduct.id!, formData);
     router.refresh();
@@ -106,14 +109,13 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
     );
   };
 
-
   return (
     <div className="flex flex-col h-full p-6 md:p-12 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 rounded-lg shadow-lg overflow-hidden">
       <h1 className="mb-4 text-2xl md:text-3xl text-pink-600" style={{ fontFamily: 'Times New Roman, serif' }}>
         Productos de Peluquería
       </h1>
       {editingProduct ? (
-        <EditForm product={editingProduct}  />
+        <EditForm product={editingProduct} />
       ) : creatingProduct ? (
         <CreateForm onSave={handleSaveNew} onCancel={handleCancel} />
       ) : (
@@ -142,7 +144,8 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
                   <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
                   <p className="text-gray-600">{product.description}</p>
                   <p className="text-gray-800 font-semibold">${product.price}</p>
-                  <p className="text-gray-600">Stock: {product.stock > 0 ? product.stock : 'Sin stock'}</p> 
+                  <p className="text-gray-600">Stock: {product.stock > 0 ? product.stock : 'Sin stock'}</p>
+                  <p className="text-gray-600">Proveedor: {product.supplierName || 'Desconocido'}</p> {/* Mostrar el proveedor */}
                   <div className="mt-4 flex justify-end space-x-2">
                     <button
                       onClick={() => handleEdit(product)}

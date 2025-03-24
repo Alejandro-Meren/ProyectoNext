@@ -98,6 +98,7 @@ export type Product = {
   price: number;
   imageUrl: string;
   stock: number; // Nuevo campo para el stock
+  supplierName: string; // Nuevo campo para el nombre del proveedor
 };
 
 export type Service = {

@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 
 interface CreateFormProps {
-  onSave: (newProduct: { name: string; description: string; price: number; imageUrl: string; stock: number }) => Promise<void>;
+  onSave: (newProduct: { name: string; description: string; price: number; imageUrl: string; stock: number; supplierName: string }) => Promise<void>;
   onCancel: () => void;
 }
 
 const CreateForm: React.FC<CreateFormProps> = ({ onSave }) => {
-  const [formData, setFormData] = useState({ name: '', description: '', price: 0, imageUrl: '', stock: 0 });
+  const [formData, setFormData] = useState({ name: '', description: '', price: 0, imageUrl: '', stock: 0, supplierName: '' });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -71,6 +71,16 @@ const CreateForm: React.FC<CreateFormProps> = ({ onSave }) => {
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm"
         />
       </div>
+      <div>
+  <label className="block text-sm font-medium text-gray-700">Proveedor</label>
+  <input
+    type="text"
+    name="supplierName"
+    value={formData.supplierName}
+    onChange={handleChange}
+    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm"
+  />
+</div>
       <div className="flex justify-end space-x-4">
         <Link
           href="/dashboard/productos"
