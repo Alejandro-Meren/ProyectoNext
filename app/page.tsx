@@ -33,44 +33,54 @@ export default function Page() {
     >
       {/* Header */}
       <header
-        className={`sticky top-0 z-50 flex flex-col sm:flex-row h-auto sm:h-20 items-center justify-between transition duration-500 ${
-          darkMode ? 'bg-gray-800 text-white' : 'bg-pink-500 text-white'
-        } p-4 md:h-24 rounded-lg shadow-xl`}
+  className={`sticky top-0 z-50 flex flex-col sm:flex-row h-auto sm:h-20 items-center justify-between transition duration-500 ${
+    darkMode ? 'bg-gray-800 text-white' : 'bg-pink-500 text-white'
+  } p-4 md:h-24 rounded-lg shadow-xl`}
+>
+  <AcmeLogo />
+  <nav className="flex flex-col sm:flex-row gap-4 sm:gap-6 mt-4 sm:mt-0">
+    <div className="flex justify-center gap-4">
+      <Link
+        href="/dashboard/invoices"
+        className={`transition duration-500 ${
+          darkMode
+            ? 'bg-purple-500 hover:bg-purple-400'
+            : 'bg-pink-500 hover:bg-pink-400'
+        } text-white px-6 py-3 rounded-lg font-medium shadow-lg transform hover:scale-105 text-lg`}
       >
-        <AcmeLogo />
-        <nav className="flex flex-col sm:flex-row gap-4 sm:gap-6 mt-4 sm:mt-0">
-          <div className="flex justify-center gap-4">
-            <Link
-              href="/dashboard/invoices"
-              className={`transition duration-500 ${
-                darkMode
-                  ? 'bg-purple-500 hover:bg-purple-400'
-                  : 'bg-pink-500 hover:bg-pink-400'
-              } text-white px-6 py-3 rounded-lg font-medium shadow-lg transform hover:scale-105 text-lg`}
-            >
-              Iniciar Sesión
-            </Link>
-            {/* Botón de modo oscuro/claro */}
-            <button
-              onClick={toggleDarkMode}
-              className="relative w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-pink-300 to-pink-400 dark:from-purple-500 dark:to-gray-700 rounded-full flex items-center justify-center shadow-lg transition duration-500 ease-in-out transform hover:scale-110"
-            >
-              <div className="absolute inset-0 flex items-center justify-center">
-                {darkMode ? (
-                  <SunIcon className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400 transition duration-500" />
-                ) : (
-                  <MoonIcon className="w-6 h-6 sm:w-8 sm:h-8 text-pink-400 transition duration-500" />
-                )}
-              </div>
-              <div
-                className={`absolute inset-0 rounded-full transition duration-500 ${
-                  darkMode ? 'bg-purple-500 opacity-20' : 'bg-pink-300 opacity-20'
-                }`}
-              ></div>
-            </button>
-          </div>
-        </nav>
-      </header>
+        Iniciar Sesión
+      </Link>
+      <Link
+        href="/register"
+        className={`transition duration-500 ${
+          darkMode
+            ? 'bg-purple-500 hover:bg-purple-400'
+            : 'bg-pink-500 hover:bg-pink-400'
+        } text-white px-6 py-3 rounded-lg font-medium shadow-lg transform hover:scale-105 text-lg`}
+      >
+        Registrarse
+      </Link>
+      {/* Botón de modo oscuro/claro */}
+      <button
+        onClick={toggleDarkMode}
+        className="relative w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-pink-300 to-pink-400 dark:from-purple-500 dark:to-gray-700 rounded-full flex items-center justify-center shadow-lg transition duration-500 ease-in-out transform hover:scale-110"
+      >
+        <div className="absolute inset-0 flex items-center justify-center">
+          {darkMode ? (
+            <SunIcon className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400 transition duration-500" />
+          ) : (
+            <MoonIcon className="w-6 h-6 sm:w-8 sm:h-8 text-pink-400 transition duration-500" />
+          )}
+        </div>
+        <div
+          className={`absolute inset-0 rounded-full transition duration-500 ${
+            darkMode ? 'bg-purple-500 opacity-20' : 'bg-pink-300 opacity-20'
+          }`}
+        ></div>
+      </button>
+    </div>
+  </nav>
+</header>
 
       {/* Hero Section */}
       <section
