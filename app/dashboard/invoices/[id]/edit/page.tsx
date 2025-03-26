@@ -42,7 +42,6 @@ export default function EditAppointmentPage({ params }: { params: Promise<{ id: 
           throw new Error('Failed to fetch customers');
         }
         const data = await response.json();
-        console.log('Fetched customers:', data); // Log the fetched data
         setCustomers(data);
       } catch (error) {
         console.error('Error fetching customers:', error);
@@ -60,7 +59,6 @@ export default function EditAppointmentPage({ params }: { params: Promise<{ id: 
           throw new Error('Failed to fetch appointment');
         }
         const data = await response.json();
-        console.log('Fetched appointment:', data); // Log the fetched data
         setAppointment(data);
       } catch (error) {
         console.error('Error fetching appointment:', error);
@@ -101,8 +99,8 @@ export default function EditAppointmentPage({ params }: { params: Promise<{ id: 
   };
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Edit Appointment</h1>
+    <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+      <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Editar Cita</h1>
       <EditForm
         appointmentId={appointmentId!}
         customers={customers}

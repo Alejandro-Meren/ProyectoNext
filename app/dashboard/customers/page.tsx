@@ -17,7 +17,7 @@ export default async function Page(props: {
   const customers = await fetchFilteredCustomers(query);
 
   return (
-    <main>
+    <main className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <CustomersTable customers={customers} />
     </main>
   );

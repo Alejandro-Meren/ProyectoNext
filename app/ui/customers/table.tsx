@@ -8,8 +8,8 @@ export default function CustomersTable({
   customers: FormattedCustomersTable[];
 }) {
   return (
-    <div className="p-4 bg-gradient-to-b from-pink-100 via-pink-200 to-pink-300 min-h-screen rounded-lg shadow-lg">
-      <h1 className="mb-4 text-xl md:text-2xl text-pink-600 font-bold text-center">
+    <div className="p-4 bg-gradient-to-b from-pink-100 via-pink-200 to-pink-300 dark:from-gray-800 dark:via-gray-900 dark:to-black min-h-screen rounded-lg shadow-lg">
+      <h1 className="mb-4 text-xl md:text-2xl text-pink-600 dark:text-purple-400 font-bold text-center">
         Clientes
       </h1>
 
@@ -20,28 +20,28 @@ export default function CustomersTable({
 
       {/* Diseño de tabla para pantallas grandes */}
       <div className="hidden md:block overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-300">
-          <thead className="bg-pink-100">
+        <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+          <thead className="bg-pink-100 dark:bg-gray-700">
             <tr>
-              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">
+              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
                 Cliente
               </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">
+              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
                 Email
               </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">
+              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
                 Citas Totales
               </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">
+              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
                 Servicios
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {customers.map((customer) => (
               <tr
                 key={customer.id}
-                className="hover:bg-pink-50 transition-colors duration-200"
+                className="hover:bg-pink-50 dark:hover:bg-gray-700 transition-colors duration-200"
               >
                 <td className="px-4 py-2 whitespace-nowrap">
                   <div className="flex items-center">
@@ -54,25 +54,25 @@ export default function CustomersTable({
                         className="w-10 h-10 rounded-full"
                       />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-gray-200" />
+                      <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700" />
                     )}
                     <div className="ml-4">
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium text-gray-900 dark:text-gray-200">
                         {customer.name}
                       </div>
                     </div>
                   </div>
                 </td>
                 <td className="px-4 py-2 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{customer.email}</div>
+                  <div className="text-sm text-gray-900 dark:text-gray-200">{customer.email}</div>
                 </td>
                 <td className="px-4 py-2 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
+                  <div className="text-sm text-gray-900 dark:text-gray-200">
                     {customer.total_appointments}
                   </div>
                 </td>
                 <td className="px-4 py-2 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{customer.services}</div>
+                  <div className="text-sm text-gray-900 dark:text-gray-200">{customer.services}</div>
                 </td>
               </tr>
             ))}
@@ -85,7 +85,7 @@ export default function CustomersTable({
         {customers.map((customer) => (
           <div
             key={customer.id}
-            className="bg-white p-4 rounded-lg shadow-md hover:bg-pink-50 transition-colors duration-200"
+            className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:bg-pink-50 dark:hover:bg-gray-700 transition-colors duration-200"
           >
             <div className="flex items-center mb-4">
               {customer.image_url ? (
@@ -97,16 +97,16 @@ export default function CustomersTable({
                   className="w-12 h-12 rounded-full"
                 />
               ) : (
-                <div className="w-12 h-12 rounded-full bg-gray-200" />
+                <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700" />
               )}
               <div className="ml-4">
-                <div className="text-lg font-medium text-gray-900">
+                <div className="text-lg font-medium text-gray-900 dark:text-gray-200">
                   {customer.name}
                 </div>
-                <div className="text-sm text-gray-500">{customer.email}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">{customer.email}</div>
               </div>
             </div>
-            <div className="text-sm text-gray-900">
+            <div className="text-sm text-gray-900 dark:text-gray-200">
               <p>
                 <strong>Citas Totales:</strong> {customer.total_appointments}
               </p>

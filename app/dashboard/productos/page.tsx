@@ -10,8 +10,7 @@ export default async function Page() {
   const products = await fetchProducts();
 
   return (
-    <main>
-      <h1 className="text-2xl font-bold mb-4"></h1>
+    <main className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <ProductsTable products={products} />
     </main>
   );

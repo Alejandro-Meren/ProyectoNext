@@ -35,8 +35,12 @@ export default function NavLinks() {
             className={clsx(
               'flex items-center p-4 text-lg font-semibold rounded-2xl transition-all duration-500',
               {
-                'bg-gradient-to-r from-pink-500 to-pink-700 text-white shadow-lg border border-pink-700': pathname === link.href,
-                'text-gray-700 hover:bg-pink-200 hover:text-gray-900 hover:shadow-md hover:border hover:border-pink-300': pathname !== link.href,
+                // Estilo para el enlace activo
+                'bg-gradient-to-r from-pink-500 to-pink-700 text-white shadow-lg border border-pink-700 dark:from-purple-600 dark:to-purple-800 dark:border-purple-700':
+                  pathname === link.href,
+                // Estilo para los enlaces inactivos
+                'text-gray-700 hover:bg-pink-200 hover:text-gray-900 hover:shadow-md hover:border hover:border-pink-300 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-gray-100 dark:hover:border-gray-600':
+                  pathname !== link.href,
               }
             )}
           >

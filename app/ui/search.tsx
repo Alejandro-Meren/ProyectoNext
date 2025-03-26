@@ -29,14 +29,14 @@ export default function Search({ placeholder }: { placeholder: string }) {
         Search
       </label>
       <input
-        className="peer block w-full rounded-full border border-pink-300 py-2 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition duration-300 ease-in-out"
+        className="peer block w-full rounded-full border border-pink-300 dark:border-gray-600 py-2 pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-pink-500 dark:focus:ring-purple-500 focus:border-pink-500 dark:focus:border-purple-500 transition duration-300 ease-in-out bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-200"
         placeholder={placeholder}
         onChange={(e) => {
           handleSearch(e.target.value);
         }}
         defaultValue={searchParams?.get('query')?.toString() || ''}
       />
-      <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-pink-500 peer-focus:text-pink-700 transition duration-300 ease-in-out" />
+      <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-pink-500 dark:text-purple-400 peer-focus:text-pink-700 dark:peer-focus:text-purple-500 transition duration-300 ease-in-out" />
     </div>
   );
 }

@@ -47,45 +47,54 @@ export default function RegisterForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow-lg">
-      <h1 className="text-2xl font-bold text-center text-pink-600">Registro</h1>
-      {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg"
+    >
+      <h1 className="text-2xl font-bold text-center text-pink-600 dark:text-purple-400">
+        Registro
+      </h1>
+      {errorMessage && <p className="text-red-500 dark:text-red-400 text-sm">{errorMessage}</p>}
       <div>
-        <label className="block text-sm font-medium text-gray-700">Nombre</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre</label>
         <input
           type="text"
           name="name"
           value={formData.name}
           onChange={handleChange}
           required
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm"
+          className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:border-purple-500 dark:focus:ring-purple-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          Correo Electrónico
+        </label>
         <input
           type="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
           required
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm"
+          className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:border-purple-500 dark:focus:ring-purple-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
         />
       </div>
       <div>
-        <label className="block text-sm font-medium text-gray-700">Contraseña</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          Contraseña
+        </label>
         <input
           type="password"
           name="password"
           value={formData.password}
           onChange={handleChange}
           required
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 sm:text-sm"
+          className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:border-purple-500 dark:focus:ring-purple-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
         />
       </div>
       <button
         type="submit"
-        className="w-full bg-pink-500 text-white py-2 rounded-lg shadow-md hover:bg-pink-600 transition-colors duration-300"
+        className="w-full bg-pink-500 dark:bg-purple-500 text-white py-2 rounded-lg shadow-md hover:bg-pink-600 dark:hover:bg-purple-600 transition-colors duration-300"
       >
         Registrarse
       </button>

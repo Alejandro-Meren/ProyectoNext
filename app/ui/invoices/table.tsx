@@ -69,38 +69,38 @@ export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
   };
 
   return (
-    <div className="p-4 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 rounded-lg shadow-lg">
-      <h1 className="mb-4 text-xl md:text-2xl text-pink-600 font-bold text-center">
+    <div className="p-4 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-lg shadow-lg">
+      <h1 className="mb-4 text-xl md:text-2xl text-pink-600 dark:text-purple-400 font-bold text-center">
         Citas
       </h1>
 
       {/* Diseño de tabla para pantallas grandes */}
       <div className="hidden md:block overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-300">
-          <thead className="bg-pink-100">
+        <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+          <thead className="bg-pink-100 dark:bg-gray-700">
             <tr>
-              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">
+              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
                 Cliente
               </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">
+              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
                 Fecha
               </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">
+              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
                 Hora
               </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 uppercase tracking-wider">
+              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
                 Servicio
               </th>
-              <th className="px-4 py-2 text-right text-xs font-medium text-pink-700 uppercase tracking-wider">
+              <th className="px-4 py-2 text-right text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
                 Acciones
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {appointments.map((appointment) => (
               <tr
                 key={appointment.id}
-                className="hover:bg-pink-50 transition-colors duration-200"
+                className="hover:bg-pink-50 dark:hover:bg-gray-700 transition-colors duration-200"
               >
                 <td className="px-4 py-2 whitespace-nowrap">
                   <div className="flex items-center">
@@ -111,39 +111,39 @@ export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
                         className="w-10 h-10 rounded-full"
                       />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-gray-200" />
+                      <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700" />
                     )}
                     <div className="ml-4">
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium text-gray-900 dark:text-gray-200">
                         {appointment.customer_name}
                       </div>
                     </div>
                   </div>
                 </td>
                 <td className="px-4 py-2 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
+                  <div className="text-sm text-gray-900 dark:text-gray-200">
                     {formatDate(appointment.date)}
                   </div>
                 </td>
                 <td className="px-4 py-2 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
+                  <div className="text-sm text-gray-900 dark:text-gray-200">
                     {formatTime(appointment.time)}
                   </div>
                 </td>
                 <td className="px-4 py-2 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{appointment.service}</div>
+                  <div className="text-sm text-gray-900 dark:text-gray-200">{appointment.service}</div>
                 </td>
                 <td className="px-4 py-2 whitespace-nowrap text-right text-sm font-medium">
                   <div className="flex justify-end space-x-2">
                     <button
                       onClick={() => onEdit(appointment.id)}
-                      className="text-white bg-indigo-600 hover:bg-indigo-700 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
+                      className="text-white bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
                     >
                       <PencilIcon className="h-5 w-5" />
                     </button>
                     <button
                       onClick={() => handleDelete(appointment.id)}
-                      className="text-white bg-red-600 hover:bg-red-700 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
+                      className="text-white bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-800 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
                     >
                       <TrashIcon className="h-5 w-5" />
                     </button>
@@ -160,7 +160,7 @@ export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
         {appointments.map((appointment) => (
           <div
             key={appointment.id}
-            className="bg-white p-4 rounded-lg shadow-md hover:bg-pink-50 transition-colors duration-200"
+            className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:bg-pink-50 dark:hover:bg-gray-700 transition-colors duration-200"
           >
             <div className="flex items-center mb-4">
               {appointment.customer_image ? (
@@ -170,15 +170,15 @@ export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
                   className="w-12 h-12 rounded-full"
                 />
               ) : (
-                <div className="w-12 h-12 rounded-full bg-gray-200" />
+                <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700" />
               )}
               <div className="ml-4">
-                <div className="text-lg font-medium text-gray-900">
+                <div className="text-lg font-medium text-gray-900 dark:text-gray-200">
                   {appointment.customer_name}
                 </div>
               </div>
             </div>
-            <div className="text-sm text-gray-900">
+            <div className="text-sm text-gray-900 dark:text-gray-200">
               <p>
                 <strong>Fecha:</strong> {formatDate(appointment.date)}
               </p>
@@ -192,13 +192,13 @@ export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
             <div className="flex justify-end space-x-2 mt-4">
               <button
                 onClick={() => onEdit(appointment.id)}
-                className="text-white bg-indigo-600 hover:bg-indigo-700 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
+                className="text-white bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
               >
                 <PencilIcon className="h-5 w-5" />
               </button>
               <button
                 onClick={() => handleDelete(appointment.id)}
-                className="text-white bg-red-600 hover:bg-red-700 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
+                className="text-white bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-800 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
               >
                 <TrashIcon className="h-5 w-5" />
               </button>

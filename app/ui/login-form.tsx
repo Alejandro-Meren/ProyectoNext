@@ -13,16 +13,16 @@ export default function LoginForm() {
   return (
     <form
       action={formAction}
-      className="space-y-6 bg-white p-6 sm:p-8 rounded-lg shadow-lg mt-8 sm:mt-16 max-w-md mx-auto"
+      className="space-y-6 bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-lg shadow-lg mt-8 sm:mt-16 max-w-md mx-auto"
     >
       {/* Header */}
       <div className="flex flex-col items-center">
         <h1
-          className={`${lusitana.className} mb-4 sm:mb-6 text-2xl sm:text-3xl text-center text-pink-600`}
+          className={`${lusitana.className} mb-4 sm:mb-6 text-2xl sm:text-3xl text-center text-pink-600 dark:text-purple-400`}
         >
           Welcome Back!
         </h1>
-        <p className="text-center text-gray-700 text-sm sm:text-base mb-4">
+        <p className="text-center text-gray-700 dark:text-gray-300 text-sm sm:text-base mb-4">
           Please login to your account
         </p>
       </div>
@@ -31,30 +31,30 @@ export default function LoginForm() {
       <div className="space-y-4">
         <div className="relative">
           <label
-            className="mb-2 block text-xs sm:text-sm font-medium text-gray-900"
+            className="mb-2 block text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-300"
             htmlFor="email"
           >
             Email
           </label>
           <input
-            className="peer block w-full rounded-md border border-gray-300 py-2 sm:py-3 pl-10 pr-4 text-sm outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 placeholder:text-gray-500"
+            className="peer block w-full rounded-md border border-gray-300 dark:border-gray-600 py-2 sm:py-3 pl-10 pr-4 text-sm outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 dark:focus:border-purple-500 dark:focus:ring-purple-500 placeholder:text-gray-500 dark:placeholder:text-gray-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
             id="email"
             type="email"
             name="email"
             placeholder="Enter your email address"
             required
           />
-          <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500 peer-focus:text-pink-500" />
+          <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500 dark:text-gray-400 peer-focus:text-pink-500 dark:peer-focus:text-purple-500" />
         </div>
         <div className="relative">
           <label
-            className="mb-2 block text-xs sm:text-sm font-medium text-gray-900"
+            className="mb-2 block text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-300"
             htmlFor="password"
           >
             Password
           </label>
           <input
-            className="peer block w-full rounded-md border border-gray-300 py-2 sm:py-3 pl-10 pr-4 text-sm outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 placeholder:text-gray-500"
+            className="peer block w-full rounded-md border border-gray-300 dark:border-gray-600 py-2 sm:py-3 pl-10 pr-4 text-sm outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 dark:focus:border-purple-500 dark:focus:ring-purple-500 placeholder:text-gray-500 dark:placeholder:text-gray-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
             id="password"
             type="password"
             name="password"
@@ -62,13 +62,13 @@ export default function LoginForm() {
             required
             minLength={6}
           />
-          <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500 peer-focus:text-pink-500" />
+          <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500 dark:text-gray-400 peer-focus:text-pink-500 dark:peer-focus:text-purple-500" />
         </div>
       </div>
 
       {/* Submit Button */}
       <Button
-        className="mt-6 w-full bg-pink-500 text-white py-2 sm:py-3 rounded-lg shadow-md hover:bg-pink-600 transition-colors duration-300 flex items-center justify-center"
+        className="mt-6 w-full bg-pink-500 dark:bg-purple-500 text-white py-2 sm:py-3 rounded-lg shadow-md hover:bg-pink-600 dark:hover:bg-purple-600 transition-colors duration-300 flex items-center justify-center"
         aria-disabled={isPending}
       >
         Log in <ArrowRightIcon className="ml-2 h-5 w-5 text-gray-50" />
@@ -76,7 +76,7 @@ export default function LoginForm() {
 
       {/* Error Message */}
       {errorMessage && (
-        <div className="flex items-center space-x-2 mt-4 text-red-500">
+        <div className="flex items-center space-x-2 mt-4 text-red-500 dark:text-red-400">
           <ExclamationCircleIcon className="h-5 w-5" />
           <p className="text-sm">{errorMessage}</p>
         </div>

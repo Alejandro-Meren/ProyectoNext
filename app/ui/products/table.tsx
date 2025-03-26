@@ -15,7 +15,7 @@ interface Product {
   price: number;
   imageUrl: string;
   stock: number;
-  supplierName: string; // Nuevo campo para el nombre del proveedor
+  supplierName: string;
 }
 
 interface ProductsTableProps {
@@ -23,8 +23,6 @@ interface ProductsTableProps {
 }
 
 const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts }) => {
-  console.log(initialProducts);
-
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [creatingProduct, setCreatingProduct] = useState<boolean>(false);
@@ -99,19 +97,9 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
     setEditingProduct(null);
   };
 
-  const handlePurchase = (productId: string) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === productId && product.stock > 0
-          ? { ...product, stock: product.stock - 1 }
-          : product
-      )
-    );
-  };
-
   return (
-    <div className="flex flex-col h-full p-6 md:p-12 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 rounded-lg shadow-lg overflow-hidden">
-      <h1 className="mb-4 text-2xl md:text-3xl text-pink-600" style={{ fontFamily: 'Times New Roman, serif' }}>
+    <div className="flex flex-col h-full p-6 md:p-12 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-lg shadow-lg overflow-hidden">
+      <h1 className="mb-4 text-2xl md:text-3xl text-pink-600 dark:text-purple-400" style={{ fontFamily: 'Times New Roman, serif' }}>
         Productos de Peluquería
       </h1>
       {editingProduct ? (
@@ -121,42 +109,42 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
       ) : (
         <>
           <Link href="/dashboard/productos/create">
-            <p className="self-end mb-4 bg-pink-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-pink-600 transition-transform duration-300 transform hover:scale-105 flex items-center">
+            <p className="self-end mb-4 bg-pink-500 dark:bg-purple-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-pink-600 dark:hover:bg-purple-600 transition-transform duration-300 transform hover:scale-105 flex items-center">
               <PlusIcon className="h-5 w-5 mr-2" />
               Añadir Producto
             </p>
           </Link>
           <div className="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
             {currentProducts.map((product) => (
-              <div key={product.id} className="relative bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-transform duration-500 transform hover:scale-105">
-                <div className="w-full h-56 flex justify-center items-center bg-gradient-to-r from-pink-100 to-yellow-100">
-                  <div className="w-40 h-40 bg-white flex justify-center items-center rounded-full border-4 border-pink-300 shadow-md">
+              <div key={product.id} className="relative bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-transform duration-500 transform hover:scale-105">
+                <div className="w-full h-56 flex justify-center items-center bg-gradient-to-r from-pink-100 to-yellow-100 dark:from-gray-700 dark:to-gray-800">
+                  <div className="w-40 h-40 bg-white dark:bg-gray-900 flex justify-center items-center rounded-full border-4 border-pink-300 dark:border-purple-500 shadow-md">
                     {product.imageUrl ? (
                       <img src={product.imageUrl} alt={product.name} className="w-36 h-36 object-cover rounded-full" />
                     ) : (
-                      <div className="w-36 h-36 bg-gray-200 rounded-full flex items-center justify-center">
-                        <span className="text-gray-500">No Image</span>
+                      <div className="w-36 h-36 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                        <span className="text-gray-500 dark:text-gray-300">No Image</span>
                       </div>
                     )}
                   </div>
                 </div>
                 <div className="p-4">
-                  <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
-                  <p className="text-gray-600">{product.description}</p>
-                  <p className="text-gray-800 font-semibold">${product.price}</p>
-                  <p className="text-gray-600">Stock: {product.stock > 0 ? product.stock : 'Sin stock'}</p>
-                  <p className="text-gray-600">Proveedor: {product.supplierName || 'Desconocido'}</p> {/* Mostrar el proveedor */}
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">{product.name}</h3>
+                  <p className="text-gray-600 dark:text-gray-400">{product.description}</p>
+                  <p className="text-gray-800 dark:text-gray-200 font-semibold">${product.price}</p>
+                  <p className="text-gray-600 dark:text-gray-400">Stock: {product.stock > 0 ? product.stock : 'Sin stock'}</p>
+                  <p className="text-gray-600 dark:text-gray-400">Proveedor: {product.supplierName || 'Desconocido'}</p>
                   <div className="mt-4 flex justify-end space-x-2">
                     <button
                       onClick={() => handleEdit(product)}
-                      className="text-white bg-indigo-600 hover:bg-indigo-700 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center"
+                      className="text-white bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center"
                     >
                       <PencilIcon className="h-5 w-5 mr-1" />
                       Editar
                     </button>
                     <button
                       onClick={() => handleDelete(product.id!)}
-                      className="text-white bg-red-600 hover:bg-red-700 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center justify-center"
+                      className="text-white bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-800 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center justify-center"
                     >
                       <TrashIcon className="h-5 w-5" />
                       Eliminar
@@ -170,14 +158,14 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
             <button
               onClick={handlePreviousPage}
               disabled={currentPage === 1}
-              className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow-md hover:bg-gray-400 transition-transform duration-300 transform hover:scale-105"
+              className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg shadow-md hover:bg-gray-400 dark:hover:bg-gray-600 transition-transform duration-300 transform hover:scale-105"
             >
               Anterior
             </button>
             <button
               onClick={handleNextPage}
               disabled={currentPage === totalPages}
-              className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg shadow-md hover:bg-gray-400 transition-transform duration-300 transform hover:scale-105"
+              className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg shadow-md hover:bg-gray-400 dark:hover:bg-gray-600 transition-transform duration-300 transform hover:scale-105"
             >
               Siguiente
             </button>

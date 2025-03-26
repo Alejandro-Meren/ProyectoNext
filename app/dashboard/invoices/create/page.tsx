@@ -9,7 +9,7 @@ export default async function Page() {
   }));
 
   return (
-    <main>
+    <main className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <Breadcrumbs
         breadcrumbs={[
           { label: 'Invoices', href: '/dashboard/invoices' },
@@ -21,7 +21,6 @@ export default async function Page() {
         ]}
       />
       <CreateForm customers={customers} />
-      
     </main>
   );
 }

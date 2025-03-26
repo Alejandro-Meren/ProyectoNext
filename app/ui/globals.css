@@ -16,3 +16,76 @@ input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+:root {
+  --bg-gradient-from: #fef2f2; /* Fondo degradado inicial */
+  --bg-gradient-via: #fde8e8; /* Fondo degradado intermedio */
+  --bg-gradient-to: #fbcfe8; /* Fondo degradado final */
+  --text-color: #9d174d; /* Texto principal */
+  --card-bg-color: #fff; /* Fondo de tarjetas */
+  --card-text-color: #1f2937; /* Texto de tarjetas */
+  --header-bg: #f43f5e; /* Fondo del header */
+  --header-text: #ffffff; /* Texto del header */
+  --button-bg: #ec4899; /* Fondo de botones */
+  --button-hover-bg: #374151; /* Hover de botones */
+  --footer-bg: #f43f5e; /* Fondo del footer */
+  --footer-text: #fbcfe8; /* Texto del footer */
+}
+
+/* Variables globales para el modo oscuro */
+.dark {
+  --bg-gradient-from: #1f2937; /* Fondo degradado inicial */
+  --bg-gradient-via: #111827; /* Fondo degradado intermedio */
+  --bg-gradient-to: #000000; /* Fondo degradado final */
+  --text-color: #a78bfa; /* Texto principal */
+  --card-bg-color: #374151; /* Fondo de tarjetas */
+  --card-text-color: #e5e7eb; /* Texto de tarjetas */
+  --header-bg: #1f2937; /* Fondo del header */
+  --header-text: #ffffff; /* Texto del header */
+  --button-bg: #6d28d9; /* Fondo de botones */
+  --button-hover-bg: #7c3aed; /* Hover de botones */
+  --footer-bg: #1f2937; /* Fondo del footer */
+  --footer-text: #a78bfa; /* Texto del footer */
+}
+
+/* Aplicar las variables globales */
+body {
+  background: linear-gradient(
+    to right,
+    var(--bg-gradient-from),
+    var(--bg-gradient-via),
+    var(--bg-gradient-to)
+  );
+  color: var(--text-color);
+  transition: background-color 0.5s, color 0.5s;
+}
+
+.card {
+  background-color: var(--card-bg-color);
+  color: var(--card-text-color);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  transition: background-color 0.5s, color 0.5s;
+}
+
+header {
+  background-color: var(--header-bg);
+  color: var(--header-text);
+  transition: background-color 0.5s, color 0.5s;
+}
+
+button {
+  background-color: var(--button-bg);
+  color: var(--header-text);
+  transition: background-color 0.5s, color 0.5s;
+}
+
+button:hover {
+  background-color: var(--button-hover-bg);
+}
+
+footer {
+  background-color: var(--footer-bg);
+  color: var(--footer-text);
+  transition: background-color 0.5s, color 0.5s;
+}
