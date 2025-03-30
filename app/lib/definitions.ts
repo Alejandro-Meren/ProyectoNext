@@ -41,6 +41,15 @@ export type LatestInvoice = {
   amount: string;
 };
 
+export type Appointment = {
+  id: string;
+  customer_id: string;
+  date: string;
+  time: string;
+  service_id: string; // Asegúrate de incluir esta propiedad
+  price: number; // Asegúrate de incluir esta propiedad
+};
+
 // The database returns a number for amount, but we later format it to a string with the formatCurrency function
 export type LatestInvoiceRaw = Omit<LatestInvoice, 'amount'> & {
   amount: number;
@@ -101,10 +110,19 @@ export type Product = {
   supplierName: string; // Nuevo campo para el nombre del proveedor
 };
 
+// export type Service = {
+//   id: string;
+//   customer_id: string;
+//   date: string;
+//   time: string;
+//   service: string;
+// };
+
 export type Service = {
   id: string;
   customer_id: string;
   date: string;
   time: string;
   service: string;
+  price: number;
 };

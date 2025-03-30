@@ -3,23 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import EditForm from '@/app/ui/invoices/edit-form';
-
-interface Customer {
-  id: string;
-  name: string;
-  image_url: string;
-}
-
-interface Appointment {
-  id: string;
-  customer_id: string;
-  date: string;
-  time: string;
-  service: string;
-}
+import { Appointment, Customer, Service } from '@/app/lib/definitions';
 
 export default function EditAppointmentPage({ params }: { params: Promise<{ id: string }> }) {
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [services, setServices] = useState<Service[]>([]); // Agregar estado para los servicios
   const [appointment, setAppointment] = useState<Appointment | null>(null);
   const [appointmentId, setAppointmentId] = useState<string | null>(null);
   const router = useRouter();
@@ -48,6 +36,23 @@ export default function EditAppointmentPage({ params }: { params: Promise<{ id: 
       }
     }
 
+    async function fetchServices() {
+      try {
+        const response = await fetch('/api/services', {
+          headers: {
+            'Cache-Control': 'no-cache',
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Failed to fetch services');
+        }
+        const data = await response.json();
+        setServices(data);
+      } catch (error) {
+        console.error('Error fetching services:', error);
+      }
+    }
+
     async function fetchAppointment(id: string) {
       try {
         const response = await fetch(`/api/appointments/${id}`, {
@@ -59,7 +64,11 @@ export default function EditAppointmentPage({ params }: { params: Promise<{ id: 
           throw new Error('Failed to fetch appointment');
         }
         const data = await response.json();
-        setAppointment(data);
+        setAppointment({
+          ...data,
+          service_id: data.service_id || '', // Asegúrate de que esta propiedad esté presente
+          price: data.price || 0, // Asegúrate de que esta propiedad esté presente
+        });
       } catch (error) {
         console.error('Error fetching appointment:', error);
       }
@@ -67,6 +76,7 @@ export default function EditAppointmentPage({ params }: { params: Promise<{ id: 
 
     fetchParams();
     fetchCustomers();
+    fetchServices(); // Llama a la función para obtener los servicios
   }, [params]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -104,6 +114,7 @@ export default function EditAppointmentPage({ params }: { params: Promise<{ id: 
       <EditForm
         appointmentId={appointmentId!}
         customers={customers}
+        services={services} // Pasa los servicios como prop
         appointment={appointment}
         handleChange={handleChange}
         handleSubmit={handleSubmit}

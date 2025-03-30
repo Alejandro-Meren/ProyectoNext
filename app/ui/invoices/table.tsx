@@ -10,6 +10,7 @@ interface Appointment {
   date: string;
   time: string;
   service: string;
+  price: number; // Asegúrate de que price sea un número
 }
 
 interface InvoicesTableProps {
@@ -31,7 +32,12 @@ export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
           throw new Error('Failed to fetch appointments');
         }
         const data = await response.json();
-        setAppointments(data);
+        // Asegúrate de que price sea un número
+        const formattedData = data.map((appointment: Appointment) => ({
+          ...appointment,
+          price: Number(appointment.price) || 0, // Convierte a número y asigna 0 si es inválido
+        }));
+        setAppointments(formattedData);
       } catch (error) {
         console.error('Error fetching appointments:', error);
       }
@@ -91,6 +97,9 @@ export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
               <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
                 Servicio
               </th>
+              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
+                Precio
+              </th>
               <th className="px-4 py-2 text-right text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
                 Acciones
               </th>
@@ -132,6 +141,11 @@ export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
                 </td>
                 <td className="px-4 py-2 whitespace-nowrap">
                   <div className="text-sm text-gray-900 dark:text-gray-200">{appointment.service}</div>
+                </td>
+                <td className="px-4 py-2 whitespace-nowrap">
+                  <div className="text-sm text-gray-900 dark:text-gray-200">
+                    ${Number(appointment.price).toFixed(2)} {/* Convierte a número */}
+                  </div>
                 </td>
                 <td className="px-4 py-2 whitespace-nowrap text-right text-sm font-medium">
                   <div className="flex justify-end space-x-2">
@@ -187,6 +201,9 @@ export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
               </p>
               <p>
                 <strong>Servicio:</strong> {appointment.service}
+              </p>
+              <p>
+                <strong>Precio:</strong> ${Number(appointment.price).toFixed(2)}
               </p>
             </div>
             <div className="flex justify-end space-x-2 mt-4">
