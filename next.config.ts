@@ -33,7 +33,8 @@ const nextConfig: NextConfig = {
       'encrypted-tbn0.gstatic.com',
       'encrypted-tbn1.gstatic.com',
       'www.jata.es',
-      'example.com' // Agregado el dominio example.com
+      'example.com',
+      'via.placeholder.com', // Agregado el dominio via.placeholder.com
     ],
   },
 };
