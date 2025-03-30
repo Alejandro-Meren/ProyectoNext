@@ -8,7 +8,7 @@ export default function CustomersTable({
   customers: FormattedCustomersTable[];
 }) {
   return (
-    <div className="p-4 bg-gradient-to-b from-pink-100 via-pink-200 to-pink-300 dark:from-gray-800 dark:via-gray-900 dark:to-black min-h-screen rounded-lg shadow-lg">
+    <div className="p-4 bg-gradient-to-b from-pink-100 via-pink-200 to-pink-300 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-lg shadow-lg">
       <h1 className="mb-4 text-xl md:text-2xl text-pink-600 dark:text-purple-400 font-bold text-center">
         Clientes
       </h1>
@@ -19,7 +19,7 @@ export default function CustomersTable({
       </div>
 
       {/* Diseño de tabla para pantallas grandes */}
-      <div className="hidden md:block overflow-x-auto">
+      <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
           <thead className="bg-pink-100 dark:bg-gray-700">
             <tr>
@@ -46,7 +46,7 @@ export default function CustomersTable({
                 <td className="px-4 py-2 whitespace-nowrap">
                   <div className="flex items-center">
                     {customer.image_url ? (
-                      <Image
+                      <img
                         src={customer.image_url}
                         alt={customer.name}
                         width={40}
@@ -89,7 +89,7 @@ export default function CustomersTable({
           >
             <div className="flex items-center mb-4">
               {customer.image_url ? (
-                <Image
+                <img
                   src={customer.image_url}
                   alt={customer.name}
                   width={48}

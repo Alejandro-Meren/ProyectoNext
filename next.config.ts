@@ -34,7 +34,8 @@ const nextConfig: NextConfig = {
       'encrypted-tbn1.gstatic.com',
       'www.jata.es',
       'example.com',
-      'via.placeholder.com', // Agregado el dominio via.placeholder.com
+      'via.placeholder.com',
+      'api.dicebear.com', // Dominio para cargar avatares generados automáticamente
     ],
   },
 };

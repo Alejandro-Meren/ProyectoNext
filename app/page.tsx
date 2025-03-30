@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from 'react';
-import AcmeLogo from '@/app/ui/acme-logo';
-import { SunIcon, MoonIcon, PhoneIcon, MapPinIcon } from '@heroicons/react/24/outline';
-import Link from 'next/link';
-import Image from 'next/image';
+import { useState } from "react";
+import AcmeLogo from "@/app/ui/acme-logo";
+import { SunIcon, MoonIcon, PhoneIcon, MapPinIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Page() {
   const [showPopup, setShowPopup] = useState(false);
@@ -145,8 +145,8 @@ export default function Page() {
         <p className="mt-2">
           <Link href="/privacy" className="hover:underline">
             Política de Privacidad
-          </Link>{' '}
-          |{' '}
+          </Link>{" "}
+          |{" "}
           <Link href="/terms" className="hover:underline">
             Términos y Condiciones
           </Link>

@@ -1,6 +1,6 @@
 import { db } from '@vercel/postgres';
-import { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcrypt';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
@@ -16,6 +16,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // Encriptar la contraseña
       const hashedPassword = await bcrypt.hash(password, 10);
 
+      // Generar un avatar automáticamente usando DiceBear
+      const avatarUrl = `https://api.dicebear.com/6.x/adventurer/svg?seed=${encodeURIComponent(name)}`;      
+      console.log('Generated avatar URL:', avatarUrl);
+
       // Iniciar una transacción para asegurar que ambas inserciones ocurran juntas
       await client.sql`BEGIN`;
 
@@ -24,10 +28,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         INSERT INTO users (name, email, password)
         VALUES (${name}, ${email}, ${hashedPassword})`;
 
-      // Insertar en la tabla `customers`
+      // Insertar en la tabla `customers` con el avatar generado
       await client.sql`
         INSERT INTO customers (name, email, image_url)
-        VALUES (${name}, ${email}, 'https://via.placeholder.com/150')`;
+        VALUES (${name}, ${email}, ${avatarUrl})`;
 
       // Confirmar la transacción
       await client.sql`COMMIT`;
