@@ -7,16 +7,17 @@ import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 const locales = {
-    es: es, // Usa la exportación nombrada
-  };
-  
-  const localizer = dateFnsLocalizer({
-    format,
-    parse,
-    startOfWeek,
-    getDay,
-    locales,
-  });
+  es: es, // Usa la exportación nombrada
+};
+
+const localizer = dateFnsLocalizer({
+  format,
+  parse,
+  startOfWeek,
+  getDay,
+  locales,
+});
+
 export default function CalendarPage() {
   const [events, setEvents] = useState([]);
 
@@ -64,8 +65,8 @@ export default function CalendarPage() {
       <Calendar
         localizer={localizer}
         events={events}
-        startAccessor="start"
-        endAccessor="end"
+        startAccessor={(event) => new Date(event.start)} // Convierte "start" a un objeto Date
+        endAccessor={(event) => new Date(event.end)} // Convierte "end" a un objeto Date
         style={{ height: 500 }}
         messages={{
           next: 'Siguiente',
