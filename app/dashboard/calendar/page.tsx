@@ -6,6 +6,13 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 
+// Define el tipo de los eventos
+type CalendarEvent = {
+  title: string;
+  start: Date;
+  end: Date;
+};
+
 const locales = {
   es: es, // Usa la exportación nombrada
 };
@@ -19,7 +26,7 @@ const localizer = dateFnsLocalizer({
 });
 
 export default function CalendarPage() {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
 
   useEffect(() => {
     async function fetchEvents() {
@@ -51,7 +58,7 @@ export default function CalendarPage() {
   }, []);
 
   // Componente personalizado para mostrar el tooltip al pasar el ratón
-  const EventTooltip = ({ event }: { event: any }) => (
+  const EventTooltip = ({ event }: { event: CalendarEvent }) => (
     <span className="tooltip">
       {event.title}
     </span>
@@ -65,8 +72,8 @@ export default function CalendarPage() {
       <Calendar
         localizer={localizer}
         events={events}
-        startAccessor={(event) => new Date(event.start)} // Convierte "start" a un objeto Date
-        endAccessor={(event) => new Date(event.end)} // Convierte "end" a un objeto Date
+        startAccessor="start" // Usa la propiedad "start" del evento
+        endAccessor="end" // Usa la propiedad "end" del evento
         style={{ height: 500 }}
         messages={{
           next: 'Siguiente',
