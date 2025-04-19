@@ -20,7 +20,7 @@ const links = [
   { name: 'Productos', href: '/dashboard/productos', icon: UserGroupIcon },
   { name: 'Calendario', href: '/dashboard/calendar', icon: CalendarIcon },
   { name: 'Configuración', href: '/dashboard/settings', icon: CogIcon },
-  { name: 'Estadísticas', href: '/dashboard/stats', icon: ChartBarIcon },
+  { name: 'Estadísticas', href: '/dashboard/statistics', icon: ChartBarIcon },
 ];
 
 export default function NavLinks() {
