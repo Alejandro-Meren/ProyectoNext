@@ -4,20 +4,19 @@ import { useState, useEffect } from 'react';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
-import es from 'date-fns/locale/es';
+import { es } from 'date-fns/locale';
 
 const locales = {
-  es: es,
-};
-
-const localizer = dateFnsLocalizer({
-  format,
-  parse,
-  startOfWeek,
-  getDay,
-  locales,
-});
-
+    es: es, // Usa la exportación nombrada
+  };
+  
+  const localizer = dateFnsLocalizer({
+    format,
+    parse,
+    startOfWeek,
+    getDay,
+    locales,
+  });
 export default function CalendarPage() {
   const [events, setEvents] = useState([]);
 
