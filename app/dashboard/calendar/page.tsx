@@ -72,8 +72,8 @@ export default function CalendarPage() {
       <Calendar
         localizer={localizer}
         events={events}
-        startAccessor="start" // Usa la propiedad "start" del evento
-        endAccessor="end" // Usa la propiedad "end" del evento
+        startAccessor={(event) => event.start} // Función para acceder a "start"
+        endAccessor={(event) => event.end} // Función para acceder a "end"
         style={{ height: 500 }}
         messages={{
           next: 'Siguiente',
