@@ -38,6 +38,9 @@ const nextConfig: NextConfig = {
       'api.dicebear.com', // Dominio para cargar avatares generados automáticamente
     ],
   },
+  experimental: {
+    runtime: 'nodejs', // Asegúrate de usar el entorno Node.js
+  },
 };
 
 export default nextConfig;
