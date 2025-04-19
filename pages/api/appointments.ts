@@ -16,7 +16,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         FROM services
         JOIN customers ON services.customer_id = customers.id
       `;
-      res.status(200).json(appointments.rows);
+
+      // Formatear los datos para asegurarse de que las fechas y horas sean válidas
+      const formattedAppointments = appointments.rows.map((appointment) => ({
+        ...appointment,
+        date: appointment.date.toISOString().split('T')[0], // Asegura que la fecha esté en formato ISO
+        time: appointment.time, // Asegura que la hora esté en formato HH:mm
+      }));
+
+      res.status(200).json(formattedAppointments);
     } catch (error) {
       console.error('Database error:', error);
       res.status(500).json({ error: 'Failed to fetch appointments' });
