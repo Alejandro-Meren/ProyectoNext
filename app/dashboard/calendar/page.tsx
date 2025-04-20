@@ -6,15 +6,9 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 
-// Define el tipo de los eventos
-type CalendarEvent = {
-  title: string;
-  start: Date;
-  end: Date;
-};
-
+// Configuración de localización
 const locales = {
-  es: es, // Usa la exportación nombrada
+  es: es,
 };
 
 const localizer = dateFnsLocalizer({
@@ -26,14 +20,14 @@ const localizer = dateFnsLocalizer({
 });
 
 export default function CalendarPage() {
-  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [events, setEvents] = useState<object[]>([]);
 
   useEffect(() => {
     async function fetchEvents() {
       try {
         const response = await fetch('/api/appointments', {
           headers: {
-            'Cache-Control': 'no-cache', // Evita respuestas en caché
+            'Cache-Control': 'no-cache',
           },
         });
         if (!response.ok) {
@@ -41,11 +35,11 @@ export default function CalendarPage() {
         }
         const data = await response.json();
 
-        // Convertir los datos de la API al formato del calendario
+        // Validar y formatear los datos de la API
         const formattedEvents = data.map((appointment: any) => ({
           title: `${appointment.service} - ${appointment.customer_name}`,
-          start: new Date(`${appointment.date}T${appointment.time}`), // Combina fecha y hora
-          end: new Date(new Date(`${appointment.date}T${appointment.time}`).getTime() + 60 * 60 * 1000), // Duración de 1 hora
+          start: new Date(`${appointment.date}T${appointment.time}`),
+          end: new Date(new Date(`${appointment.date}T${appointment.time}`).getTime() + 60 * 60 * 1000),
         }));
 
         setEvents(formattedEvents);
@@ -57,13 +51,6 @@ export default function CalendarPage() {
     fetchEvents();
   }, []);
 
-  // Componente personalizado para mostrar el tooltip al pasar el ratón
-  const EventTooltip = ({ event }: { event: CalendarEvent }) => (
-    <span className="tooltip">
-      {event.title}
-    </span>
-  );
-
   return (
     <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
@@ -72,8 +59,8 @@ export default function CalendarPage() {
       <Calendar
         localizer={localizer}
         events={events}
-        startAccessor={(event: any) => event.start} // Usa "any" para evitar conflictos
-        endAccessor={(event: any) => event.end} // Usa "any" para evitar conflictos
+        startAccessor="start" // Usa directamente la clave "start"
+        endAccessor="end" // Usa directamente la clave "end"
         style={{ height: 500 }}
         messages={{
           next: 'Siguiente',
@@ -86,9 +73,6 @@ export default function CalendarPage() {
           date: 'Fecha',
           time: 'Hora',
           event: 'Evento',
-        }}
-        components={{
-          event: EventTooltip, // Personaliza los eventos con el tooltip
         }}
         className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200 rounded-lg shadow-md"
       />
