@@ -11,7 +11,7 @@ type CalendarEvent = {
   title: string;
   start: Date;
   end: Date;
-} & object; // Extiende el tipo "object"
+};
 
 const locales = {
   es: es, // Usa la exportación nombrada
@@ -72,8 +72,8 @@ export default function CalendarPage() {
       <Calendar
         localizer={localizer}
         events={events}
-        startAccessor={(event: CalendarEvent) => event.start} // Función para acceder a "start"
-        endAccessor={(event: CalendarEvent) => event.end} // Función para acceder a "end"
+        startAccessor={(event: any) => event.start} // Usa "any" para evitar conflictos
+        endAccessor={(event: any) => event.end} // Usa "any" para evitar conflictos
         style={{ height: 500 }}
         messages={{
           next: 'Siguiente',
