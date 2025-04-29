@@ -3,28 +3,25 @@
 import {
   UserGroupIcon,
   HomeIcon,
-  CalendarIcon,
+  DocumentDuplicateIcon,
   CogIcon,
   ChartBarIcon,
-  DocumentDuplicateIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-
-// Map of links to display in the side navigation.
-const links = [
-  { name: 'Inicio', href: '/dashboard', icon: HomeIcon },
-  { name: 'Citas', href: '/dashboard/invoices', icon: DocumentDuplicateIcon },
-  { name: 'Clientes', href: '/dashboard/customers', icon: UserGroupIcon },
-  { name: 'Productos', href: '/dashboard/productos', icon: UserGroupIcon },
-  { name: 'Calendario', href: '/dashboard/calendar', icon: CalendarIcon },
-  { name: 'Configuración', href: '/dashboard/settings', icon: CogIcon },
-  { name: 'Estadísticas', href: '/dashboard/statistics', icon: ChartBarIcon },
-];
+import { useLanguage } from '@/app/context/LanguageContext';
 
 export default function NavLinks() {
   const pathname = usePathname();
+  const { translations } = useLanguage();
+
+  const links = [
+    { name: translations.home, href: '/dashboard', icon: HomeIcon },
+    { name: translations.appointments, href: '/dashboard/invoices', icon: DocumentDuplicateIcon },
+    { name: translations.customers, href: '/dashboard/customers', icon: UserGroupIcon },
+    { name: translations.products, href: '/dashboard/productos', icon: UserGroupIcon },
+  ];
 
   return (
     <nav className="space-y-4">
@@ -39,16 +36,13 @@ export default function NavLinks() {
             className={clsx(
               'flex items-center p-4 text-lg font-semibold rounded-2xl transition-all duration-300 group',
               {
-                // Estilo para el enlace activo
                 'bg-gradient-to-r from-pink-500 to-pink-700 text-white shadow-lg border border-pink-700 dark:from-purple-600 dark:to-purple-800 dark:border-purple-700':
                   isActive,
-                // Estilo para los enlaces inactivos
                 'text-gray-700 hover:bg-pink-200 hover:text-gray-900 hover:shadow-md hover:border hover:border-pink-300 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-gray-100 dark:hover:border-gray-600':
                   !isActive,
               }
             )}
           >
-            {/* Icono del enlace */}
             <div
               className={clsx(
                 'flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-300',
@@ -61,7 +55,6 @@ export default function NavLinks() {
             >
               <LinkIcon className="w-6 h-6" />
             </div>
-            {/* Nombre del enlace */}
             <span className="ml-4">{link.name}</span>
           </Link>
         );
