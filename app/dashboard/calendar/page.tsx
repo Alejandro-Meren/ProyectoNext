@@ -62,7 +62,7 @@ export default function CalendarPage() {
       <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
         Calendario de Citas
       </h1>
-      <Calendar<CalendarEvent>
+      <Calendar
         localizer={localizer}
         events={events}
         startAccessor={(event) => event.start} // Función para acceder a "start"
