@@ -6,6 +6,13 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 
+// Define el tipo de los eventos
+type CalendarEvent = {
+  title: string;
+  start: Date;
+  end: Date;
+};
+
 const locales = {
   es: es,
 };
@@ -19,7 +26,7 @@ const localizer = dateFnsLocalizer({
 });
 
 export default function CalendarPage() {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
 
   useEffect(() => {
     async function fetchEvents() {
@@ -34,7 +41,8 @@ export default function CalendarPage() {
         }
         const data = await response.json();
 
-        const formattedEvents = data.map((appointment: any) => ({
+        // Formatear los datos de la API
+        const formattedEvents: CalendarEvent[] = data.map((appointment: any) => ({
           title: `${appointment.service} - ${appointment.customer_name}`,
           start: new Date(`${appointment.date}T${appointment.time}`),
           end: new Date(new Date(`${appointment.date}T${appointment.time}`).getTime() + 60 * 60 * 1000),
