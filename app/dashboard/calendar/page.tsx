@@ -7,11 +7,11 @@ import { format, parse, startOfWeek, getDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 // Define el tipo de los eventos
-type CalendarEvent = {
+interface CalendarEvent {
   title: string;
   start: Date;
   end: Date;
-};
+}
 
 const locales = {
   es: es,
@@ -62,7 +62,7 @@ export default function CalendarPage() {
       <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
         Calendario de Citas
       </h1>
-      <Calendar
+      <Calendar<CalendarEvent>
         localizer={localizer}
         events={events}
         startAccessor={(event) => event.start} // Función para acceder a "start"
