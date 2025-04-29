@@ -7,6 +7,7 @@ import {
   CogIcon,
   ChartBarIcon,
   DocumentDuplicateIcon,
+  CubeIcon, // Nuevo icono para productos
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -17,9 +18,7 @@ const links = [
   { name: 'Inicio', href: '/dashboard', icon: HomeIcon },
   { name: 'Citas', href: '/dashboard/invoices', icon: DocumentDuplicateIcon },
   { name: 'Clientes', href: '/dashboard/customers', icon: UserGroupIcon },
-  { name: 'Productos', href: '/dashboard/productos', icon: UserGroupIcon },
-  { name: 'Calendario', href: '/dashboard/calendar', icon: CalendarIcon },
-  { name: 'Configuración', href: '/dashboard/settings', icon: CogIcon },
+  { name: 'Productos', href: '/dashboard/productos', icon: CubeIcon }, // Cambiado a CubeIcon
   { name: 'Estadísticas', href: '/dashboard/statistics', icon: ChartBarIcon },
 ];
 
