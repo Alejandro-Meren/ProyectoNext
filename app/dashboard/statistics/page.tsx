@@ -30,9 +30,9 @@ ChartJS.register(
 export default function StatisticsPage() {
   const [customersData, setCustomersData] = useState(0);
   const [appointmentsData, setAppointmentsData] = useState({
-    usersByMonth: [],
-    servicesCount: [],
-    appointmentsByMonth: [],
+    usersByMonth: [] as { month: string; total: number }[],
+    servicesCount: [] as { name: string; count: number }[],
+    appointmentsByMonth: [] as { month: string; total: number }[],
   });
   const [loading, setLoading] = useState(true);
 
@@ -59,18 +59,18 @@ export default function StatisticsPage() {
         const appointments = await appointmentsRes.json();
         const services = await servicesRes.json();
 
-        const usersByMonth = customers.reduce((acc, customer) => {
+        const usersByMonth = customers.reduce<Record<string, number>>((acc, customer) => {
           const month = new Date(customer.createdAt).toLocaleString('es-ES', { month: 'long' });
           acc[month] = (acc[month] || 0) + 1;
           return acc;
         }, {});
 
-        const servicesCount = services.reduce((acc, service) => {
+        const servicesCount = services.reduce<Record<string, number>>((acc, service) => {
           acc[service.service] = (acc[service.service] || 0) + 1;
           return acc;
         }, {});
 
-        const appointmentsByMonth = appointments.reduce((acc, appointment) => {
+        const appointmentsByMonth = appointments.reduce<Record<string, number>>((acc, appointment) => {
           const month = new Date(appointment.date).toLocaleString('es-ES', { month: 'long' });
           acc[month] = (acc[month] || 0) + 1;
           return acc;
