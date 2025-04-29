@@ -1,53 +1,67 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Bar, Line, Pie } from 'react-chartjs-2';
+import { useState, useEffect } from 'react';
+import { Bar, Pie, Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   BarElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
   ArcElement,
   PointElement,
-  LineElement,
 } from 'chart.js';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
+  LineElement,
+  PointElement,
   Title,
   Tooltip,
   Legend,
-  ArcElement,
-  PointElement,
-  LineElement
+  ArcElement
 );
 
 export default function StatisticsPage() {
-  const [customersData, setCustomersData] = useState(0); // Número total de clientes
-  const [appointmentsData, setAppointmentsData] = useState([]);
-  const [servicesData, setServicesData] = useState([]);
+  const [customersData, setCustomersData] = useState(0);
+  const [appointmentsData, setAppointmentsData] = useState({
+    usersByMonth: [],
+    servicesCount: [],
+    appointmentsByMonth: [],
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const customersRes = await fetch('/api/customers');
-        const appointmentsRes = await fetch('/api/appointments');
-        const servicesRes = await fetch('/api/services');
+        const customersRes = await fetch('/api/customers', {
+          headers: {
+            'Cache-Control': 'no-cache',
+          },
+        });
+        const appointmentsRes = await fetch('/api/appointments', {
+          headers: {
+            'Cache-Control': 'no-cache',
+          },
+        });
+        const servicesRes = await fetch('/api/services', {
+          headers: {
+            'Cache-Control': 'no-cache',
+          },
+        });
 
         const customers = await customersRes.json();
         const appointments = await appointmentsRes.json();
         const services = await servicesRes.json();
 
-        // Procesar datos
-        const revenueByMonth = appointments.reduce((acc, appointment) => {
-          const month = new Date(appointment.date).toLocaleString('es-ES', { month: 'long' });
-          acc[month] = (acc[month] || 0) + parseFloat(appointment.price);
+        const usersByMonth = customers.reduce((acc, customer) => {
+          const month = new Date(customer.createdAt).toLocaleString('es-ES', { month: 'long' });
+          acc[month] = (acc[month] || 0) + 1;
           return acc;
         }, {});
 
@@ -56,10 +70,20 @@ export default function StatisticsPage() {
           return acc;
         }, {});
 
-        setCustomersData(customers.length); // Número total de clientes
+        const appointmentsByMonth = appointments.reduce((acc, appointment) => {
+          const month = new Date(appointment.date).toLocaleString('es-ES', { month: 'long' });
+          acc[month] = (acc[month] || 0) + 1;
+          return acc;
+        }, {});
+
+        setCustomersData(customers.length);
         setAppointmentsData({
-          revenueByMonth: Object.entries(revenueByMonth).map(([month, total]) => ({ month, total })),
+          usersByMonth: Object.entries(usersByMonth).map(([month, total]) => ({ month, total })),
           servicesCount: Object.entries(servicesCount).map(([name, count]) => ({ name, count })),
+          appointmentsByMonth: Object.entries(appointmentsByMonth).map(([month, total]) => ({
+            month,
+            total,
+          })),
         });
         setLoading(false);
       } catch (error) {
@@ -79,56 +103,67 @@ export default function StatisticsPage() {
     );
   }
 
-  // Opciones para los gráficos
   const chartOptions = {
     responsive: true,
     plugins: {
       legend: {
         labels: {
-          color: 'white',
+          color: 'var(--text-color)', // Se adapta al modo oscuro/claro
           font: {
-            size: 16,
+            size: 14,
+            family: 'Arial, sans-serif',
           },
         },
+        position: 'top',
       },
       title: {
         display: true,
         text: 'Estadísticas',
-        color: 'white',
+        color: 'var(--text-color)', // Se adapta al modo oscuro/claro
         font: {
-          size: 20,
+          size: 18,
+          family: 'Arial, sans-serif',
         },
       },
     },
     scales: {
       x: {
+        grid: {
+          color: 'rgba(200, 200, 200, 0.2)', // Líneas de cuadrícula suaves
+        },
         ticks: {
-          color: 'white',
+          color: 'var(--text-color)', // Se adapta al modo oscuro/claro
           font: {
-            size: 14,
+            size: 12,
+            family: 'Arial, sans-serif',
           },
         },
       },
       y: {
+        grid: {
+          color: 'rgba(200, 200, 200, 0.2)', // Líneas de cuadrícula suaves
+        },
         ticks: {
-          color: 'white',
+          color: 'var(--text-color)', // Se adapta al modo oscuro/claro
           font: {
-            size: 14,
+            size: 12,
+            family: 'Arial, sans-serif',
           },
         },
       },
     },
   };
 
-  const lineData = {
-    labels: appointmentsData.revenueByMonth.map((item) => item.month),
+  const barData = {
+    labels: appointmentsData.usersByMonth.map((item) => item.month),
     datasets: [
       {
-        label: 'Ingresos ($)',
-        data: appointmentsData.revenueByMonth.map((item) => item.total),
-        borderColor: 'rgba(255, 99, 132, 1)',
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        tension: 0.4,
+        label: 'Usuarios Registrados',
+        data: appointmentsData.usersByMonth.map((item) => item.total),
+        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 2,
+        hoverBackgroundColor: 'rgba(75, 192, 192, 0.9)',
       },
     ],
   };
@@ -140,10 +175,10 @@ export default function StatisticsPage() {
         label: 'Servicios',
         data: appointmentsData.servicesCount.map((item) => item.count),
         backgroundColor: [
-          'rgba(255, 99, 132, 0.5)',
-          'rgba(54, 162, 235, 0.5)',
-          'rgba(255, 206, 86, 0.5)',
-          'rgba(75, 192, 192, 0.5)',
+          'rgba(255, 99, 132, 0.7)',
+          'rgba(54, 162, 235, 0.7)',
+          'rgba(255, 206, 86, 0.7)',
+          'rgba(75, 192, 192, 0.7)',
         ],
         borderColor: [
           'rgba(255, 99, 132, 1)',
@@ -151,7 +186,26 @@ export default function StatisticsPage() {
           'rgba(255, 206, 86, 1)',
           'rgba(75, 192, 192, 1)',
         ],
-        borderWidth: 1,
+        borderWidth: 2,
+        hoverOffset: 10,
+      },
+    ],
+  };
+
+  const lineData = {
+    labels: appointmentsData.appointmentsByMonth.map((item) => item.month),
+    datasets: [
+      {
+        label: 'Citas por Mes',
+        data: appointmentsData.appointmentsByMonth.map((item) => item.total),
+        borderColor: 'rgba(153, 102, 255, 1)',
+        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+        borderWidth: 2,
+        pointBackgroundColor: 'rgba(153, 102, 255, 1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(153, 102, 255, 1)',
+        tension: 0.4,
       },
     ],
   };
@@ -163,22 +217,14 @@ export default function StatisticsPage() {
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Número total de clientes */}
-        <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-6 rounded-lg shadow-lg text-center">
-          <h2 className="text-2xl font-semibold text-white mb-4">Clientes Totales</h2>
-          <p className="text-5xl font-bold text-white">{customersData}</p>
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+          <Bar data={barData} options={chartOptions} />
         </div>
-
-        {/* Gráfico de líneas */}
-        <div className="bg-gradient-to-r from-blue-500 to-indigo-500 p-6 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-semibold text-white mb-4">Ingresos Mensuales</h2>
-          <Line data={lineData} options={chartOptions} />
-        </div>
-
-        {/* Gráfico de pastel */}
-        <div className="bg-gradient-to-r from-green-500 to-teal-500 p-6 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-semibold text-white mb-4">Servicios más Solicitados</h2>
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
           <Pie data={pieData} options={chartOptions} />
+        </div>
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+          <Line data={lineData} options={chartOptions} />
         </div>
       </div>
     </div>

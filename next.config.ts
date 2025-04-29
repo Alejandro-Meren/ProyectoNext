@@ -39,7 +39,7 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    runtime: 'nodejs', // Asegúrate de usar el entorno Node.js
+    // Add any valid experimental options here if needed
   },
 };
 
