@@ -39,4 +39,9 @@ export const { auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
+  events: {
+    signOut: async () => {
+      console.log('User signed out');
+    },
+  },
 });

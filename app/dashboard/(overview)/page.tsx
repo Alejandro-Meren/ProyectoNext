@@ -23,7 +23,6 @@ export default async function Page() {
 
   const userEmail = session.user.email; // Recupera el email de la sesión
   const user = await getUser(userEmail); // Obtén los datos del usuario desde tu base de datos
-  console.log('User:', user); // Debugging line para verificar el objeto usuario
 
   if (!user) {
     redirect('/login'); // Redirige al login si el usuario no existe en la base de datos

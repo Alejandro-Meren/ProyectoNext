@@ -20,7 +20,8 @@ export const authConfig = {
   providers: [], // Add providers with an empty array for now
   events: {
     signOut: async () => {
-      window.location.href = '/'; // Redirect to home page after sign out
+      // Elimina el uso de window.location.href
+      console.log('User signed out');
     },
   },
 } satisfies NextAuthConfig;

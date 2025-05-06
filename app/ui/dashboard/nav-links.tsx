@@ -1,35 +1,58 @@
-'use client';
-
 import {
   UserGroupIcon,
   HomeIcon,
-  CalendarIcon,
-  CogIcon,
-  ChartBarIcon,
   DocumentDuplicateIcon,
-  CubeIcon, // Nuevo icono para productos
+  CubeIcon,
+  ChartBarIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
+import { headers } from 'next/headers'; // Para obtener la URL actual
+import { auth } from '@/auth'; // Importa la función auth para obtener la sesión
+import { getUser } from '@/auth'; // Importa la función getUser para obtener los datos del usuario
 
 // Map of links to display in the side navigation.
 const links = [
-  { name: 'Inicio', href: '/dashboard', icon: HomeIcon },
+  { name: 'Inicio', href: '/dashboard', icon: HomeIcon, adminOnly: true },
   { name: 'Citas', href: '/dashboard/invoices', icon: DocumentDuplicateIcon },
   { name: 'Clientes', href: '/dashboard/customers', icon: UserGroupIcon },
-  { name: 'Productos', href: '/dashboard/productos', icon: CubeIcon }, // Cambiado a CubeIcon
+  { name: 'Productos', href: '/dashboard/productos', icon: CubeIcon },
   { name: 'Estadísticas', href: '/dashboard/statistics', icon: ChartBarIcon },
 ];
 
-export default function NavLinks() {
-  const pathname = usePathname();
+export default async function NavLinks() {
+  // Obtener la URL actual desde los encabezados
+  const headersList = await headers();
+  const currentUrl = headersList.get('x-invoke-path') || '';
+  const pathname = currentUrl.split('?')[0]; // Extraer solo la ruta sin parámetros
+
+  // Obtener la sesión del usuario
+  const session = await auth();
+
+  if (!session || !session.user?.email) {
+    return null; // Si no hay sesión, no renderizamos nada
+  }
+
+  const userEmail = session.user.email; // Recupera el email de la sesión
+  const user = await getUser(userEmail); // Obtén los datos del usuario desde tu base de datos
+
+  if (!user) {
+    return null; // Si el usuario no existe, no renderizamos nada
+  }
+
+  const role = user.role; // Recupera el rol del usuario
 
   return (
     <nav className="space-y-4">
       {links.map((link) => {
         const LinkIcon = link.icon;
-        const isActive = pathname === link.href;
+
+        // Si el enlace es solo para admin y el usuario no es admin, no lo mostramos
+        if (link.adminOnly && role !== 'admin') {
+          return null;
+        }
+
+        const isActive = pathname === link.href; // Verifica si la ruta actual coincide con el enlace
 
         return (
           <Link
