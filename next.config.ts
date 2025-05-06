@@ -1,4 +1,4 @@
-import type { NextConfig } from 'next';
+import { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   images: {
@@ -35,7 +35,9 @@ const nextConfig: NextConfig = {
       'www.jata.es',
       'example.com',
       'via.placeholder.com',
-      'api.dicebear.com', // Dominio para cargar avatares generados automáticamente
+      'api.dicebear.com',
+      'www.farmaciabarata.es',
+      'www.perfumeriasana.com', // Agregado el dominio
     ],
   },
   experimental: {

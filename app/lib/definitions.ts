@@ -7,6 +7,7 @@ export type User = {
   name: string;
   email: string;
   password: string;
+  role: 'admin' | 'user'; // Asegúrate de incluir esta propiedad
 };
 
 export type Customer = {
