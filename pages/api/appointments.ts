@@ -24,8 +24,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         time: appointment.time, // Asegura que la hora esté en formato HH:mm
       }));
 
-      console.log('Datos de la API:', formattedAppointments); // Agregado para inspeccionar los datos
-
       res.status(200).json(formattedAppointments);
     } catch (error) {
       console.error('Database error:', error);
@@ -39,6 +37,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
+      // Verificar si la fecha y hora ya están ocupadas
+      const existingAppointment = await sql`
+        SELECT * FROM services
+        WHERE date = ${date} AND time = ${time}
+      `;
+
+      if (existingAppointment.rows.length > 0) {
+        return res.status(409).json({ error: 'La fecha y hora seleccionadas ya están ocupadas' });
+      }
+
+      // Obtener información del servicio
       const service = await sql`SELECT service, price FROM services WHERE id = ${service_id}`;
       if (service.rows.length === 0) {
         return res.status(404).json({ error: 'Service not found' });
@@ -46,6 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const { service: serviceName, price } = service.rows[0];
 
+      // Insertar la nueva cita
       await sql`
         INSERT INTO services (customer_id, date, time, service, price)
         VALUES (${customer_id}, ${date}, ${time}, ${serviceName}, ${price})
