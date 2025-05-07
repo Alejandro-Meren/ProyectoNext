@@ -9,8 +9,8 @@ export default function CustomersTable({
 }) {
   return (
     <div className="p-4 bg-gradient-to-b from-pink-100 via-pink-200 to-pink-300 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-lg shadow-lg">
-      <h1 className="mb-4 text-xl md:text-2xl text-pink-600 dark:text-purple-400 font-bold text-center">
-        Clientes
+      <h1 className="mb-4 text-2xl md:text-3xl text-pink-600 dark:text-purple-400" style={{ fontFamily: 'Times New Roman, serif' }}>
+      Clientes
       </h1>
 
       {/* Barra de búsqueda */}

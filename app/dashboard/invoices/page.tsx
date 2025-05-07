@@ -15,7 +15,7 @@ export default function InvoicesPage() {
     <div className="flex flex-col min-h-screen bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 dark:from-gray-800 dark:via-gray-900 dark:to-black p-4">
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-        <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100 sm:text-2xl mb-4 sm:mb-0">
+      <h1 className="mb-4 text-2xl md:text-3xl text-pink-600 dark:text-purple-400" style={{ fontFamily: 'Times New Roman, serif' }}>
           Gestión de Citas
         </h1>
         <Link

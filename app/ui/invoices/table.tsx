@@ -76,8 +76,8 @@ export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
   };
   return (
     <div className="p-4 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-lg shadow-lg">
-      <h1 className="mb-4 text-xl md:text-2xl text-pink-600 dark:text-purple-400 font-bold text-center">
-        Citas
+      <h1 className="mb-4 text-2xl md:text-3xl text-pink-600 dark:text-purple-400" style={{ fontFamily: 'Times New Roman, serif' }}>
+      Citas
       </h1>
 
       {/* Diseño de tabla para pantallas grandes */}
