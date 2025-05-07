@@ -88,6 +88,9 @@ export default function EditForm({
     return <div className="text-gray-700 dark:text-gray-300">Loading...</div>;
   }
 
+  // Asegurarse de que la fecha esté en el formato correcto (YYYY-MM-DD)
+  const formattedDate = new Date(appointment.date).toISOString().split('T')[0];
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
       <div className="mb-4">
@@ -115,22 +118,23 @@ export default function EditForm({
         </select>
       </div>
       <div className="mb-4">
-        <label htmlFor="service" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label htmlFor="service_id" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           Service
         </label>
         <select
-          id="service"
+          id="service_id"
           name="service_id"
           value={selectedService || ''}
           onChange={handleServiceChange}
-          className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-pink-500 focus:border-pink-500 dark:focus:ring-purple-500 dark:focus:border-purple-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
+          required
+          className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:border-purple-500 dark:focus:ring-purple-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
         >
           <option value="" disabled>
             Select a service
           </option>
           {services.map((service) => (
             <option key={service.id} value={service.id}>
-              {service.service} - ${Number(service.price).toFixed(2)}
+              {service.service} - ${service.price.toFixed(2)}
             </option>
           ))}
         </select>
@@ -140,13 +144,13 @@ export default function EditForm({
           Price
         </label>
         <input
-          type="text"
-          id="price"
-          name="price"
-          value={`$${(Number(price) || 0).toFixed(2)}`}
-          readOnly
-          className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:ring-purple-500 dark:focus:ring-purple-500 sm:text-sm bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200"
-        />
+  type="text"
+  id="price"
+  name="price"
+  value={`$${Number(price).toFixed(2)}`} // Asegurarse de que price sea un número
+  readOnly
+  className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:ring-purple-500 dark:focus:ring-purple-500 sm:text-sm bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200"
+/>
       </div>
       <div className="mb-4">
         <label htmlFor="date" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -156,7 +160,7 @@ export default function EditForm({
           type="date"
           id="date"
           name="date"
-          value={appointment.date}
+          value={formattedDate}
           onChange={handleChange}
           className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-pink-500 focus:border-pink-500 dark:focus:ring-purple-500 dark:focus:border-purple-500 sm:text-sm rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
         />
