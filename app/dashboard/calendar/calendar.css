@@ -59,11 +59,9 @@
   }
   
   /* Ocultar botones de Semana y Día */
-  .rbc-btn-group button:nth-child(2), /* Botón de Semana */
-  .rbc-btn-group button:nth-child(3) { /* Botón de Día */
-    display: none;
-  }
-  
+ 
+  /* Ocultar solo los botones de Semana y Día */
+
   /* Responsividad */
   @media (max-width: 768px) {
     .rbc-calendar {
