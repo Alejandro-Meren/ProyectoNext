@@ -28,6 +28,7 @@ interface Appointment {
 
 export default function CustomBigCalendar() {
   const [events, setEvents] = useState<Appointment[]>([]);
+  const [currentDate, setCurrentDate] = useState(new Date()); // Estado para manejar la fecha actual
 
   useEffect(() => {
     async function fetchAppointments() {
@@ -86,28 +87,28 @@ export default function CustomBigCalendar() {
         />
       </div>
       <div className="flex justify-between items-center mt-4 mb-4">
-  {/* Botón de Mes Anterior */}
-  <button
-    onClick={() => {
-      const previousMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
-      setCurrentDate(previousMonth);
-    }}
-    className="bg-pink-500 dark:bg-purple-500 text-white hover:bg-pink-600 dark:hover:bg-purple-600 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
-  >
-    Mes Anterior
-  </button>
+        {/* Botón de Mes Anterior */}
+        <button
+          onClick={() => {
+            const previousMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+            setCurrentDate(previousMonth);
+          }}
+          className="bg-pink-500 dark:bg-purple-500 text-white hover:bg-pink-600 dark:hover:bg-purple-600 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
+        >
+          Mes Anterior
+        </button>
 
-  {/* Botón de Mes Siguiente */}
-  <button
-    onClick={() => {
-      const nextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
-      setCurrentDate(nextMonth);
-    }}
-    className="bg-pink-500 dark:bg-purple-500 text-white hover:bg-pink-600 dark:hover:bg-purple-600 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
-  >
-    Mes Siguiente
-  </button>
-</div>
+        {/* Botón de Mes Siguiente */}
+        <button
+          onClick={() => {
+            const nextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+            setCurrentDate(nextMonth);
+          }}
+          className="bg-pink-500 dark:bg-purple-500 text-white hover:bg-pink-600 dark:hover:bg-purple-600 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
+        >
+          Mes Siguiente
+        </button>
+      </div>
     </div>
   );
 }
