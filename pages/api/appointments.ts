@@ -24,6 +24,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         time: appointment.time, // Asegura que la hora esté en formato HH:mm
       }));
 
+      console.log('Datos de la API:', formattedAppointments); // Agregado para inspeccionar los datos
+
       res.status(200).json(formattedAppointments);
     } catch (error) {
       console.error('Database error:', error);

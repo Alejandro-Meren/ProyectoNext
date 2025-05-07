@@ -4,6 +4,7 @@ import {
   DocumentDuplicateIcon,
   CubeIcon,
   ChartBarIcon,
+  CalendarIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import clsx from 'clsx';
@@ -17,7 +18,8 @@ const links = [
   { name: 'Citas', href: '/dashboard/invoices', icon: DocumentDuplicateIcon },
   { name: 'Clientes', href: '/dashboard/customers', icon: UserGroupIcon },
   { name: 'Productos', href: '/dashboard/productos', icon: CubeIcon },
-  { name: 'Estadísticas', href: '/dashboard/statistics', icon: ChartBarIcon },
+  { name: 'Calendario', href: '/dashboard/calendar', icon: CalendarIcon },
+  { name: 'Estadísticas', href: '/dashboard/statistics', icon: ChartBarIcon, adminOnly: true },
 ];
 
 export default async function NavLinks() {

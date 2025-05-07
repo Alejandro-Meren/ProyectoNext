@@ -1,0 +1,102 @@
+/* Estilos generales para el calendario */
+.rbc-calendar {
+    background-color: #ffffff; /* Fondo claro */
+    color: #333333; /* Texto oscuro */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dark .rbc-calendar {
+    background-color: #1f2937; /* Fondo oscuro */
+    color: #e5e7eb; /* Texto claro */
+  }
+  
+  /* Barra de herramientas del calendario */
+  .rbc-toolbar {
+    background-color: transparent;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 10px;
+  }
+  
+  .dark .rbc-toolbar {
+    border-bottom: 1px solid #374151;
+  }
+  
+  .rbc-toolbar button {
+    background-color: #f3f4f6;
+    color: #333333;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .rbc-toolbar button:hover {
+    background-color: #e5e7eb;
+  }
+  
+  .dark .rbc-toolbar button {
+    background-color: #374151;
+    color: #e5e7eb;
+  }
+  
+  .dark .rbc-toolbar button:hover {
+    background-color: #4b5563;
+  }
+  
+  /* Eventos del calendario */
+  .rbc-event {
+    background-color: #f472b6; /* Color de eventos */
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 2px 5px;
+  }
+  
+  .dark .rbc-event {
+    background-color: #8b5cf6; /* Color de eventos en modo oscuro */
+  }
+  
+  /* Ocultar botones de Semana y Día */
+  .rbc-btn-group button:nth-child(2), /* Botón de Semana */
+  .rbc-btn-group button:nth-child(3) { /* Botón de Día */
+    display: none;
+  }
+  
+  /* Responsividad */
+  @media (max-width: 768px) {
+    .rbc-calendar {
+      font-size: 0.8rem; /* Reducir tamaño de fuente en pantallas pequeñas */
+    }
+  
+    .rbc-toolbar {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .rbc-toolbar button {
+      margin: 0.2rem 0;
+    }
+  }
+  
+  /* Lista de citas para pantallas pequeñas */
+  .appointment-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .appointment-list li {
+    background-color: #fef2f2;
+    color: #333333;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dark .appointment-list li {
+    background-color: #374151;
+    color: #e5e7eb;
+  }

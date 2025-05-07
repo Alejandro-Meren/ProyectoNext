@@ -45,10 +45,12 @@ export type LatestInvoice = {
 export type Appointment = {
   id: string;
   customer_id: string;
-  date: string;
-  time: string;
-  service_id: string; // Asegúrate de incluir esta propiedad
-  price: number; // Asegúrate de incluir esta propiedad
+  date: string; // Fecha en formato 'YYYY-MM-DD'
+  time: string; // Hora en formato 'HH:mm'
+  service_id: string;
+  price: number;
+  start: Date; // Fecha de inicio como objeto Date
+  end: Date; // Fecha de fin como objeto Date
 };
 
 // The database returns a number for amount, but we later format it to a string with the formatCurrency function
