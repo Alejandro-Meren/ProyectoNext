@@ -60,6 +60,10 @@ export default function CustomBigCalendar() {
     fetchAppointments();
   }, []);
 
+  const handleNavigate = (date: Date) => {
+    setCurrentDate(date); // Actualiza la fecha actual al navegar
+  };
+
   return (
     <div className="p-6 bg-gradient-to-b from-pink-50 via-pink-100 to-pink-200 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-lg shadow-lg">
       <h2 className="mb-4 text-2xl md:text-3xl text-pink-600 dark:text-purple-400" style={{ fontFamily: 'Times New Roman, serif' }}>
@@ -84,6 +88,8 @@ export default function CustomBigCalendar() {
             agenda: 'Agenda',
             noEventsInRange: 'No hay eventos en este rango.',
           }}
+          date={currentDate} // Sincroniza la fecha actual con el calendario
+          onNavigate={handleNavigate} // Actualiza el estado al navegar
         />
       </div>
       <div className="flex justify-between items-center mt-4 mb-4">
