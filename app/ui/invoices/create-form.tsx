@@ -77,23 +77,39 @@ export default function CreateForm({ customers }: CreateFormProps) {
         },
         body: JSON.stringify(formData),
       });
-
+  
       if (response.status === 409) {
         const errorData = await response.json();
-        setPopupMessage(errorData.error); // Establecer el mensaje del popup
-        setShowPopup(true); // Mostrar el popup
+        setPopupMessage(errorData.error);
+        setShowPopup(true);
         return;
       }
-
+  
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to create appointment');
       }
-
+  
       router.push('/dashboard/invoices');
     } catch (error) {
       console.error('Error:', error);
     }
+  };
+
+  const generateTimeOptions = () => {
+    const times = [];
+    let start = new Date();
+    start.setHours(7, 0, 0, 0); // Inicio del horario (8:00 AM)
+    const end = new Date();
+    end.setHours(22, 0, 0, 0); // Fin del horario (6:00 PM)
+  
+    while (start <= end) {
+      const timeString = start.toTimeString().slice(0, 5); // Formato HH:mm
+      times.push(timeString);
+      start.setMinutes(start.getMinutes() + 30); // Incrementar 30 minutos
+    }
+  
+    return times;
   };
 
   return (
@@ -189,19 +205,27 @@ export default function CreateForm({ customers }: CreateFormProps) {
             />
           </div>
           <div>
-            <label htmlFor="time" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Time
-            </label>
-            <input
-              type="time"
-              id="time"
-              name="time"
-              value={formData.time}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:border-purple-500 dark:focus:ring-purple-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
-            />
-          </div>
+  <label htmlFor="time" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+    Time
+  </label>
+  <select
+    id="time"
+    name="time"
+    value={formData.time}
+    onChange={handleChange}
+    required
+    className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:border-purple-500 dark:focus:ring-purple-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
+  >
+    <option value="" disabled>
+      Select a time
+    </option>
+    {generateTimeOptions().map((time) => (
+      <option key={time} value={time}>
+        {time}
+      </option>
+    ))}
+  </select>
+</div>
         </div>
         <div className="mt-6 flex justify-end gap-4">
           <button

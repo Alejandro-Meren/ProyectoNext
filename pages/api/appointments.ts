@@ -6,22 +6,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const appointments = await sql`
         SELECT 
-          services.id,
-          services.date,
-          services.time,
+          appointments.id,
+          appointments.date,
+          appointments.time,
+          appointments.price,
           services.service,
-          services.price,
           customers.name AS customer_name,
           customers.image_url AS customer_image
-        FROM services
-        JOIN customers ON services.customer_id = customers.id
+        FROM appointments
+        JOIN services ON appointments.service_id = services.id
+        JOIN customers ON appointments.customer_id = customers.id
       `;
 
-      // Formatear los datos para asegurarse de que las fechas y horas sean válidas
       const formattedAppointments = appointments.rows.map((appointment) => ({
         ...appointment,
-        date: appointment.date.toISOString().split('T')[0], // Asegura que la fecha esté en formato ISO
-        time: appointment.time, // Asegura que la hora esté en formato HH:mm
+        date: appointment.date.toISOString().split('T')[0],
+        time: appointment.time,
       }));
 
       res.status(200).json(formattedAppointments);
@@ -37,28 +37,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-      // Verificar si la fecha y hora ya están ocupadas
       const existingAppointment = await sql`
-        SELECT * FROM services
-        WHERE date = ${date} AND time = ${time}
+        SELECT * FROM appointments
+        WHERE date = ${date} AND time = ${time} AND service_id = ${service_id}
       `;
 
       if (existingAppointment.rows.length > 0) {
         return res.status(409).json({ error: 'La fecha y hora seleccionadas ya están ocupadas' });
       }
 
-      // Obtener información del servicio
-      const service = await sql`SELECT service, price FROM services WHERE id = ${service_id}`;
+      const service = await sql`SELECT price FROM services WHERE id = ${service_id}`;
       if (service.rows.length === 0) {
         return res.status(404).json({ error: 'Service not found' });
       }
 
-      const { service: serviceName, price } = service.rows[0];
+      const { price } = service.rows[0];
 
-      // Insertar la nueva cita
       await sql`
-        INSERT INTO services (customer_id, date, time, service, price)
-        VALUES (${customer_id}, ${date}, ${time}, ${serviceName}, ${price})
+        INSERT INTO appointments (customer_id, service_id, date, time, price)
+        VALUES (${customer_id}, ${service_id}, ${date}, ${time}, ${price})
       `;
       res.status(201).json({ message: 'Appointment created successfully' });
     } catch (error) {
