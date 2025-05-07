@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { AtSymbolIcon, KeyIcon, UserIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -42,17 +43,15 @@ export default function RegisterForm() {
       className="space-y-6 bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-lg shadow-lg mt-8 sm:mt-16 max-w-md mx-auto"
     >
       {/* Header */}
-      <div className="flex flex-col items-center">
-        <h2 className="text-2xl font-bold text-pink-600 dark:text-purple-400">Crear Cuenta</h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          Por favor, completa los campos para registrarte.
-        </p>
-      </div>
 
       {/* Input Fields */}
       <div className="space-y-4">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        {/* Name Field */}
+        <div className="relative">
+          <label
+            htmlFor="name"
+            className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
+          >
             Nombre
           </label>
           <input
@@ -62,11 +61,18 @@ export default function RegisterForm() {
             value={formData.name}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+            className="peer block w-full rounded-md border border-gray-300 dark:border-gray-600 py-2 sm:py-3 pl-12 pr-4 text-sm outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 dark:focus:border-purple-500 dark:focus:ring-purple-500 placeholder:text-gray-500 dark:placeholder:text-gray-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
+            placeholder="Introduce tu nombre"
           />
+          <UserIcon className="pointer-events-none absolute left-3 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-500 dark:text-gray-400 peer-focus:text-pink-500 dark:peer-focus:text-purple-500 mt-3" />
         </div>
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+
+        {/* Email Field */}
+        <div className="relative">
+          <label
+            htmlFor="email"
+            className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
+          >
             Correo Electrónico
           </label>
           <input
@@ -76,11 +82,18 @@ export default function RegisterForm() {
             value={formData.email}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+            className="peer block w-full rounded-md border border-gray-300 dark:border-gray-600 py-2 sm:py-3 pl-12 pr-4 text-sm outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 dark:focus:border-purple-500 dark:focus:ring-purple-500 placeholder:text-gray-500 dark:placeholder:text-gray-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
+            placeholder="Introduce tu correo electrónico"
           />
+          <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-500 dark:text-gray-400 peer-focus:text-pink-500 dark:peer-focus:text-purple-500 mt-3" />
         </div>
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+
+        {/* Password Field */}
+        <div className="relative">
+          <label
+            htmlFor="password"
+            className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
+          >
             Contraseña
           </label>
           <input
@@ -90,15 +103,19 @@ export default function RegisterForm() {
             value={formData.password}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+            minLength={6}
+            className="peer block w-full rounded-md border border-gray-300 dark:border-gray-600 py-2 sm:py-3 pl-12 pr-4 text-sm outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 dark:focus:border-purple-500 dark:focus:ring-purple-500 placeholder:text-gray-500 dark:placeholder:text-gray-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
+            placeholder="Introduce tu contraseña"
           />
+          <KeyIcon className="pointer-events-none absolute left-3 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-500 dark:text-gray-400 peer-focus:text-pink-500 dark:peer-focus:text-purple-500 mt-3" />
         </div>
       </div>
 
       {/* Error Message */}
       {errorMessage && (
-        <div className="text-sm text-red-500">
-          {errorMessage}
+        <div className="flex items-center space-x-2 mt-4 text-red-500 dark:text-red-400">
+          <ExclamationCircleIcon className="h-5 w-5" />
+          <p className="text-sm">{errorMessage}</p>
         </div>
       )}
 
@@ -111,7 +128,7 @@ export default function RegisterForm() {
       </button>
 
       {/* Link to Login */}
-      <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+      <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4">
         ¿Ya tienes una cuenta?{' '}
         <a href="/login" className="text-pink-500 dark:text-purple-400 hover:underline">
           Inicia sesión
