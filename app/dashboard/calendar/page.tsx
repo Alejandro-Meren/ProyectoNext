@@ -28,7 +28,6 @@ interface Appointment {
 
 export default function CustomBigCalendar() {
   const [events, setEvents] = useState<Appointment[]>([]);
-  const [currentDate, setCurrentDate] = useState(new Date()); // Estado para manejar la fecha actual
 
   useEffect(() => {
     async function fetchAppointments() {
@@ -60,10 +59,6 @@ export default function CustomBigCalendar() {
     fetchAppointments();
   }, []);
 
-  const handleNavigate = (date: Date) => {
-    setCurrentDate(date); // Actualiza la fecha actual al navegar
-  };
-
   return (
     <div className="p-6 bg-gradient-to-b from-pink-50 via-pink-100 to-pink-200 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-lg shadow-lg">
       <h2 className="mb-4 text-2xl md:text-3xl text-pink-600 dark:text-purple-400" style={{ fontFamily: 'Times New Roman, serif' }}>
@@ -87,38 +82,9 @@ export default function CustomBigCalendar() {
             day: 'Día',
             agenda: 'Agenda',
             noEventsInRange: 'No hay eventos en este rango.',
-            
           }}
-          
-          date={currentDate} // Fecha actual del calendario
-          onNavigate={handleNavigate} // Controlador para la navegación
         />
-        
       </div>
-      <div className="flex justify-between items-center mt-4 mb-4">
-  {/* Botón de Mes Anterior */}
-  <button
-    onClick={() => {
-      const previousMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
-      setCurrentDate(previousMonth);
-    }}
-    className="bg-pink-500 dark:bg-purple-500 text-white hover:bg-pink-600 dark:hover:bg-purple-600 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
-  >
-    Mes Anterior
-  </button>
-
-  {/* Botón de Mes Siguiente */}
-  <button
-    onClick={() => {
-      const nextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
-      setCurrentDate(nextMonth);
-    }}
-    className="bg-pink-500 dark:bg-purple-500 text-white hover:bg-pink-600 dark:hover:bg-purple-600 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
-  >
-    Mes Siguiente
-  </button>
-</div>
     </div>
-    
   );
 }
