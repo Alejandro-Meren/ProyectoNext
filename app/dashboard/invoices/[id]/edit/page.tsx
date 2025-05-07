@@ -7,7 +7,7 @@ import { Appointment, Customer, Service } from '@/app/lib/definitions';
 
 export default function EditAppointmentPage({ params }: { params: Promise<{ id: string }> }) {
   const [customers, setCustomers] = useState<Customer[]>([]);
-  const [services, setServices] = useState<Service[]>([]); // Agregar estado para los servicios
+  const [services, setServices] = useState<Service[]>([]);
   const [appointment, setAppointment] = useState<Appointment | null>(null);
   const [appointmentId, setAppointmentId] = useState<string | null>(null);
   const router = useRouter();
@@ -66,8 +66,8 @@ export default function EditAppointmentPage({ params }: { params: Promise<{ id: 
         const data = await response.json();
         setAppointment({
           ...data,
-          service_id: data.service_id || '', // Asegúrate de que esta propiedad esté presente
-          price: data.price || 0, // Asegúrate de que esta propiedad esté presente
+          service_id: data.service_id || '',
+          price: data.price || 0,
         });
       } catch (error) {
         console.error('Error fetching appointment:', error);
@@ -76,7 +76,7 @@ export default function EditAppointmentPage({ params }: { params: Promise<{ id: 
 
     fetchParams();
     fetchCustomers();
-    fetchServices(); // Llama a la función para obtener los servicios
+    fetchServices();
   }, [params]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -114,7 +114,7 @@ export default function EditAppointmentPage({ params }: { params: Promise<{ id: 
       <EditForm
         appointmentId={appointmentId!}
         customers={customers}
-        services={services} // Pasa los servicios como prop
+        services={services}
         appointment={appointment}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
