@@ -1,165 +1,38 @@
-'use client';
+import { auth } from '@/auth'; // Importa la función auth desde tu configuración
+import { redirect } from 'next/navigation';
+import { getUser } from '@/auth'; // Importa la función getUser desde tu configuración
+import StatsPage from './stats'; // Importa el componente de estadísticas
 
-import { useEffect, useState } from 'react';
-import { Bar, Pie, Line } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-  PointElement,
-  LineElement,
-} from 'chart.js';
+export default async function Page() {
+  // Obtén la sesión del usuario autenticado
+  const session = await auth();
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-  PointElement,
-  LineElement
-);
-
-interface Appointment {
-  id: string;
-  service: string;
-  price: number;
-  date: string;
-}
-
-export default function StatsPage() {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchAppointments() {
-      try {
-        const response = await fetch('/api/appointments', {
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch appointments');
-        }
-        const data = await response.json();
-        setAppointments(data);
-      } catch (error) {
-        console.error('Error fetching appointments:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchAppointments();
-  }, []);
-
-  if (isLoading) {
-    return <div className="text-center text-pink-600 dark:text-purple-400">Cargando estadísticas...</div>;
+  if (!session || !session.user?.email) {
+    redirect('/login'); // Redirige al login si no hay sesión
+    return null;
   }
 
-  // Datos para el gráfico de barras (ingresos por servicio)
-  const services = Array.from(new Set(appointments.map((a) => a.service)));
-  const barData = {
-    labels: services,
-    datasets: [
-      {
-        label: 'Ingresos por servicio',
-        data: services.map((service) =>
-          appointments
-            .filter((a) => a.service === service)
-            .reduce((sum, a) => sum + a.price, 0)
-        ),
-        backgroundColor: 'rgba(236, 72, 153, 0.7)', // Rosa
-        borderColor: 'rgba(236, 72, 153, 1)',
-        borderWidth: 1,
-      },
-    ],
-  };
+  const userEmail = session.user.email; // Recupera el email de la sesión
+  const user = await getUser(userEmail); // Obtén los datos del usuario desde tu base de datos
 
-  // Datos para el gráfico de pastel (distribución de servicios)
-  const pieData = {
-    labels: services,
-    datasets: [
-      {
-        label: 'Distribución de servicios',
-        data: services.map((service) =>
-          appointments.filter((a) => a.service === service).length
-        ),
-        backgroundColor: [
-          'rgba(236, 72, 153, 0.7)', // Rosa
-          'rgba(168, 85, 247, 0.7)', // Púrpura
-          'rgba(59, 130, 246, 0.7)', // Azul
-          'rgba(34, 197, 94, 0.7)', // Verde
-        ],
-        borderColor: [
-          'rgba(236, 72, 153, 1)',
-          'rgba(168, 85, 247, 1)',
-          'rgba(59, 130, 246, 1)',
-          'rgba(34, 197, 94, 1)',
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
+  if (!user) {
+    redirect('/login'); // Redirige al login si el usuario no existe en la base de datos
+    return null;
+  }
 
-  // Datos para el gráfico de líneas (ingresos por fecha)
-  const dates = Array.from(new Set(appointments.map((a) => a.date))).sort();
-  const lineData = {
-    labels: dates,
-    datasets: [
-      {
-        label: 'Ingresos por fecha',
-        data: dates.map((date) =>
-          appointments
-            .filter((a) => a.date === date)
-            .reduce((sum, a) => sum + a.price, 0)
-        ),
-        borderColor: 'rgba(168, 85, 247, 1)', // Púrpura
-        backgroundColor: 'rgba(168, 85, 247, 0.3)',
-        tension: 0.4,
-      },
-    ],
-  };
+  if (user.role !== 'admin') {
+    redirect('/dashboard/invoices'); // Redirige si el usuario no es admin
+    return null;
+  }
 
   return (
-    <div className="p-6 bg-gradient-to-b from-pink-50 via-pink-100 to-pink-200 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-lg shadow-lg">
+    <main className="flex flex-col h-full p-8 md:p-16 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-lg shadow-2xl overflow-hidden">
       <h1 className="mb-4 text-2xl md:text-3xl text-pink-600 dark:text-purple-400" style={{ fontFamily: 'Times New Roman, serif' }}>
-      Estadísticas
+        Estadísticas del Salón
       </h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Gráfico de barras */}
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold text-pink-600 dark:text-purple-400 mb-4">
-            Ingresos por servicio
-          </h2>
-          <Bar data={barData} />
-        </div>
-
-        {/* Gráfico de pastel */}
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold text-pink-600 dark:text-purple-400 mb-4">
-            Distribución de servicios
-          </h2>
-          <Pie data={pieData} />
-        </div>
-
-        {/* Gráfico de líneas */}
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md md:col-span-2">
-          <h2 className="text-lg font-semibold text-pink-600 dark:text-purple-400 mb-4">
-            Ingresos por fecha
-          </h2>
-          <Line data={lineData} />
-        </div>
+      <div className="flex-grow overflow-auto">
+        <StatsPage /> {/* Renderiza el componente de estadísticas */}
       </div>
-    </div>
+    </main>
   );
 }
