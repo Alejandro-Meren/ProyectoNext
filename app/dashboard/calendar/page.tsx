@@ -63,8 +63,9 @@ export default function CustomBigCalendar() {
   useEffect(() => {
     const buttons = document.querySelectorAll('.rbc-btn-group button');
     buttons.forEach((button) => {
-      if (button.innerText === 'Semana' || button.innerText === 'Día') {
-        button.style.display = 'none';
+      const btn = button as HTMLButtonElement; // Asegurar que es un HTMLButtonElement
+      if (btn.innerText === 'Semana' || btn.innerText === 'Día') {
+        btn.style.display = 'none';
       }
     });
   }, []);
