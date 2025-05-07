@@ -58,11 +58,7 @@
     background-color: #8b5cf6; /* Color de eventos en modo oscuro */
   }
   
-  /* Ocultar botones de Semana y Día */
-  .rbc-btn-group button:nth-child(2), /* Botón de Semana */
-  .rbc-btn-group button:nth-child(3) { /* Botón de Día */
-    display: none;
-  }
+
   
   /* Responsividad */
   @media (max-width: 768px) {
