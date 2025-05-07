@@ -88,7 +88,7 @@ export default function CustomBigCalendar() {
             agenda: 'Agenda',
             noEventsInRange: 'No hay eventos en este rango.',
           }}
-          date={currentDate} // Sincroniza la fecha actual con el calendario
+          defaultDate={currentDate} // Fecha inicial del calendario
           onNavigate={handleNavigate} // Actualiza el estado al navegar
         />
       </div>
