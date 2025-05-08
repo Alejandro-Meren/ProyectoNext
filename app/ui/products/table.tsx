@@ -20,9 +20,10 @@ interface Product {
 
 interface ProductsTableProps {
   products: Product[];
+  userRole: 'admin' | 'user'; // Define el rol del usuario
 }
 
-const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts }) => {
+const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts, userRole }) => {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [creatingProduct, setCreatingProduct] = useState<boolean>(false);
@@ -92,6 +93,33 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
     router.refresh();
   };
 
+  const handleBuy = async (id: string) => {
+    try {
+      const response = await fetch(`/api/products/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ stock: -1 }), // Reduce el stock en 1
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to update stock');
+      }
+  
+      const data = await response.json();
+  
+      // Actualiza el estado local con el nuevo stock
+      setProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          product.id === id ? { ...product, stock: data.stock } : product
+        )
+      );
+    } catch (error) {
+      console.error('Error updating stock:', error);
+    }
+  };
+
   const handleCancel = () => {
     setCreatingProduct(false);
     setEditingProduct(null);
@@ -108,12 +136,14 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
         <CreateForm onSave={handleSaveNew} onCancel={handleCancel} />
       ) : (
         <>
-          <Link href="/dashboard/productos/create">
-            <p className="self-end mb-4 bg-pink-500 dark:bg-purple-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-pink-600 dark:hover:bg-purple-600 transition-transform duration-300 transform hover:scale-105 flex items-center">
-              <PlusIcon className="h-5 w-5 mr-2" />
-              Añadir Producto
-            </p>
-          </Link>
+          {userRole === 'admin' && ( // Ocultar botón de crear producto si no es admin
+            <Link href="/dashboard/productos/create">
+              <p className="self-end mb-4 bg-pink-500 dark:bg-purple-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-pink-600 dark:hover:bg-purple-600 transition-transform duration-300 transform hover:scale-105 flex items-center">
+                <PlusIcon className="h-5 w-5 mr-2" />
+                Añadir Producto
+              </p>
+            </Link>
+          )}
           <div className="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
             {currentProducts.map((product) => (
               <div key={product.id} className="relative bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-transform duration-500 transform hover:scale-105">
@@ -134,22 +164,36 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
                   <p className="text-gray-800 dark:text-gray-200 font-semibold">${product.price}</p>
                   <p className="text-gray-600 dark:text-gray-400">Stock: {product.stock > 0 ? product.stock : 'Sin stock'}</p>
                   <p className="text-gray-600 dark:text-gray-400">Proveedor: {product.supplierName || 'Desconocido'}</p>
-                  <div className="mt-4 flex justify-end space-x-2">
-                    <button
-                      onClick={() => handleEdit(product)}
-                      className="text-white bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center"
-                    >
-                      <PencilIcon className="h-5 w-5 mr-1" />
-                      Editar
-                    </button>
-                    <button
-                      onClick={() => handleDelete(product.id!)}
-                      className="text-white bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-800 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center justify-center"
-                    >
-                      <TrashIcon className="h-5 w-5" />
-                      Eliminar
-                    </button>
-                  </div>
+                  {userRole === 'admin' ? (
+                    <div className="mt-4 flex justify-end space-x-2">
+                      <button
+                        onClick={() => handleEdit(product)}
+                        className="text-white bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center"
+                      >
+                        <PencilIcon className="h-5 w-5 mr-1" />
+                        Editar
+                      </button>
+                      <button
+                        onClick={() => handleDelete(product.id!)}
+                        className="text-white bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-800 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center justify-center"
+                      >
+                        <TrashIcon className="h-5 w-5" />
+                        Eliminar
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="mt-4 flex justify-end">
+                      <button
+                        onClick={() => handleBuy(product.id)}
+                        disabled={product.stock === 0}
+                        className={`text-white ${
+                          product.stock > 0 ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-400 cursor-not-allowed'
+                        } py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300`}
+                      >
+                        Comprar
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
