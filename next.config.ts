@@ -38,6 +38,8 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'api.dicebear.com' },
       { protocol: 'https', hostname: 'www.farmaciabarata.es' },
       { protocol: 'https', hostname: 'www.perfumeriasana.com' },
+      { protocol: 'https', hostname: 'nirvel-shop.com' }, // Agregado para permitir imágenes de este dominio
+
     ],
   },
   experimental: {

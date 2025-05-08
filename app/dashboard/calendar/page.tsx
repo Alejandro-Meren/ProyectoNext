@@ -60,18 +60,18 @@ export default function CustomBigCalendar() {
   }, []);
 
   return (
-    <div className="p-6 bg-gradient-to-b from-pink-50 via-pink-100 to-pink-200 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-lg shadow-lg">
-      <h2 className="mb-4 text-2xl md:text-3xl text-pink-600 dark:text-purple-400" style={{ fontFamily: 'Times New Roman, serif' }}>
+    <div className="p-auto sm:p-6 md:p-8 bg-gradient-to-b from-pink-50 via-pink-100 to-pink-200 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-lg shadow-lg max-w-full overflow-x-hidden">
+      <h2 className="mb-4 text-xl sm:text-2xl md:text-3xl text-pink-600 dark:text-purple-400 text-center" style={{ fontFamily: 'Times New Roman, serif' }}>
         Calendario de Citas
       </h2>
-
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
+  
+      <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md max-w-full overflow-x-auto">
         <Calendar
           localizer={localizer}
           events={events}
           startAccessor={(event) => (event as Appointment).start}
           endAccessor={(event) => (event as Appointment).end}
-          style={{ height: 600 }}
+          style={{ height: '60vh', minHeight: '400px' }}
           className="text-gray-900 dark:text-gray-200"
           messages={{
             next: 'Siguiente',

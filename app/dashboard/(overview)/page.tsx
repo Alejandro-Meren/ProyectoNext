@@ -35,26 +35,26 @@ export default async function Page() {
   }
 
   return (
-    <main className="flex flex-col h-full p-8 md:p-16 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-lg shadow-2xl overflow-hidden">
-      <h1 className={`${lusitana.className} mb-4 text-2xl md:text-3xl text-pink-600 dark:text-purple-400`}>
-        Hair Salon Dashboard
-      </h1>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 flex-grow overflow-auto">
-        <Suspense fallback={<CardsSkeleton />}>
-          <CardWrapper />
-        </Suspense>
-      </div>
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8 flex-grow overflow-auto">
-        <Suspense fallback={<RevenueChartSkeleton />}>
-          {/* Aquí puedes agregar el componente RevenueChart si lo tienes */}
-        </Suspense>
-        <Suspense fallback={<LatestInvoicesSkeleton />}>
-          <LatestInvoices />
-        </Suspense>
-        <Suspense fallback={<div className="text-gray-700 dark:text-gray-300">Loading Services...</div>}>
-          <ServicesList />
-        </Suspense>
-      </div>
-    </main>
+    <main className="flex flex-col h-full max-w-screen-xl mx-auto p-4 md:p-8 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-lg shadow-2xl overflow-hidden">
+  <h1 className={`${lusitana.className} mb-4 text-2xl md:text-3xl text-pink-600 dark:text-purple-400`}>
+    Hair Salon Dashboard
+  </h1>
+  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 flex-grow">
+    <Suspense fallback={<CardsSkeleton />}>
+      <CardWrapper />
+    </Suspense>
+  </div>
+  <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8 flex-grow overflow-x-auto">
+    <Suspense fallback={<RevenueChartSkeleton />}>
+      {/* Aquí puedes agregar el componente RevenueChart si lo tienes */}
+    </Suspense>
+    <Suspense fallback={<LatestInvoicesSkeleton />}>
+      <LatestInvoices />
+    </Suspense>
+    <Suspense fallback={<div className="text-gray-700 dark:text-gray-300">Loading Services...</div>}>
+      <ServicesList />
+    </Suspense>
+  </div>
+</main>
   );
 }

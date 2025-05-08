@@ -155,8 +155,8 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
   };
 
   return (
-    <div className="flex flex-col h-full p-6 md:p-12 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-lg shadow-lg overflow-hidden">
-      <h1 className="mb-4 text-2xl md:text-3xl text-pink-600 dark:text-purple-400" style={{ fontFamily: 'Times New Roman, serif' }}>
+    <div className="flex flex-col h-full p-2 sm:p-6 md:p-8 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-lg shadow-lg overflow-hidden">
+      <h1 className="mb-4 text-xl sm:text-2xl md:text-3xl text-pink-600 dark:text-purple-400 text-center" style={{ fontFamily: 'Times New Roman, serif' }}>
         Productos de Peluquería
       </h1>
       {editingProduct ? (
@@ -167,15 +167,19 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
         <>
           {userRole === 'admin' && (
             <Link href="/dashboard/productos/create">
-              <p className="self-end mb-4 bg-pink-500 dark:bg-purple-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-pink-600 dark:hover:bg-purple-600 transition-transform duration-300 transform hover:scale-105 flex items-center">
+              <p className="self-end mb-4 bg-pink-500 dark:bg-purple-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-pink-600 dark:hover:bg-purple-600 transition-transform duration-300 flex items-center">
                 <PlusIcon className="h-5 w-5 mr-2" />
                 Añadir Producto
               </p>
             </Link>
           )}
-          <div className="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {currentProducts.map((product) => (
-              <div key={product.id} className="relative bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-500">                <div className="w-full h-56 flex justify-center items-center bg-gradient-to-r from-pink-100 to-yellow-100 dark:from-gray-700 dark:to-gray-800">
+              <div
+                key={product.id}
+                className="relative bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden"
+              >
+                <div className="w-full h-56 flex justify-center items-center bg-gradient-to-r from-pink-100 to-yellow-100 dark:from-gray-700 dark:to-gray-800">
                   <div className="w-40 h-40 bg-white dark:bg-gray-900 flex justify-center items-center rounded-full border-4 border-pink-300 dark:border-purple-500 shadow-md">
                     {product.imageUrl ? (
                       <img src={product.imageUrl} alt={product.name} className="w-36 h-36 object-cover rounded-full" />
@@ -197,14 +201,14 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
                       <div className="flex justify-end space-x-2">
                         <button
                           onClick={() => handleEdit(product)}
-                          className="text-white bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center"
+                          className="text-white bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 py-2 px-4 rounded-lg shadow-md flex items-center"
                         >
                           <PencilIcon className="h-5 w-5 mr-1" />
                           Editar
                         </button>
                         <button
                           onClick={() => handleDelete(product.id!)}
-                          className="text-white bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-800 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center justify-center"
+                          className="text-white bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-800 py-2 px-4 rounded-lg shadow-md flex items-center justify-center"
                         >
                           <TrashIcon className="h-5 w-5" />
                           Eliminar
@@ -219,13 +223,14 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
                         <option value="20">20</option>
                       </select>
                       <button
-                      onClick={() => handleRestock(product.id, restockQuantity)}
-                      className="bg-pink-500 text-white hover:bg-pink-600 dark:bg-purple-500 dark:hover:bg-purple-600 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 text-center flex items-center justify-center">
-                      <span className="mr-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582M20 20v-5h-.582M4 4l16 16M20 4L4 20" />
-                      </svg>
-                      </span>
+                        onClick={() => handleRestock(product.id, restockQuantity)}
+                        className="bg-pink-500 text-white hover:bg-pink-600 dark:bg-purple-500 dark:hover:bg-purple-600 py-2 px-4 rounded-lg shadow-md flex items-center justify-center"
+                      >
+                        <span className="mr-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582M20 20v-5h-.582M4 4l16 16M20 4L4 20" />
+                          </svg>
+                        </span>
                         Reponer Stock
                       </button>
                     </div>
@@ -244,15 +249,16 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
                         disabled={product.stock < selectedQuantity}
                         className={`${
                           product.stock >= selectedQuantity
-                          ? 'bg-pink-500 hover:bg-pink-600 dark:bg-purple-500 dark:hover:bg-purple-600'
-                          : 'bg-gray-400 cursor-not-allowed'
-                        } text-white py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 text-center flex items-center justify-center`}>
+                            ? 'bg-pink-500 hover:bg-pink-600 dark:bg-purple-500 dark:hover:bg-purple-600'
+                            : 'bg-gray-400 cursor-not-allowed'
+                        } text-white py-2 px-4 rounded-lg shadow-md flex items-center justify-center`}
+                      >
                         <span className="mr-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h18M9 3v18m6-18v18M3 9h18m-9 9h9" />
-                            </svg>
-                          </span>
-                          Comprar
+                          </svg>
+                        </span>
+                        Comprar
                       </button>
                     </div>
                   )}
@@ -264,14 +270,14 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
             <button
               onClick={handlePreviousPage}
               disabled={currentPage === 1}
-              className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg shadow-md hover:bg-gray-400 dark:hover:bg-gray-600 transition-transform duration-300 transform hover:scale-105"
+              className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg shadow-md hover:bg-gray-400 dark:hover:bg-gray-600"
             >
               Anterior
             </button>
             <button
               onClick={handleNextPage}
               disabled={currentPage === totalPages}
-              className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg shadow-md hover:bg-gray-400 dark:hover:bg-gray-600 transition-transform duration-300 transform hover:scale-105"
+              className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg shadow-md hover:bg-gray-400 dark:hover:bg-gray-600"
             >
               Siguiente
             </button>
