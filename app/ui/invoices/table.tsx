@@ -15,9 +15,10 @@ interface Appointment {
 
 interface InvoicesTableProps {
   onEdit: (id: string) => void;
+  userRole: 'admin' | 'user'; // Añadido: Define el rol del usuario
 }
 
-export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
+export default function InvoicesTable({ onEdit, userRole }: InvoicesTableProps) {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
 
   useEffect(() => {
@@ -74,10 +75,11 @@ export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
     const [hours, minutes] = timeString.split(':').map(Number);
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
   };
+
   return (
     <div className="p-4 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-lg shadow-lg">
       <h1 className="mb-4 text-2xl md:text-3xl text-pink-600 dark:text-purple-400" style={{ fontFamily: 'Times New Roman, serif' }}>
-      Citas
+        Citas
       </h1>
 
       {/* Diseño de tabla para pantallas grandes */}
@@ -100,9 +102,11 @@ export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
               <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
                 Precio
               </th>
-              <th className="px-4 py-2 text-right text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
-                Acciones
-              </th>
+              {userRole === 'admin' && ( // Añadido: Mostrar acciones solo si el usuario es admin
+                <th className="px-4 py-2 text-right text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
+                  Acciones
+                </th>
+              )}
             </tr>
           </thead>
           <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -147,22 +151,24 @@ export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
                     ${Number(appointment.price).toFixed(2)} {/* Convierte a número */}
                   </div>
                 </td>
-                <td className="px-4 py-2 whitespace-nowrap text-right text-sm font-medium">
-                  <div className="flex justify-end space-x-2">
-                    <button
-                      onClick={() => onEdit(appointment.id)}
-                      className="text-white bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
-                    >
-                      <PencilIcon className="h-5 w-5" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(appointment.id)}
-                      className="text-white bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-800 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
-                    >
-                      <TrashIcon className="h-5 w-5" />
-                    </button>
-                  </div>
-                </td>
+                {userRole === 'admin' && ( // Añadido: Mostrar botones solo si el usuario es admin
+                  <td className="px-4 py-2 whitespace-nowrap text-right text-sm font-medium">
+                    <div className="flex justify-end space-x-2">
+                      <button
+                        onClick={() => onEdit(appointment.id)}
+                        className="text-white bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
+                      >
+                        <PencilIcon className="h-5 w-5" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(appointment.id)}
+                        className="text-white bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-800 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
+                      >
+                        <TrashIcon className="h-5 w-5" />
+                      </button>
+                    </div>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
@@ -206,20 +212,22 @@ export default function InvoicesTable({ onEdit }: InvoicesTableProps) {
                 <strong>Precio:</strong> ${Number(appointment.price).toFixed(2)}
               </p>
             </div>
-            <div className="flex justify-end space-x-2 mt-4">
-              <button
-                onClick={() => onEdit(appointment.id)}
-                className="text-white bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
-              >
-                <PencilIcon className="h-5 w-5" />
-              </button>
-              <button
-                onClick={() => handleDelete(appointment.id)}
-                className="text-white bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-800 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
-              >
-                <TrashIcon className="h-5 w-5" />
-              </button>
-            </div>
+            {userRole === 'admin' && ( // Añadido: Mostrar botones solo si el usuario es admin
+              <div className="flex justify-end space-x-2 mt-4">
+                <button
+                  onClick={() => onEdit(appointment.id)}
+                  className="text-white bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
+                >
+                  <PencilIcon className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => handleDelete(appointment.id)}
+                  className="text-white bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-800 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
+                >
+                  <TrashIcon className="h-5 w-5" />
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>
