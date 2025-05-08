@@ -38,8 +38,19 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'api.dicebear.com' },
       { protocol: 'https', hostname: 'www.farmaciabarata.es' },
       { protocol: 'https', hostname: 'www.perfumeriasana.com' },
-      { protocol: 'https', hostname: 'nirvel-shop.com' }, // Agregado para permitir imágenes de este dominio
-
+      { protocol: 'https', hostname: 'nirvel-shop.com' },
+      { protocol: 'https', hostname: 'www.maquillalia.com' },
+      { protocol: 'https', hostname: 'content.app-sources.com' }, 
+      { protocol: 'https', hostname: 'www.todopeluqueria.es' }, 
+      { protocol: 'https', hostname: 'www.cuchilleriasimon.es' }, 
+      { protocol: 'https', hostname: 'orbegozo.com' }, 
+      { protocol: 'https', hostname: 'www.tiendasgxs.com' }, 
+      { protocol: 'https', hostname: 'arcashop.es' }, 
+      { protocol: 'https', hostname: 'floccus.es' }, 
+      { protocol: 'https', hostname: 'cotril.es' }, 
+      { protocol: 'https', hostname: 'beter.es' }, 
+      { protocol: 'https', hostname: 'media.centrobell.com' }, 
+      { protocol: 'https', hostname: 'www.3claveles.com' }, 
     ],
   },
   experimental: {
