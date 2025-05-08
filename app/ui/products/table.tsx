@@ -28,6 +28,8 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [creatingProduct, setCreatingProduct] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedQuantity, setSelectedQuantity] = useState<number>(1); // Para el botón "Comprar"
+  const [restockQuantity, setRestockQuantity] = useState<number>(5); // Para el botón "Reponer Stock"
   const productsPerPage = 9;
   const router = useRouter();
 
@@ -93,22 +95,49 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
     router.refresh();
   };
 
-  const handleBuy = async (id: string) => {
+  const handleBuy = async (id: string, quantity: number) => {
     try {
       const response = await fetch(`/api/products/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ stock: -1 }), // Reduce el stock en 1
+        body: JSON.stringify({ stock: -quantity }), // Reduce el stock en la cantidad seleccionada
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to update stock');
       }
-  
+
       const data = await response.json();
-  
+
+      // Actualiza el estado local con el nuevo stock
+      setProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          product.id === id ? { ...product, stock: data.stock } : product
+        )
+      );
+    } catch (error) {
+      console.error('Error updating stock:', error);
+    }
+  };
+
+  const handleRestock = async (id: string, quantity: number) => {
+    try {
+      const response = await fetch(`/api/products/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ stock: quantity }), // Aumenta el stock en la cantidad seleccionada
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update stock');
+      }
+
+      const data = await response.json();
+
       // Actualiza el estado local con el nuevo stock
       setProducts((prevProducts) =>
         prevProducts.map((product) =>
@@ -136,7 +165,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
         <CreateForm onSave={handleSaveNew} onCancel={handleCancel} />
       ) : (
         <>
-          {userRole === 'admin' && ( // Ocultar botón de crear producto si no es admin
+          {userRole === 'admin' && (
             <Link href="/dashboard/productos/create">
               <p className="self-end mb-4 bg-pink-500 dark:bg-purple-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-pink-600 dark:hover:bg-purple-600 transition-transform duration-300 transform hover:scale-105 flex items-center">
                 <PlusIcon className="h-5 w-5 mr-2" />
@@ -146,8 +175,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
           )}
           <div className="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
             {currentProducts.map((product) => (
-              <div key={product.id} className="relative bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-transform duration-500 transform hover:scale-105">
-                <div className="w-full h-56 flex justify-center items-center bg-gradient-to-r from-pink-100 to-yellow-100 dark:from-gray-700 dark:to-gray-800">
+              <div key={product.id} className="relative bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-500">                <div className="w-full h-56 flex justify-center items-center bg-gradient-to-r from-pink-100 to-yellow-100 dark:from-gray-700 dark:to-gray-800">
                   <div className="w-40 h-40 bg-white dark:bg-gray-900 flex justify-center items-center rounded-full border-4 border-pink-300 dark:border-purple-500 shadow-md">
                     {product.imageUrl ? (
                       <img src={product.imageUrl} alt={product.name} className="w-36 h-36 object-cover rounded-full" />
@@ -165,32 +193,66 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
                   <p className="text-gray-600 dark:text-gray-400">Stock: {product.stock > 0 ? product.stock : 'Sin stock'}</p>
                   <p className="text-gray-600 dark:text-gray-400">Proveedor: {product.supplierName || 'Desconocido'}</p>
                   {userRole === 'admin' ? (
-                    <div className="mt-4 flex justify-end space-x-2">
-                      <button
-                        onClick={() => handleEdit(product)}
-                        className="text-white bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center"
+                    <div className="mt-4 flex flex-col space-y-2">
+                      <div className="flex justify-end space-x-2">
+                        <button
+                          onClick={() => handleEdit(product)}
+                          className="text-white bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center"
+                        >
+                          <PencilIcon className="h-5 w-5 mr-1" />
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => handleDelete(product.id!)}
+                          className="text-white bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-800 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center justify-center"
+                        >
+                          <TrashIcon className="h-5 w-5" />
+                          Eliminar
+                        </button>
+                      </div>
+                      <select
+                        className="border border-gray-300 rounded-lg px-2 py-1"
+                        onChange={(e) => setRestockQuantity(Number(e.target.value))}
                       >
-                        <PencilIcon className="h-5 w-5 mr-1" />
-                        Editar
-                      </button>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                      </select>
                       <button
-                        onClick={() => handleDelete(product.id!)}
-                        className="text-white bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-800 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 flex items-center justify-center"
-                      >
-                        <TrashIcon className="h-5 w-5" />
-                        Eliminar
+                      onClick={() => handleRestock(product.id, restockQuantity)}
+                      className="bg-pink-500 text-white hover:bg-pink-600 dark:bg-purple-500 dark:hover:bg-purple-600 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 text-center flex items-center justify-center">
+                      <span className="mr-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582M20 20v-5h-.582M4 4l16 16M20 4L4 20" />
+                      </svg>
+                      </span>
+                        Reponer Stock
                       </button>
                     </div>
                   ) : (
-                    <div className="mt-4 flex justify-end">
-                      <button
-                        onClick={() => handleBuy(product.id)}
-                        disabled={product.stock === 0}
-                        className={`text-white ${
-                          product.stock > 0 ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-400 cursor-not-allowed'
-                        } py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300`}
+                    <div className="mt-4 flex flex-col space-y-2">
+                      <select
+                        className="border border-gray-300 rounded-lg px-2 py-1"
+                        onChange={(e) => setSelectedQuantity(Number(e.target.value))}
                       >
-                        Comprar
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="5">5</option>
+                      </select>
+                      <button
+                        onClick={() => handleBuy(product.id, selectedQuantity)}
+                        disabled={product.stock < selectedQuantity}
+                        className={`${
+                          product.stock >= selectedQuantity
+                          ? 'bg-pink-500 hover:bg-pink-600 dark:bg-purple-500 dark:hover:bg-purple-600'
+                          : 'bg-gray-400 cursor-not-allowed'
+                        } text-white py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 text-center flex items-center justify-center`}>
+                        <span className="mr-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h18M9 3v18m6-18v18M3 9h18m-9 9h9" />
+                            </svg>
+                          </span>
+                          Comprar
                       </button>
                     </div>
                   )}
