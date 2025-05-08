@@ -42,16 +42,17 @@ export type LatestInvoice = {
   amount: string;
 };
 
-export type Appointment = {
+export interface Appointment {
   id: string;
   customer_id: string;
-  date: string; // Fecha en formato 'YYYY-MM-DD'
-  time: string; // Hora en formato 'HH:mm'
+  date: string;
+  time: string;
   service_id: string;
+  service?: string; // Opcional
   price: number;
-  start: Date; // Fecha de inicio como objeto Date
-  end: Date; // Fecha de fin como objeto Date
-};
+  start?: Date | null; // Agrega esta propiedad si es opcional
+  end?: Date | null;   // Agrega esta propiedad si es opcional
+}
 
 // The database returns a number for amount, but we later format it to a string with the formatCurrency function
 export type LatestInvoiceRaw = Omit<LatestInvoice, 'amount'> & {

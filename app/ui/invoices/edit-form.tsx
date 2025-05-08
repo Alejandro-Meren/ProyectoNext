@@ -29,6 +29,7 @@ interface EditFormProps {
   customers: Customer[];
   services: Service[];
   appointment: Appointment | null;
+  setAppointment: React.Dispatch<React.SetStateAction<Appointment | null>>; // Ajusta el tipo aquí
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   handleSubmit: (e: React.FormEvent) => void;
 }
@@ -40,6 +41,7 @@ export default function EditForm({
   appointment,
   handleChange,
   handleSubmit,
+  setAppointment,
 }: EditFormProps) {
   const [selectedCustomer, setSelectedCustomer] = useState<string | null>(null);
   const [selectedService, setSelectedService] = useState<string | null>(null);
@@ -61,27 +63,15 @@ export default function EditForm({
   const handleServiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedServiceId = e.target.value;
     const selectedService = services.find((service) => service.id === selectedServiceId);
-
-    setSelectedService(selectedServiceId);
-    setPrice(selectedService ? selectedService.price : 0);
-
-    handleChange({
-      ...e,
-      target: {
-        ...e.target,
-        name: 'service_id',
-        value: selectedServiceId,
-      },
-    });
-
-    handleChange({
-      ...e,
-      target: {
-        ...e.target,
-        name: 'price',
-        value: selectedService ? selectedService.price.toString() : '0',
-      },
-    });
+  
+    if (appointment) {
+      setAppointment({
+        ...appointment,
+        service_id: selectedServiceId,
+        // Removed the 'service' property as it does not exist in the Appointment type
+        price: selectedService ? selectedService.price : 0, // Actualiza el precio
+      });
+    }
   };
 
   if (!appointment) {
@@ -122,22 +112,22 @@ export default function EditForm({
           Service
         </label>
         <select
-          id="service_id"
-          name="service_id"
-          value={selectedService || ''}
-          onChange={handleServiceChange}
-          required
-          className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:border-purple-500 dark:focus:ring-purple-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
-        >
-          <option value="" disabled>
-            Select a service
-          </option>
-          {services.map((service) => (
-            <option key={service.id} value={service.id}>
-              {service.service} - ${service.price.toFixed(2)}
-            </option>
-          ))}
-        </select>
+  id="service_id"
+  name="service_id"
+  value={appointment?.service_id || ''}
+  onChange={handleServiceChange}
+  required
+  className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:border-purple-500 dark:focus:ring-purple-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-200"
+>
+  <option value="" disabled>
+    Select a service
+  </option>
+  {services.map((service) => (
+    <option key={service.id} value={service.id}>
+      {service.service} - ${service.price.toFixed(2)}
+    </option>
+  ))}
+</select>
       </div>
       <div className="mb-4">
         <label htmlFor="price" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -149,8 +139,10 @@ export default function EditForm({
   name="price"
   value={`$${Number(price).toFixed(2)}`} // Asegurarse de que price sea un número
   readOnly
-  className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-pink-500 focus:ring-pink-500 dark:focus:ring-purple-500 dark:focus:ring-purple-500 sm:text-sm bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200"
+  className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200"
 />
+
+
       </div>
       <div className="mb-4">
         <label htmlFor="date" className="block text-sm font-medium text-gray-700 dark:text-gray-300">

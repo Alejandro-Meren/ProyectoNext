@@ -9,7 +9,7 @@ export default function EditAppointmentPage({ params }: { params: Promise<{ id: 
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [appointment, setAppointment] = useState<Appointment | null>(null);
-  const [appointmentId, setAppointmentId] = useState<string | null>(null);
+    const [appointmentId, setAppointmentId] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -112,13 +112,14 @@ export default function EditAppointmentPage({ params }: { params: Promise<{ id: 
     <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Editar Cita</h1>
       <EditForm
-        appointmentId={appointmentId!}
-        customers={customers}
-        services={services}
-        appointment={appointment}
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
-      />
+  appointmentId={appointmentId!}
+  customers={customers}
+  services={services}
+  appointment={appointment}
+  setAppointment={setAppointment} // Pasa esta función como prop
+  handleChange={handleChange}
+  handleSubmit={handleSubmit}
+/>
     </div>
   );
 }
