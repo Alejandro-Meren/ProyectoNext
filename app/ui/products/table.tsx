@@ -28,8 +28,8 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [creatingProduct, setCreatingProduct] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedQuantity, setSelectedQuantity] = useState<number>(1); // Para el botón "Comprar"
-  const [restockQuantity, setRestockQuantity] = useState<number>(5); // Para el botón "Reponer Stock"
+  const [selectedQuantities, setSelectedQuantities] = useState<{ [id: string]: number }>({}); // Para el botón "Comprar"
+  const [restockQuantities, setRestockQuantities] = useState<{ [id: string]: number }>({}); // Estado para manejar cantidades por producto
   const productsPerPage = 9;
   const router = useRouter();
 
@@ -104,26 +104,49 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
         },
         body: JSON.stringify({ stock: -quantity }), // Reduce el stock en la cantidad seleccionada
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to update stock');
       }
-
+  
       const data = await response.json();
-
+  
       // Actualiza el estado local con el nuevo stock
       setProducts((prevProducts) =>
         prevProducts.map((product) =>
           product.id === id ? { ...product, stock: data.stock } : product
         )
       );
+  
+      // Limpia la cantidad seleccionada para el producto
+      setSelectedQuantities((prev) => {
+        const updated = { ...prev };
+        delete updated[id];
+        return updated;
+      });
     } catch (error) {
       console.error('Error updating stock:', error);
     }
   };
 
-  const handleRestock = async (id: string, quantity: number) => {
+  const handleSelectedQuantityChange = (id: string, quantity: number) => {
+    setSelectedQuantities((prev) => ({
+      ...prev,
+      [id]: quantity, // Actualiza la cantidad seleccionada para el producto específico
+    }));
+  };
+  
+
+  const handleRestockQuantityChange = (id: string, quantity: number) => {
+    setRestockQuantities((prev) => ({
+      ...prev,
+      [id]: quantity, // Actualiza la cantidad para el producto específico
+    }));
+  };
+  
+  const handleRestock = async (id: string) => {
     try {
+      const quantity = restockQuantities[id] || 0; // Obtiene la cantidad específica para el producto
       const response = await fetch(`/api/products/${id}`, {
         method: 'PATCH',
         headers: {
@@ -131,19 +154,26 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
         },
         body: JSON.stringify({ stock: quantity }), // Aumenta el stock en la cantidad seleccionada
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to update stock');
       }
-
+  
       const data = await response.json();
-
+  
       // Actualiza el estado local con el nuevo stock
       setProducts((prevProducts) =>
         prevProducts.map((product) =>
           product.id === id ? { ...product, stock: data.stock } : product
         )
       );
+  
+      // Limpia la cantidad de reposición para el producto
+      setRestockQuantities((prev) => {
+        const updated = { ...prev };
+        delete updated[id];
+        return updated;
+      });
     } catch (error) {
       console.error('Error updating stock:', error);
     }
@@ -216,50 +246,60 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
                       </div>
                       <select
                         className="border border-gray-300 rounded-lg px-2 py-1"
-                        onChange={(e) => setRestockQuantity(Number(e.target.value))}
-                      >
+                        onChange={(e) => handleRestockQuantityChange(product.id, Number(e.target.value))}
+                        value={restockQuantities[product.id] || ''} >
+                          
+                        <option value="">Selecciona cantidad</option> {/* Opción inicial vacía */}
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="20">20</option>
-                      </select>
-                      <button
-                        onClick={() => handleRestock(product.id, restockQuantity)}
-                        className="bg-pink-500 text-white hover:bg-pink-600 dark:bg-purple-500 dark:hover:bg-purple-600 py-2 px-4 rounded-lg shadow-md flex items-center justify-center"
-                      >
-                        <span className="mr-2">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582M20 20v-5h-.582M4 4l16 16M20 4L4 20" />
-                          </svg>
-                        </span>
-                        Reponer Stock
-                      </button>
+                        <option value="50">50</option>
+                    </select>
+                    <button
+                      onClick={() => handleRestock(product.id)}
+                      disabled={!restockQuantities[product.id]} // Deshabilita el botón si no hay cantidad seleccionada
+                      className={`${
+                        restockQuantities[product.id]
+                          ? 'bg-pink-500 hover:bg-pink-600 dark:bg-purple-500 dark:hover:bg-purple-600'
+                          : 'bg-gray-400 cursor-not-allowed'
+                      } text-white py-2 px-4 rounded-lg shadow-md flex items-center justify-center`}>
+
+                      <span className="mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582M20 20v-5h-.582M4 4l16 16M20 4L4 20" />
+                        </svg>
+                      </span>
+                      Reponer Stock
+                    </button>
                     </div>
                   ) : (
                     <div className="mt-4 flex flex-col space-y-2">
                       <select
                         className="border border-gray-300 rounded-lg px-2 py-1"
-                        onChange={(e) => setSelectedQuantity(Number(e.target.value))}
-                      >
+                        onChange={(e) => handleSelectedQuantityChange(product.id, Number(e.target.value))}
+                        value={selectedQuantities[product.id] || ''}>
+
+                        <option value="">Selecciona cantidad</option> {/* Opción inicial vacía */}
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="5">5</option>
                       </select>
                       <button
-                        onClick={() => handleBuy(product.id, selectedQuantity)}
-                        disabled={product.stock < selectedQuantity}
+                        onClick={() => handleBuy(product.id, selectedQuantities[product.id] || 0)}
+                        disabled={!selectedQuantities[product.id] || product.stock < (selectedQuantities[product.id] || 0)} // Deshabilita si no hay cantidad seleccionada o si no hay suficiente stock
                         className={`${
-                          product.stock >= selectedQuantity
+                          selectedQuantities[product.id] && product.stock >= (selectedQuantities[product.id] || 0)
                             ? 'bg-pink-500 hover:bg-pink-600 dark:bg-purple-500 dark:hover:bg-purple-600'
                             : 'bg-gray-400 cursor-not-allowed'
-                        } text-white py-2 px-4 rounded-lg shadow-md flex items-center justify-center`}
-                      >
+                        } text-white py-2 px-4 rounded-lg shadow-md flex items-center justify-center`}>
+
                         <span className="mr-2">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h18M9 3v18m6-18v18M3 9h18m-9 9h9" />
                           </svg>
                         </span>
-                        Comprar
-                      </button>
+                      Comprar
+                    </button>
                     </div>
                   )}
                 </div>
