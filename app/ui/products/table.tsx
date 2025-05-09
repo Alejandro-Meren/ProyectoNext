@@ -106,38 +106,45 @@ const ProductsTable: React.FC<ProductsTableProps> = ({ products: initialProducts
   };
 
   const handleBuy = async (id: string, quantity: number) => {
-    try {
-      const response = await fetch(`/api/products/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ stock: -quantity }), // Reduce el stock en la cantidad seleccionada
-      });
+  try {
+    const response = await fetch(`/api/products/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ stock: -quantity }), // Reduce el stock en la cantidad seleccionada
+    });
 
-      if (!response.ok) {
-        throw new Error('Failed to update stock');
-      }
-
-      const data = await response.json();
-
-      // Actualiza el estado local con el nuevo stock
-      setProducts((prevProducts) =>
-        prevProducts.map((product) =>
-          product.id === id ? { ...product, stock: data.stock } : product
-        )
-      );
-
-      // Limpia la cantidad seleccionada para el producto
-      setSelectedQuantities((prev) => {
-        const updated = { ...prev };
-        delete updated[id];
-        return updated;
-      });
-    } catch (error) {
-      console.error('Error updating stock:', error);
+    if (!response.ok) {
+      throw new Error('Failed to update stock');
     }
-  };
+
+    const data = await response.json();
+
+    // Actualiza el estado local con el nuevo stock
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === id ? { ...product, stock: data.stock } : product
+      )
+    );
+
+    // Encuentra el producto en la lista de productos
+    const product = products.find((p) => p.id === id);
+    if (product) {
+      // Agrega el producto al carrito con la cantidad seleccionada
+      addToCart(product, quantity);
+    }
+
+    // Limpia la cantidad seleccionada para este producto
+    setSelectedQuantities((prev) => {
+      const updated = { ...prev };
+      delete updated[id];
+      return updated;
+    });
+  } catch (error) {
+    console.error('Error updating stock:', error);
+  }
+};
 
   const handleSelectedQuantityChange = (id: string, quantity: number) => {
     setSelectedQuantities((prev) => ({
