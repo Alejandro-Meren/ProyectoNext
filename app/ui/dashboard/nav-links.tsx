@@ -20,10 +20,10 @@ const links = [
   { name: 'Inicio', href: '/dashboard', icon: HomeIcon, adminOnly: true },
   { name: 'Citas', href: '/dashboard/invoices', icon: DocumentDuplicateIcon },
   { name: 'Clientes', href: '/dashboard/customers', icon: UserGroupIcon, adminOnly: true },
-  { name: 'Productos', href: '/dashboard/productos', icon: CubeIcon },
   { name: 'Calendario', href: '/dashboard/calendar', icon: CalendarIcon },
+  { name: 'Productos', href: '/dashboard/productos', icon: CubeIcon },
   { name: 'Estadísticas', href: '/dashboard/statistics', icon: ChartBarIcon, adminOnly: true },  
-  { name: ' Carrito', href: '/dashboard/cart', icon: ShoppingCartIcon }, // Añade el enlace al carrito
+  { name: 'Carrito', href: '/dashboard/cart', icon: ShoppingCartIcon }, // Añade el enlace al carrito
 
 
 ];
