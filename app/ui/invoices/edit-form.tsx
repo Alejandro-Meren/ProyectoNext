@@ -94,7 +94,7 @@ export default function EditForm({
   }
 
   // Asegurarse de que la fecha esté en el formato correcto (YYYY-MM-DD)
-  const formattedDate = new Date(appointment.date).toISOString().split('T')[0];
+const formattedDate = new Date(appointment.date).toLocaleDateString('en-CA'); // Formato YYYY-MM-DD
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">

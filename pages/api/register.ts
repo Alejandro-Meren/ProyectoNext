@@ -17,21 +17,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const hashedPassword = await bcrypt.hash(password, 10);
 
       // Generar un avatar automáticamente usando DiceBear
-      const avatarUrl = `https://api.dicebear.com/6.x/adventurer/svg?seed=${encodeURIComponent(name)}`;      
+      const avatarUrl = `https://api.dicebear.com/6.x/adventurer/svg?seed=${encodeURIComponent(name)}`;
       console.log('Generated avatar URL:', avatarUrl);
 
       // Iniciar una transacción para asegurar que ambas inserciones ocurran juntas
       await client.sql`BEGIN`;
 
       // Insertar en la tabla `users`
-      await client.sql`
-        INSERT INTO users (name, email, password)
-        VALUES (${name}, ${email}, ${hashedPassword})`;
+      const userResult = await client.sql`
+        INSERT INTO users (name, email, password, role)
+        VALUES (${name}, ${email}, ${hashedPassword}, 'user')
+        RETURNING id
+      `;
+      const userId = userResult.rows[0].id;
 
       // Insertar en la tabla `customers` con el avatar generado
       await client.sql`
-        INSERT INTO customers (name, email, image_url)
-        VALUES (${name}, ${email}, ${avatarUrl})`;
+        INSERT INTO customers (id, name, email, image_url)
+        VALUES (${userId}, ${name}, ${email}, ${avatarUrl})
+      `;
 
       // Confirmar la transacción
       await client.sql`COMMIT`;

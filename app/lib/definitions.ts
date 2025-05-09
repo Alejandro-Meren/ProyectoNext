@@ -8,6 +8,7 @@ export type User = {
   email: string;
   password: string;
   role: 'admin' | 'user'; // Asegúrate de incluir esta propiedad
+  profile_image?: string; // Asegúrate de incluir esta propiedad
 };
 
 export type Customer = {

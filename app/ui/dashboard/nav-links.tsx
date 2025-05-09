@@ -4,7 +4,10 @@ import {
   DocumentDuplicateIcon,
   CubeIcon,
   ChartBarIcon,
-  CalendarIcon
+  CalendarIcon,
+  ShoppingCartIcon, // Importa el icono del carrito de la compra
+
+
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import clsx from 'clsx';
@@ -16,11 +19,11 @@ import { getUser } from '@/auth'; // Importa la función getUser para obtener lo
 const links = [
   { name: 'Inicio', href: '/dashboard', icon: HomeIcon, adminOnly: true },
   { name: 'Citas', href: '/dashboard/invoices', icon: DocumentDuplicateIcon },
-  { name: 'Clientes', href: '/dashboard/customers', icon: UserGroupIcon },
+  { name: 'Clientes', href: '/dashboard/customers', icon: UserGroupIcon, adminOnly: true },
   { name: 'Productos', href: '/dashboard/productos', icon: CubeIcon },
   { name: 'Calendario', href: '/dashboard/calendar', icon: CalendarIcon },
   { name: 'Estadísticas', href: '/dashboard/statistics', icon: ChartBarIcon, adminOnly: true },  
-  { name: ' Carrito', href: '/dashboard/cart', icon: CalendarIcon },
+  { name: ' Carrito', href: '/dashboard/cart', icon: ShoppingCartIcon }, // Añade el enlace al carrito
 
 
 ];
