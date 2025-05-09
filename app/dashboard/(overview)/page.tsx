@@ -35,7 +35,7 @@ export default async function Page() {
   }
 
   return (
-    <main className="flex flex-col h-full max-w-screen-xl mx-auto p-4 md:p-8 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-lg shadow-2xl overflow-hidden">
+    <main className="flex flex-col h-full p-4 md:p-8 bg-gradient-to-r from-pink-50 via-pink-100 to-pink-200 dark:from-gray-800 dark:via-gray-900 dark:to-black rounded-lg shadow-2xl overflow-hidden">
   <h1 className={`${lusitana.className} mb-4 text-2xl md:text-3xl text-pink-600 dark:text-purple-400`}>
     Hair Salon Dashboard
   </h1>

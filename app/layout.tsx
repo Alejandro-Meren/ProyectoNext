@@ -2,6 +2,7 @@
 
 import './ui/globals.css';
 import { inter } from '@/app/ui/fonts';
+import { CartProvider } from '@/app/lib/cart-context';
 import { useState, useEffect } from 'react';
 
 export default function RootLayout({
@@ -37,6 +38,8 @@ export default function RootLayout({
         {/* Script para aplicar la clase 'dark' en el servidor */}
       </head>
       <body className={`${inter.className} antialiased transition-all duration-500`}>
+                <CartProvider>
+
         {/* Botón de modo oscuro */}
         <div className="fixed bottom-6 right-6 z-50">
           <button
@@ -102,6 +105,8 @@ export default function RootLayout({
                 }}
               />
         {children}
+                </CartProvider>
+
       </body>
     </html>
   );

@@ -19,7 +19,10 @@ const links = [
   { name: 'Clientes', href: '/dashboard/customers', icon: UserGroupIcon },
   { name: 'Productos', href: '/dashboard/productos', icon: CubeIcon },
   { name: 'Calendario', href: '/dashboard/calendar', icon: CalendarIcon },
-  { name: 'Estadísticas', href: '/dashboard/statistics', icon: ChartBarIcon, adminOnly: true },
+  { name: 'Estadísticas', href: '/dashboard/statistics', icon: ChartBarIcon, adminOnly: true },  
+  { name: ' Carrito', href: '/dashboard/cart', icon: CalendarIcon },
+
+
 ];
 
 export default async function NavLinks() {
