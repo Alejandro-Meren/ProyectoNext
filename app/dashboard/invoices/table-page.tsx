@@ -31,7 +31,7 @@ export default function InvoicesTablePage({ userRole }: InvoicesTablePageProps) 
               href="/dashboard/invoices/create"
               className="bg-pink-500 text-white hover:bg-pink-600 dark:bg-purple-500 dark:hover:bg-purple-600 py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300 text-center"
             >
-              Crear Cita
+              Reservar Cita
             </Link>
         </div>
   

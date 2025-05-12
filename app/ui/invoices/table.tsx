@@ -85,93 +85,89 @@ export default function InvoicesTable({ onEdit, userRole }: InvoicesTableProps) 
       {/* Diseño de tabla para pantallas grandes */}
       <div className="hidden md:block overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
-          <thead className="bg-pink-100 dark:bg-gray-700">
-            <tr>
-              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
-                Cliente
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
-                Fecha
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
-                Hora
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
-                Servicio
-              </th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
-                Precio
-              </th>
-              {userRole === 'admin' && ( // Añadido: Mostrar acciones solo si el usuario es admin
-                <th className="px-4 py-2 text-right text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
-                  Acciones
-                </th>
-              )}
-            </tr>
-          </thead>
-          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            {appointments.map((appointment) => (
-              <tr
-                key={appointment.id}
-                className="hover:bg-pink-50 dark:hover:bg-gray-700 transition-colors duration-200"
-              >
-                <td className="px-4 py-2 whitespace-nowrap">
-                  <div className="flex items-center">
-                    {appointment.customer_image ? (
-                      <img
-                        src={appointment.customer_image}
-                        alt={appointment.customer_name}
-                        className="w-10 h-10 rounded-full"
-                      />
-                    ) : (
-                      <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700" />
-                    )}
-                    <div className="ml-4">
-                      <div className="text-sm font-medium text-gray-900 dark:text-gray-200">
-                        {appointment.customer_name}
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-4 py-2 whitespace-nowrap">
-                  <div className="text-sm text-gray-900 dark:text-gray-200">
-                    {formatDate(appointment.date)}
-                  </div>
-                </td>
-                <td className="px-4 py-2 whitespace-nowrap">
-                  <div className="text-sm text-gray-900 dark:text-gray-200">
-                    {formatTime(appointment.time)}
-                  </div>
-                </td>
-                <td className="px-4 py-2 whitespace-nowrap">
-                  <div className="text-sm text-gray-900 dark:text-gray-200">{appointment.service}</div>
-                </td>
-                <td className="px-4 py-2 whitespace-nowrap">
-                  <div className="text-sm text-gray-900 dark:text-gray-200">
-                    ${Number(appointment.price).toFixed(2)} {/* Convierte a número */}
-                  </div>
-                </td>
-                {userRole === 'admin' && ( // Añadido: Mostrar botones solo si el usuario es admin
-                  <td className="px-4 py-2 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="flex justify-end space-x-2">
-                      <button
-                        onClick={() => onEdit(appointment.id)}
-                        className="text-white bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
-                      >
-                        <PencilIcon className="h-5 w-5" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(appointment.id)}
-                        className="text-white bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-800 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
-                      >
-                        <TrashIcon className="h-5 w-5" />
-                      </button>
-                    </div>
-                  </td>
-                )}
-              </tr>
-            ))}
-          </tbody>
+         <thead className="bg-pink-100 dark:bg-gray-700">
+  <tr>
+    <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
+      Cliente
+    </th>
+    <th className="px-4 py-2 text-right text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
+      Fecha
+    </th>
+    <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
+      Hora
+    </th>
+    <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
+      Servicio
+    </th>
+    <th className="px-4 py-2 text-left text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
+      Precio
+    </th>
+    {userRole === 'admin' && (
+      <th className="px-4 py-2 text-right text-xs font-medium text-pink-700 dark:text-purple-400 uppercase tracking-wider">
+        Acciones
+      </th>
+    )}
+  </tr>
+</thead>
+<tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+  {appointments.map((appointment) => (
+    <tr
+      key={appointment.id}
+      className="hover:bg-pink-50 dark:hover:bg-gray-700 transition-colors duration-200"
+    >
+      <td className="px-4 py-2 whitespace-nowrap">
+        <div className="flex items-center space-x-4">
+          {appointment.customer_image ? (
+            <img
+              src={appointment.customer_image}
+              alt={appointment.customer_name}
+              className="w-10 h-10 rounded-full"
+            />
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700" />
+          )}
+          <span className="text-sm font-medium text-gray-900 dark:text-gray-200 truncate">
+            {appointment.customer_name}
+          </span>
+        </div>
+      </td>
+      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900 dark:text-gray-200 text-right">
+        {formatDate(appointment.date)}
+      </td>
+      <td className="px-4 py-2 whitespace-nowrap">
+        <div className="text-sm text-gray-900 dark:text-gray-200">
+          {formatTime(appointment.time)}
+        </div>
+      </td>
+      <td className="px-4 py-2 whitespace-nowrap">
+        <div className="text-sm text-gray-900 dark:text-gray-200">{appointment.service}</div>
+      </td>
+      <td className="px-4 py-2 whitespace-nowrap">
+        <div className="text-sm text-gray-900 dark:text-gray-200">
+          ${Number(appointment.price).toFixed(2)}
+        </div>
+      </td>
+      {userRole === 'admin' && (
+        <td className="px-4 py-2 whitespace-nowrap text-right text-sm font-medium">
+          <div className="flex justify-end space-x-2">
+            <button
+              onClick={() => onEdit(appointment.id)}
+              className="text-white bg-indigo-600 dark:bg-indigo-700 hover:bg-indigo-700 dark:hover:bg-indigo-800 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
+            >
+              <PencilIcon className="h-5 w-5" />
+            </button>
+            <button
+              onClick={() => handleDelete(appointment.id)}
+              className="text-white bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-800 py-1 px-3 rounded-lg shadow-md transition-transform transform hover:scale-105 duration-300"
+            >
+              <TrashIcon className="h-5 w-5" />
+            </button>
+          </div>
+        </td>
+      )}
+    </tr>
+  ))}
+</tbody>
         </table>
       </div>
 
