@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import AcmeLogo from "@/app/ui/acme-logo";
-import { SunIcon, MoonIcon, PhoneIcon, MapPinIcon } from "@heroicons/react/24/outline";
+import { SunIcon, MoonIcon, PhoneIcon, MapPinIcon, StarIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -43,7 +43,7 @@ export default function Page() {
       {/* Hero Section */}
       <section className="mt-16 p-6 rounded-lg shadow-lg transition duration-500 bg-pink-50 dark:bg-gray-800 text-pink-600 dark:text-purple-400">
         <h1 className="text-center text-4xl font-extrabold">
-          Bienvenidos a Acme Hair Salon
+          Bienvenidos a Style Craft
         </h1>
         <p className="text-center text-lg mt-4">
           Transformamos tu estilo con cortes modernos, tintes vibrantes y peinados únicos.
@@ -124,6 +124,58 @@ export default function Page() {
         </div>
       </section>
 
+     {/* Testimonios */}
+<section className="mt-16 p-6 rounded-lg shadow-lg transition duration-500 bg-pink-50 dark:bg-gray-800 text-pink-600 dark:text-purple-400">
+  <h2 className="text-center text-3xl font-bold">Testimonios</h2>
+  <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+    {[
+      {
+        name: "Ana López",
+        comment: "¡Me encantó el corte de cabello! Muy profesional.",
+        rating: 5,
+        image: "/Andrea-López-Septiembre-2022-13.jpg",
+      },
+      {
+        name: "Carlos Pérez",
+        comment: "El tinte quedó perfecto, justo como lo quería.",
+        rating: 4,
+        image: "/carlos-perez-1.jpg",
+      },
+      {
+        name: "María García",
+        comment: "El peinado para mi boda fue espectacular.",
+        rating: 5,
+        image: "/MARIA-GARCIA-CONCHA-WEB-6.jpg",
+      },
+    ].map((testimonial, index) => (
+      <div
+        key={index}
+        className="p-6 rounded-xl shadow-lg transform transition-transform duration-500 hover:scale-105 bg-pink-50 dark:bg-gray-700 text-pink-600 dark:text-purple-400"
+      >
+        <div className="flex items-center gap-4">
+          <Image
+            src={testimonial.image}
+            alt={testimonial.name}
+            width={50}
+            height={50}
+            className="rounded-full border-2 border-pink-500 dark:border-purple-400"
+          />
+          <h3 className="text-lg font-semibold">{testimonial.name}</h3>
+        </div>
+        <p className="text-sm mt-4 italic">"{testimonial.comment}"</p>
+        <div className="flex mt-4">
+          {Array.from({ length: testimonial.rating }).map((_, i) => (
+            <StarIcon key={i} className="w-5 h-5 text-yellow-400" />
+          ))}
+          {Array.from({ length: 5 - testimonial.rating }).map((_, i) => (
+            <StarIcon key={i} className="w-5 h-5 text-gray-300 dark:text-gray-500" />
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
       {/* Contacto */}
       <section className="mt-16 p-6 rounded-lg shadow-lg transition duration-500 bg-pink-50 dark:bg-gray-800 text-pink-600 dark:text-purple-400">
         <h2 className="text-center text-xl sm:text-2xl font-bold">Contáctanos</h2>
@@ -141,7 +193,7 @@ export default function Page() {
 
       {/* Footer */}
       <footer className="mt-16 p-6 rounded-lg shadow-xl text-center transition duration-500 bg-pink-500 dark:bg-gray-800 text-pink-300 dark:text-purple-400">
-        <p>&copy; 2023 Acme Hair Salon. Todos los derechos reservados.</p>
+        <p>&copy; 2023 Style Craft. Todos los derechos reservados.</p>
         <p className="mt-2">
           <Link href="/privacy" className="hover:underline">
             Política de Privacidad
