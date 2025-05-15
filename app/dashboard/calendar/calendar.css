@@ -58,7 +58,24 @@
     background-color: #8b5cf6; /* Color de eventos en modo oscuro */
   }
   
+/* Estilos generales para los días del calendario */
+.dark .rbc-day-bg {
+  background-color: #1f2937; /* Fondo oscuro para todos los días */
+  color: #e5e7eb; /* Texto claro */
+  
+}
 
+.dark .rbc-day-bg:hover {
+  background-color: #374151; /* Fondo más claro al pasar el cursor */
+}
+
+/* Estilo para el día actual */
+.dark .rbc-today {
+  background-color: #4b5563; /* Fondo destacado para el día actual */
+  color: #ffffff; /* Texto blanco */
+  font-weight: bold; /* Número más visible */
+  border: 2px solid #8b5cf6; /* Borde para resaltar el día actual */
+}
   
   /* Responsividad */
   @media (max-width: 768px) {
