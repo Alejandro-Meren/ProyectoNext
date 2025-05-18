@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AtSymbolIcon, KeyIcon, UserIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
+import { useCart } from '@/app/lib/cart-context'; // Importa el contexto del carrito
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ export default function RegisterForm() {
   });
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
+  const { clearCart } = useCart(); // Obtén la función para limpiar el carrito
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,6 +29,7 @@ export default function RegisterForm() {
       });
 
       if (res.ok) {
+        clearCart(); // Limpia el carrito al crear el usuario
         router.push('/login'); // Redirige al login después del registro exitoso
       } else {
         const data = await res.json();
@@ -36,6 +39,7 @@ export default function RegisterForm() {
       setErrorMessage('Error al registrar el usuario.');
     }
   };
+
 
   return (
     <form

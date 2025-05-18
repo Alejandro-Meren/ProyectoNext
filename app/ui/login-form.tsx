@@ -1,5 +1,6 @@
 'use client';
 
+import React, { useRef } from 'react';
 import { lusitana } from '@/app/ui/fonts';
 import { AtSymbolIcon, KeyIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
@@ -8,9 +9,28 @@ import { useActionState } from 'react';
 import { authenticate } from '@/app/lib/actions';
 import { getUser } from '@/auth';
 import { redirect } from 'next/navigation';
+import { useCart } from '@/app/lib/cart-context';
+
 
 export default function LoginForm() {
   const [errorMessage, formAction, isPending] = useActionState(authenticate, undefined);
+  const { clearCart } = useCart(); // Importa la función para limpiar el carrito
+  const hasCleared = useRef(false);
+
+
+ React.useEffect(() => {
+    // Solo limpia el carrito una vez tras login exitoso
+    if (!errorMessage && !isPending && !hasCleared.current) {
+      clearCart();
+      hasCleared.current = true;
+    }
+    // Si hay error o vuelve a estar pendiente, permite limpiar de nuevo en el futuro
+    if (errorMessage || isPending) {
+      hasCleared.current = false;
+    }
+  }, [errorMessage, isPending, clearCart]);
+
+
 
   return (
     <form
